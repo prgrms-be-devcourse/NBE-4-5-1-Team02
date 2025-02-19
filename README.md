@@ -68,7 +68,7 @@ PR이 다음 요구 사항을 충족하는지 확인하세요.
 
 ---
 
-## Issue
+## Issue template
 ```markdown
 [feat] : 
 
