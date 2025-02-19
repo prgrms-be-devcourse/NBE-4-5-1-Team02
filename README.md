@@ -14,7 +14,19 @@
 # Git-Flow 전략
 
 # 컨벤션
+
+## 브랜치 명명법
+> 브랜치 이름은 `<github id>/feat-<issue 번호>` 로 작성합니다. <br/>
+> ex ) omegafrog/feat-18 : omegafrog의 18번 issue에 대한 브랜치
+
+
+
 ## Pull Request
+
+제목 : `<issue-title>`
+> PR 제목은 이슈 이름과 완전히 동일하게 작성합니다.
+
+본문
 ```markdown
 ## 개요
 <!---- 변경 사항 및 관련 이슈에 대해 간단하게 작성해주세요. 어떻게보다 무엇을 왜 수정했는지 설명해주세요. -->
