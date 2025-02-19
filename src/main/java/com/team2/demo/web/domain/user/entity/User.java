@@ -1,8 +1,7 @@
 package com.team2.demo.web.domain.user.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.team2.demo.web.domain.order.entity.Order;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +10,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,6 +31,9 @@ public class User {
 
     @LastModifiedDate
     private LocalDateTime modifiedDate;
+
+    @OneToMany(mappedBy = "buyer")
+    private final List<Order> orders = new ArrayList<>();
 
     @Builder
     public User(String email) {
