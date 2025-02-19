@@ -1,7 +1,11 @@
 package com.team2.demo.order;
 
+import com.team2.demo.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +32,13 @@ public class Order {
     @JoinTable(name = "PRODUCT_ORDER_RELATION",
             joinColumns = @JoinColumn(name = "ORDER_UUID"),
             inverseJoinColumns = @JoinColumn(name = "PRODUCT_UUID"))
-    private List<Product> products = new ArrayList<>();
+    private final List<Product> products = new ArrayList<>();
 
-
+    @CreatedDate
     @Column(name = "CREATE_DATE")
     private LocalDateTime createDate;
 
+    @LastModifiedDate
     @Column(name = "MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
@@ -46,6 +51,7 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private String deliveryStatus;
 
@@ -54,6 +60,10 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public enum DeliveryStatus {
+
     }
 
 }
