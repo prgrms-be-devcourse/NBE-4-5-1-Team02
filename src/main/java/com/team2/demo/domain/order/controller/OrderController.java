@@ -51,8 +51,8 @@ public class OrderController {
                 .size(orderPage.getSize())
                 .totalPages(orderPage.getTotalPages())
                 .build();
-
-        return RsData.success("success", response);
+      
+        return RsData.success("ok", response);
     }
 
     @PostMapping

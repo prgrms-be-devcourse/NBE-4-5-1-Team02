@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
 
+    // 사용자: 주문 리스트 조회
     public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게.
         Page<Order> orders = orderRepository.findAllByUser_Email(orderForm.email(), pageable);
@@ -23,6 +24,19 @@ public class OrderService {
         return orders.map(OrderDto::new);
     }
 
+    // 관리자: 주문 리스트 조회
+    public Page<OrderDto> getAllOrders(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
+        Page<Order> orders = orderRepository.findAll(pageable);
+
+        if (orders.isEmpty()) {
+            throw new IllegalArgumentException("주문 내역이 없습니다.");
+        }
+
+        return orders.map(OrderDto::new);
+    }
+  
+  
     public Order payment(Order order){
         System.out.println("결제 진행 서비스 시작");
         return orderRepository.save(order);
