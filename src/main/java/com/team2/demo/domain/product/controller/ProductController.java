@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class ProductController {
 
     @Builder
     @AllArgsConstructor
-    public static class PaginationData<T>{
+    public static class PaginationData<T> {
         private List<T> data;
         private int page;
         private int size;
@@ -31,11 +32,15 @@ public class ProductController {
     }
 
     @PostMapping
-    public RsData<PaginationData<ProductDto>> getProductList(Pageable pageable){
-        Page<ProductDto> products = productService.getProductList(pageable);
+    public RsData<PaginationData<ProductDto>> getProductList(
+            @RequestParam(name = "keyword-type", defaultValue = "title") String keywordType,
+            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            Pageable pageable) {
+
+        Page<ProductDto> products = productService.getProductList(keywordType, keyword, pageable);
         return RsData.success(
                 "성공했습니다.",
-                        PaginationData.<ProductDto>builder()
+                PaginationData.<ProductDto>builder()
                         .data(products.getContent())
                         .page(products.getNumber())
                         .size(products.getSize())
