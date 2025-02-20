@@ -1,18 +1,25 @@
 package com.team2.demo.global.response;
 
+
+import lombok.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
+@AllArgsConstructor
 public class RsData<T> {
 
-    //private static final RsData
     private String message;
     private T data;
+    private int code;
+
 
     public static <T> RsData<T> success(T data) {
         /*RsData<T> rsData = new RsData<>();
@@ -28,4 +35,5 @@ public class RsData<T> {
 
         return new RsData<>(message, null);
     }
+
 }
