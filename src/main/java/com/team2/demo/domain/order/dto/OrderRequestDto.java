@@ -2,6 +2,7 @@ package com.team2.demo.domain.order.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class OrderRequestDto {
     private Integer zipCode;
 
     @NotNull(message = "상품 ID 리스트는 필수입니다.")
+    @Size(min = 1)
     private List<String> productIds;
 
 }
