@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "orders")
+@Table(name = "ORDER")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,6 +25,7 @@ public class Order {
     private String orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_UUID")
     private User user;
 
     @ManyToMany
