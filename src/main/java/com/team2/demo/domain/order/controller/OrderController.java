@@ -19,8 +19,9 @@ public class OrderController {
     @PutMapping("/{orderId}")
     public ResponseEntity<RsData<OrderDto>> updateOrder(
             @PathVariable String orderId,
+            @RequestParam String email,
             @RequestBody OrderDto request) {
-        RsData<OrderDto> response = orderService.updateOrder(orderId, request);
+        RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
         return ResponseEntity.ok(response);
     }
 }

@@ -21,7 +21,7 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public RsData<OrderDto> updateOrder(String orderId, OrderDto request) {
+    public RsData<OrderDto> updateOrder(String orderId, String email, OrderDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
