@@ -25,7 +25,8 @@ public class OrderService {
 
     // 관리자: 주문 리스트 조회
     public Page<OrderDto> getAllOrders(int page, int size) {
-
-        return null;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
+        Page<Order> orders = orderRepository.findAll(pageable);
+        return orders.map(OrderDto::new);
     }
 }
