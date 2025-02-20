@@ -17,11 +17,11 @@ public class OrderDto {
     private String orderId;
     private LocalDateTime orderDate;
     private Integer totalPrice;
-    private String deliveryStatus;
+    private DeliveryStatus  deliveryStatus;
     private String buyerEmail;
     private List<String> productIds; // product_id 리스트
-
     private Integer zipCode;
+
     private String deliveryAddress;
 
     // 종현 : 반환 타입을 OrderDto로 변경
