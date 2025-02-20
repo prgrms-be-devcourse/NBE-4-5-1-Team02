@@ -15,8 +15,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public Page<ProductDto> getProductList(Pageable pageable) {
-        return productRepository.findAll(pageable)
-                .map(ProductDto::of);
+    public Page<ProductDto> getProductList(String keywordType, String keyword, Pageable pageable) {
+
+        KeywordType searchKeywordType = KeywordType.valueOf(keywordType);
+        return searchKeywordType.getSearchResult(productRepository, keyword, pageable);
     }
 }
