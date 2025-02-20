@@ -2,6 +2,7 @@ package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.entity.Order;
+import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderControllerAdmin {
 
     private final OrderService orderService;
+    private final AdminOrderService adminOrderService;
 
     /*
         관리자 주문 목록 조회
@@ -40,7 +42,7 @@ public class OrderControllerAdmin {
     public ResponseEntity<Order> updateOrder(
             @PathVariable String orderUuid,
             @RequestBody Order order) {
-        Order updateOrder = orderService.updateOrder(orderUuid, order);
+        Order updateOrder = adminOrderService.updateOrder(orderUuid, order);
         return ResponseEntity.ok(updateOrder);
     }
 }
