@@ -15,15 +15,28 @@ public class OrderDto {
     private String orderId;
     private LocalDateTime orderDate;
     private Integer totalPrice;
+
     private DeliveryStatus  deliveryStatus;
+
     private String buyerEmail;
+    private List<ProductItem> items;
+  
+    @Getter
+    @AllArgsConstructor
+    public static class ProductItem {
+        private String name;
+        private int quantity;
+    }
 
     // 종현 : 반환 타입을 OrderDto로 변경
-    public OrderDto (Order order) {
+    public OrderDto(Order order) {
         this.orderId = order.getOrderUuid();
         this.orderDate = order.getCreateDate();
         this.totalPrice = order.getTotalAmount();
         this.deliveryStatus = order.getDeliveryStatus();
         this.buyerEmail = order.getUser().getEmail();
+        this.items = order.getProducts().stream()
+                .map(product -> new ProductItem(product.getProductName(), 1)) // 수량 수동 변경
+                .collect(Collectors.toList());
     }
 }
