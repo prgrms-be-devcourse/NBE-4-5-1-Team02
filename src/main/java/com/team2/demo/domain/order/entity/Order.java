@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "ORDER")
+@Table(name = "ORDERS")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,7 +53,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
-    private String deliveryStatus;
+    private DeliveryStatus deliveryStatus;
 
     public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
         this.user = user;
@@ -63,7 +63,7 @@ public class Order {
     }
 
     public enum DeliveryStatus {
-
+        PENDING, SHIPPED, DELIVERED
     }
 
 }
