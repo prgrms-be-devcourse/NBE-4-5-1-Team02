@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-@Getter @Setter
+@Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -65,6 +65,19 @@ public class Order {
 
     public enum DeliveryStatus {
         PENDING, SHIPPED, DELIVERED, CANCELLED
+    }
+
+    public void updateDeliveryInfo(String deliveryAddress, Integer zipCode) {
+        this.deliveryAddress = deliveryAddress;
+        this.zipCode = zipCode;
+    }
+
+    public void updateDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public void updateModifiedDate() {
+        this.modifiedDate = LocalDateTime.now();
     }
 
 }
