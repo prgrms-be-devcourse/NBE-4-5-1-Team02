@@ -21,20 +21,21 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public RsData<OrderDto> updateOrder(String orderId, String email, OrderDto request) {
+    public RsData<OrderDto> updateOrder(String orderId, OrderDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
-        if (order.getDeliveryStatus().equals("배송 중") || order.getDeliveryStatus().equals("배송 완료")) {
+        if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
+                order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
             return RsData.fail("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.");
         }
 
         List<Product> updatedProducts = request.getProductIds().stream()
-                .map(id -> productRepository.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + id)))
+                .map(productId  -> productRepository.findById(productId)
+                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productId)))
                 .collect(Collectors.toList());
 
-        // 기존 상품 제거, 새로운 상품 추가
+        // 기존 상품 제거, 새로운 상품 목록 설정
         order.getProducts().clear();
         order.getProducts().addAll(updatedProducts);
 
@@ -44,13 +45,15 @@ public class OrderService {
 
         // 수정 시간 갱신
         order.setModifiedDate(LocalDateTime.now());
+
         orderRepository.save(order);
 
         if (updatedProducts.isEmpty()) {
+            order.setDeliveryStatus(Order.DeliveryStatus.CANCELLED);
             orderRepository.delete(order);
             return RsData.success(null, "주문이 취소되었습니다.");
         }
 
-        return RsData.success(new OrderDto(order));
+        return RsData.success(new OrderDto(order),"주문이 수정되었습니다.");
     }
 }
