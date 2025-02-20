@@ -1,11 +1,10 @@
 package com.team2.demo.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team2.demo.domain.order.entity.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,6 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Table(name = "MEMBER")
