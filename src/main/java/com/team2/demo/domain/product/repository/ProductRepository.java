@@ -4,6 +4,8 @@ import com.team2.demo.domain.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.NativeQuery;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
@@ -13,4 +15,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByProductNameLike(String productName, Pageable pageable);
 
     Optional<Product> findByProductUuid(String productUuid);
+
+    @NativeQuery(value = """
+            SELECT PRODUCT.* FROM PRODUCT
+            LEFT JOIN PRODUCT_ORDER_RELATION
+            ON PRODUCT.PRODUCT_UUID=PRODUCT_ORDER_RELATION.PRODUCT_UUID
+            WHERE PRODUCT_ORDER_RELATION.ORDER_UUID="order-11111-22222-33331";
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM PRODUCT
+            LEFT JOIN PRODUCT_ORDER_RELATION
+            ON PRODUCT.PRODUCT_UUID=PRODUCT_ORDER_RELATION.PRODUCT_UUID
+            WHERE PRODUCT_ORDER_RELATION.ORDER_UUID="order-11111-22222-33331";
+            """)
+    Page<Product> findAllByOrderId(String orderId, Pageable pageable);
 }
