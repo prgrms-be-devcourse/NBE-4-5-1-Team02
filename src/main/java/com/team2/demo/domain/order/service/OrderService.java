@@ -27,6 +27,11 @@ public class OrderService {
     public Page<OrderDto> getAllOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
         Page<Order> orders = orderRepository.findAll(pageable);
+
+        if (orders.isEmpty()) {
+            throw new IllegalArgumentException("주문 내역이 없습니다.");
+        }
+
         return orders.map(OrderDto::new);
     }
 }
