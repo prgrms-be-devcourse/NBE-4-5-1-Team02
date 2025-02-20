@@ -39,13 +39,13 @@ public class OrderService {
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
-            return RsData.fail("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.");
+            return RsData.badRequest("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.");
         }
 
 
         List<Product> updatedProducts = request.getProductIds().stream()
-                .map(productId -> productRepository.findById(productId)
-                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productId)))
+                .map(productUuid -> productRepository.findByProductUuid(productUuid)
+                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
                 .collect(Collectors.toList());
 
         order.getProducts().clear();
@@ -60,9 +60,9 @@ public class OrderService {
         if (updatedProducts.isEmpty()) {
             order.setDeliveryStatus(Order.DeliveryStatus.CANCELLED);
             orderRepository.delete(order);
-            return RsData.success(null, "주문이 취소되었습니다.");
+            return RsData.success("주문이 취소되었습니다.", null);
         }
 
-        return RsData.success(new OrderDto(order), "주문이 수정되었습니다.");
+        return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
     }
 }

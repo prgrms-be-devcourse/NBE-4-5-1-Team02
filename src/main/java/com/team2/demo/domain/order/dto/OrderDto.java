@@ -1,6 +1,7 @@
 package com.team2.demo.domain.order.dto;
 
 import com.team2.demo.domain.order.entity.Order;
+import com.team2.demo.domain.order.entity.Order.DeliveryStatus;
 import com.team2.demo.domain.product.entity.Product;
 import lombok.*;
 
