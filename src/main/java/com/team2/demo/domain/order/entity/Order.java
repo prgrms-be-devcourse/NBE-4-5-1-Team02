@@ -63,7 +63,7 @@ public class Order {
     }
 
     public enum DeliveryStatus {
-
+        PENDING, SHIPPED, DELIVERED
     }
 
 }
