@@ -1,8 +1,7 @@
-package com.team2.demo.product; // Order 와 다른 패키지에 위치
+package com.team2.demo.domain.product.entity; // Order 와 다른 패키지에 위치
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "PRODUCT")

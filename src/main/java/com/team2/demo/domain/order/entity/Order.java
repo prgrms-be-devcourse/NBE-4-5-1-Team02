@@ -1,7 +1,7 @@
-package com.team2.demo.order;
+package com.team2.demo.domain.order.entity;
 
-import com.team2.demo.product.Product;
-import com.team2.demo.web.domain.user.entity.User;
+import com.team2.demo.domain.product.entity.Product;
+import com.team2.demo.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity(name = "CustomOrder") // order 중복
-@Table(name = "orders")
+@Entity
+@Table(name = "ORDERS")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,7 +25,6 @@ public class Order {
     private String orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_UUID")
     private User user;
 
     @ManyToMany
@@ -51,18 +50,20 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
-    //@Enumerated(EnumType.STRING)
-    @Column(name = "DELIVERY_STATUS")
-    private String deliveryStatus;
 
-    public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
+    @Enumerated(EnumType.STRING)
+    @Column(name = "DELIVERY_STATUS")
+    private DeliveryStatus deliveryStatus;
+
+    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus  deliveryStatus) {
+
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
         this.deliveryStatus = deliveryStatus;
     }
 
-    public void updateOrder(Integer totalAmount, String deliveryAddress, Integer zipCode, String deliveryStatus) {
+    public void updateOrder(Integer totalAmount, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
         if (totalAmount != null) {
             this.totalAmount = totalAmount;
         }
@@ -72,7 +73,7 @@ public class Order {
         if (zipCode != null) {
             this.zipCode = zipCode;
         }
-        if (deliveryStatus != null && !deliveryStatus.isBlank()) {
+        if (deliveryStatus != null) {
             this.deliveryStatus = deliveryStatus;
         }
         this.modifiedDate = LocalDateTime.now();
@@ -82,6 +83,21 @@ public class Order {
     }
 
     public enum DeliveryStatus {
+
+        PENDING, SHIPPED, DELIVERED, CANCELLED
+    }
+
+    public void updateDeliveryInfo(String deliveryAddress, Integer zipCode) {
+        this.deliveryAddress = deliveryAddress;
+        this.zipCode = zipCode;
+    }
+
+    public void updateDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public void updateModifiedDate() {
+        this.modifiedDate = LocalDateTime.now();
 
     }
 

@@ -1,7 +1,7 @@
-package com.team2.demo.order.service;
+package com.team2.demo.domain.order.service;
 
-import com.team2.demo.order.Order;
-import com.team2.demo.order.repository.OrderRepository;
+import com.team2.demo.domain.order.entity.Order;
+import com.team2.demo.domain.order.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class AdminOrderService {
+
     private final OrderRepository orderRepository;
 
-    //주문 찾기
     @Transactional
     public Order updateOrder(String orderId, Order request) {
         Order order = orderRepository.findById(orderId).
@@ -22,8 +22,8 @@ public class OrderService {
         order.updateOrder(
                 request.getTotalAmount(),
                 request.getDeliveryAddress(),
-                request.getDeliveryStatus(),
-                request.getZipCode()
+                request.getZipCode(),
+                request.getDeliveryStatus()
         );
         return order;
     }
