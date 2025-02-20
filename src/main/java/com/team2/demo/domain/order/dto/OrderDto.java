@@ -14,7 +14,7 @@ public class OrderDto {
     private String orderId;
     private LocalDateTime orderDate;
     private Integer totalPrice;
-    private String deliveryStatus;
+    private Order.DeliveryStatus deliveryStatus;
     private String buyerEmail;
     private List<String> productNames;
 

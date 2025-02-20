@@ -13,7 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Builder
-@AllArgsConstructor
 public class RsData<T> {
 
     private String message;
@@ -21,19 +20,19 @@ public class RsData<T> {
     private int code;
 
 
-    public static <T> RsData<T> success(T data) {
+    public static <T> RsData<T> success(String message, T data) {
         /*RsData<T> rsData = new RsData<>();
         rsData.data = data;
         return rsData;*/
 
-        return new RsData<>("Success", data);
+        return new RsData<>(message, data, 200);
     }
-    public static <T> RsData<T> badRequest(String message) {
+    public static <T> RsData<T> badRequest(String message, int code) {
         /*RsData<T> rsData = new RsData<>();
         rsData.message = message;
         return rsData;*/
 
-        return new RsData<>(message, null);
+        return new RsData<>(message, null, code);
     }
 
 }
