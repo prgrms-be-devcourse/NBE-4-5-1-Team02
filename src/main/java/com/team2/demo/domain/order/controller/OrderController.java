@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/orders")
 public class OrderController {
 
-    @Autowired
     private final OrderService orderService;
 
-    @putMapping("/{orderId}")
+    @PutMapping("/{orderId}")
     public ResponseEntity<RsData<OrderDto>> updateOrder(
             @PathVariable String orderId,
-            @RequestParam String email,
             @RequestBody OrderDto request) {
-        return ResponseEntity.ok(RsData.success(orderService.updateOrder(orderId, orderDto)));
+        RsData<OrderDto> response = orderService.updateOrder(orderId, request);
+        return ResponseEntity.ok(response);
     }
 }

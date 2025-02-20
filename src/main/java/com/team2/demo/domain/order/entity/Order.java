@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-@Getter
+@Getter @Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
