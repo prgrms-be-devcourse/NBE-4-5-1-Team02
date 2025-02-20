@@ -12,11 +12,5 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
 
-//    public Order updateOrder(String orderUuid, OrderDto requset) {
-//        Order order = orderRepository.findByOrderUuid(orderUuid)
-//                .orElseThrow(() -> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderUuid));
-//
-//    }
-
 
 }
