@@ -1,22 +1,23 @@
 package com.team2.demo.domain.order.dto;
 
 import com.team2.demo.domain.order.entity.Order;
+import com.team2.demo.domain.order.entity.Order.DeliveryStatus;
+import com.team2.demo.domain.product.entity.Product;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
     private String orderId;
     private LocalDateTime orderDate;
     private Integer totalPrice;
-    private Order.DeliveryStatus deliveryStatus;
+
+    private DeliveryStatus  deliveryStatus;
+
     private String buyerEmail;
     private List<ProductItem> items;
   

@@ -1,7 +1,9 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.entity.Order;
+
+import com.team2.demo.domain.order.dto.OrderRequestDto;
+
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
@@ -10,6 +12,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -63,5 +66,18 @@ public class OrderController {
         } catch (Exception e) {
             return RsData.badRequest("결제 실패:" + e.getMessage());
         }
+    }
+
+    /*
+        사용자 주문 수정
+        PUT /orders/{orderId}?email=user@example.com
+    */
+    @PutMapping("/{orderId}")
+    public ResponseEntity<RsData<OrderDto>> updateOrder(
+            @PathVariable String orderId,
+            @RequestParam String email,
+            @RequestBody OrderRequestDto request) {
+        RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
+        return ResponseEntity.ok(response);
     }
 }

@@ -51,12 +51,15 @@ public class Order {
     private Integer zipCode;
 
 
-//    @Enumerated(EnumType.STRING)
+
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private DeliveryStatus deliveryStatus;
 
-    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
+
+
+    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus  deliveryStatus) {
+
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
@@ -64,7 +67,22 @@ public class Order {
     }
 
     public enum DeliveryStatus {
-        PENDING, SHIPPED, DELIVERED
+
+        PENDING, SHIPPED, DELIVERED, CANCELLED
+    }
+
+    public void updateDeliveryInfo(String deliveryAddress, Integer zipCode) {
+        this.deliveryAddress = deliveryAddress;
+        this.zipCode = zipCode;
+    }
+
+    public void updateDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public void updateModifiedDate() {
+        this.modifiedDate = LocalDateTime.now();
+
     }
 
 }
