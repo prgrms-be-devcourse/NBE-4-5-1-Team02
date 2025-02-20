@@ -17,8 +17,8 @@ public class RsData<T> {
         this.data = data;
     }
 
-    public static <T> RsData<T> success(T data) {
-       return new RsData<>(HttpStatus.OK.value(), "성공", data);
+    public static <T> RsData<T> success(T data, String message) {
+        return new RsData<>(HttpStatus.OK.value(), message, data);
     }
 
     public static <T> RsData<T> fail(String message) {
