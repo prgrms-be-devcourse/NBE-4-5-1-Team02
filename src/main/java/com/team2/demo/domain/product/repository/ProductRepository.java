@@ -1,4 +1,12 @@
 package com.team2.demo.domain.product.repository;
 
-public class ProductRepository {
+import com.team2.demo.domain.product.entity.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<Product, Long> {
+    Page<Product> findAllByCategoryLike(String category, Pageable pageable);
+
+    Page<Product> findAllByProductNameLike(String productName, Pageable pageable);
 }

@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Table(name = "MEMBER")
 public class User {
 
@@ -39,7 +38,7 @@ public class User {
     @Column(name = "MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
     @Builder.Default
     private final List<Order> orders = new ArrayList<>();

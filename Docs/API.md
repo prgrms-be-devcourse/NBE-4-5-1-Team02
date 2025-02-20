@@ -4,25 +4,35 @@
 
 - URL: `/products`
 - Method: `POST`
-    - Success
+- Parameters
+  - `keyword-type` : string, default="title", not null
+  - `keyword` : string, nullable <br/>
+
+
+- Success
 
 ```json
 {
-	[
-		{"uuid": 1,
-		"name":"커피",
-		"category":"커피콩",
-		"image_url":"url~~"
-		},
-		{
-		"uuid": 2,
-			"name":"차",
-			"category":"허브",
-			"image_url":"url~~"
-		}
-	]
-	
-	"msg" : "성공했습니다."
+  "data": 
+      [
+        {"uuid": 1,
+          "name":"커피",
+          "category":"커피콩",
+          "image_url":"url~~"
+        },
+        {
+          "uuid": 2,
+          "name":"차",
+          "category":"허브",
+          "image_url":"url~~"
+        }
+      ],
+  "pagination": {
+      "page": 1,
+      "size": 10,
+      "totalPages": 1
+  },
+  "msg" : "성공했습니다."
 }
 ```
 

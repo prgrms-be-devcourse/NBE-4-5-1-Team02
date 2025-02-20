@@ -15,19 +15,16 @@ import java.util.List;
 @Entity
 @Table(name = "ORDERS")
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Order {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ORDER_UUID")
-    private Long orderUuid;
+    private String orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_UUID")
     private User user;
 
     @ManyToOne
@@ -57,6 +54,8 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
+
+//    @Enumerated(EnumType.STRING)
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private DeliveryStatus deliveryStatus;
