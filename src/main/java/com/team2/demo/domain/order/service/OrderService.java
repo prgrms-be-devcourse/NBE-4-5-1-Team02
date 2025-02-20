@@ -51,14 +51,14 @@ public class OrderService {
         order.getProducts().clear();
         order.getProducts().addAll(updatedProducts);
 
-        order.setDeliveryAddress(request.getDeliveryAddress());
-        order.setZipCode(request.getZipCode());
+        order.updateDeliveryInfo(request.getDeliveryAddress(), request.getZipCode());
 
-        order.setModifiedDate(LocalDateTime.now());
+        order.updateModifiedDate();
+
         orderRepository.save(order);
 
         if (updatedProducts.isEmpty()) {
-            order.setDeliveryStatus(Order.DeliveryStatus.CANCELLED);
+            order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
             orderRepository.delete(order);
             return RsData.success("주문이 취소되었습니다.", null);
         }
