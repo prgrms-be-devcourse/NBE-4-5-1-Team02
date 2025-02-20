@@ -21,15 +21,19 @@ import java.util.UUID;
 public class User {
 
     @Id
+    @Column(name = "USER_UUID")
     private final String id = "user-" + UUID.randomUUID();
 
     @Email
+    @Column(name = "EMAIL")
     private String email;
 
     @CreatedDate
+    @Column(name = "CREATE_DATE")
     private LocalDateTime createdDate;
 
     @LastModifiedDate
+    @Column(name = "MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "buyer")
