@@ -1,6 +1,7 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
@@ -65,7 +66,7 @@ public class OrderController {
     public ResponseEntity<RsData<OrderDto>> updateOrder(
             @PathVariable String orderId,
             @RequestParam String email,
-            @RequestBody OrderDto request) {
+            @RequestBody OrderRequestDto request) {
         RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
         return ResponseEntity.ok(response);
     }
