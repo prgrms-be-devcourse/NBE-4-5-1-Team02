@@ -1,9 +1,11 @@
 package com.team2.demo.global.response;
 
+
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
 @AllArgsConstructor
