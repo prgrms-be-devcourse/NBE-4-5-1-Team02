@@ -2,7 +2,6 @@ package com.team2.demo.domain.product.service;
 
 import com.team2.demo.domain.product.dto.ProductDto;
 import com.team2.demo.domain.product.repository.ProductRepository;
-import com.team2.demo.global.response.PaginationData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,14 +12,14 @@ public enum ProductKeywordType {
     TITLE("title") {
         @Override
         public Page<ProductDto> getSearchResult(ProductRepository productRepository, String keyword, Pageable pageable) {
-            return productRepository.findAllByProductNameLike(keyword, pageable)
+            return productRepository.findAllByProductNameLike("%"+keyword+"%", pageable)
                     .map(ProductDto::of);
         }
     },
     CATEGORY("category") {
         @Override
         public Page<ProductDto> getSearchResult(ProductRepository productRepository, String keyword, Pageable pageable) {
-            return productRepository.findAllByCategoryLike(keyword, pageable)
+            return productRepository.findAllByCategoryLike("%"+keyword+"%", pageable)
                     .map(ProductDto::of);
 
         }
