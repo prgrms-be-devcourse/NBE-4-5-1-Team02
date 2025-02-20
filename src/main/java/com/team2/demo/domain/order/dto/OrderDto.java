@@ -16,6 +16,7 @@ public class OrderDto {
     private String deliveryStatus;
     private String buyerEmail;
 
+    // 종현 : 반환 타입을 OrderDto로 변경
     public OrderDto (Order order) {
         this.orderId = order.getOrderUuid();
         this.orderDate = order.getCreateDate();
