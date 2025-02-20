@@ -4,11 +4,8 @@ package com.team2.demo.global.response;
 import lombok.*;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
-
 
 @NoArgsConstructor
 @Getter
@@ -19,6 +16,7 @@ public class RsData<T> {
     private String message;
     private T data;
     private int code;
+
 
 
     public static <T> RsData<T> success(String message, T data) {
@@ -35,5 +33,6 @@ public class RsData<T> {
 
         return new RsData<>(message, null, HttpStatus.BAD_REQUEST.value());
     }
+
 
 }
