@@ -13,20 +13,26 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "ORDER")
+@Table(name = "ORDERS")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ORDER_UUID")
-    private String orderUuid;
+    private Long orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_UUID")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "buyer_id")
+    private User buyer;
 
     @ManyToMany
     @JoinTable(name = "PRODUCT_ORDER_RELATION",
@@ -53,9 +59,9 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
-    private String deliveryStatus;
+    private DeliveryStatus deliveryStatus;
 
-    public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
+    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
@@ -63,7 +69,7 @@ public class Order {
     }
 
     public enum DeliveryStatus {
-
+        PENDING, SHIPPED, DELIVERED
     }
 
 }
