@@ -1,6 +1,6 @@
-package com.team2.demo.web.domain.user.entity;
+package com.team2.demo.domain.user.entity;
 
-import com.team2.demo.web.domain.order.entity.Order;
+import com.team2.demo.domain.order.entity.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
