@@ -18,7 +18,7 @@ public class OrderController {
         GET /orders?email=user@example.com&page=1&size=10
      */
     @GetMapping
-    public void getOrders(@PathVariable String email,
+    public void getOrders(@RequestParam String email,
                           @RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size) {
 
