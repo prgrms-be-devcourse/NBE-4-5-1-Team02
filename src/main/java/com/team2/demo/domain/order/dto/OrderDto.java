@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
@@ -18,7 +19,7 @@ public class OrderDto {
     private Order.DeliveryStatus deliveryStatus;
     private String buyerEmail;
     private List<ProductItem> items;
-
+  
     @Getter
     @AllArgsConstructor
     public static class ProductItem {
@@ -26,6 +27,7 @@ public class OrderDto {
         private int quantity;
     }
 
+    // 종현 : 반환 타입을 OrderDto로 변경
     public OrderDto(Order order) {
         this.orderId = order.getOrderUuid();
         this.orderDate = order.getCreateDate();
