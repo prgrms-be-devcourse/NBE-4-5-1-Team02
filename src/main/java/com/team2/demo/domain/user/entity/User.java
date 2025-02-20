@@ -36,7 +36,7 @@ public class User {
     @Column(name = "MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
-    @OneToMany(mappedBy = "buyer")
+    @OneToMany(mappedBy = "user")
     private final List<Order> orders = new ArrayList<>();
 
     @Builder
