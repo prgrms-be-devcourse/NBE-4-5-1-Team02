@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "orders")
+@Table(name = "ORDERS")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -50,9 +50,11 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
+
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS", columnDefinition = "varchar(255)")
     private DeliveryStatus deliveryStatus;
+
 
     public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
         this.user = user;
