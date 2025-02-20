@@ -6,16 +6,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
-@Entity
-@Table(name = "ORDER")
+@Entity(name = "CustomOrder") // order 중복
+@Table(name = "orders")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,7 +51,7 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private String deliveryStatus;
 

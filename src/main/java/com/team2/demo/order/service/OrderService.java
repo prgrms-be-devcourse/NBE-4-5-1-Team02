@@ -1,7 +1,6 @@
 package com.team2.demo.order.service;
 
 import com.team2.demo.order.Order;
-import com.team2.demo.order.dto.OrderDto;
 import com.team2.demo.order.repository.OrderRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
