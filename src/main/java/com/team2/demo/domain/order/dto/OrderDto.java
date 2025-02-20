@@ -19,7 +19,6 @@ public class OrderDto {
     private Integer totalPrice;
     private String deliveryStatus;
     private String buyerEmail;
-    private List<String> productIds; // product_id 리스트
 
     private Integer zipCode;
     private String deliveryAddress;
@@ -31,8 +30,5 @@ public class OrderDto {
         this.totalPrice = order.getTotalAmount();
         this.deliveryStatus = order.getDeliveryStatus();
         this.buyerEmail = order.getUser().getEmail();
-        this.productIds = order.getProducts().stream()
-                .map(Product::getProductUuid)
-                .collect(Collectors.toList());
     }
 }
