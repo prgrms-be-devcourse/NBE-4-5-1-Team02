@@ -1,7 +1,6 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;

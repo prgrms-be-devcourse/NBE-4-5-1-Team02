@@ -7,7 +7,6 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @Getter
@@ -25,9 +24,9 @@ public class UserDto {
                 .email(user.getEmail())
                 .createdDate(user.getCreatedDate())
                 .modifiedDate(user.getModifiedDate())
-                .orders(user.getOrders().stream()
-                        .map(OrderDto::of) // Order 엔티티 -> OrderDto 변환
-                        .collect(Collectors.toList()))
+//                .orders(user.getOrders().stream()
+//                        .map(OrderDto::of) // Order 엔티티 -> OrderDto 변환
+//                        .collect(Collectors.toList()))
                 .build();
     }
 }
