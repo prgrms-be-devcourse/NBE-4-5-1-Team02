@@ -2,6 +2,7 @@ package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.entity.Product;
@@ -32,7 +33,7 @@ public class OrderService {
     }
 
     @Transactional
-    public RsData<OrderDto> updateOrder(String orderId, String email, OrderDto request) {
+    public RsData<OrderDto> updateOrder(String orderId, String email, OrderRequestDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
