@@ -1,8 +1,8 @@
 package com.team2.demo.domain.product.service;
 
-import com.team2.demo.domain.product.controller.ProductController.PaginationData;
 import com.team2.demo.domain.product.dto.ProductDto;
 import com.team2.demo.domain.product.repository.ProductRepository;
+import com.team2.demo.global.response.PaginationData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
