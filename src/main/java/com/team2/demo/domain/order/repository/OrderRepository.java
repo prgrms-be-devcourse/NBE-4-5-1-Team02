@@ -13,6 +13,5 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     // 종현 : 사용자 이메일로 주문 목록 조회
     Page<Order> findAllByUser_Email(String email, Pageable pageable);
 
-    // 윤주 : 주문 UUID로 조회
     Optional<Order> findByOrderUuid(String orderUuid);
 }

@@ -25,6 +25,7 @@ public class Order {
     private String orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_UUID")
     private User user;
 
     @ManyToMany
@@ -50,13 +51,11 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private DeliveryStatus deliveryStatus;
 
-
-    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus  deliveryStatus) {
+    public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
