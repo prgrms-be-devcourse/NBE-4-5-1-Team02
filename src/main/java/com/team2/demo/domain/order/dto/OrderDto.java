@@ -7,17 +7,18 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
     private String orderId;
     private LocalDateTime orderDate;
     private Integer totalPrice;
-    private String deliveryStatus;
+    private Order.DeliveryStatus deliveryStatus;
     private String buyerEmail;
 
     // 종현 : 반환 타입을 OrderDto로 변경
-    public OrderDto (Order order) {
+    public OrderDto(Order order) {
         this.orderId = order.getOrderUuid();
         this.orderDate = order.getCreateDate();
         this.totalPrice = order.getTotalAmount();
