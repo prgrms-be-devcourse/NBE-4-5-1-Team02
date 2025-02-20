@@ -1,6 +1,7 @@
 package com.team2.demo.order;
 
 import com.team2.demo.product.Product;
+import com.team2.demo.web.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
