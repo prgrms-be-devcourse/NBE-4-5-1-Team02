@@ -1,8 +1,8 @@
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33331', 'email@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33332', 'email@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33333', 'email@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33334', 'email@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33335', 'email@email.com', now(), now());
+INSERT INTO `MEMBER` VALUES('user-11111-22222-33331', 'email1@email.com', now(), now());
+INSERT INTO `MEMBER` VALUES('user-11111-22222-33332', 'email2@email.com', now(), now());
+INSERT INTO `MEMBER` VALUES('user-11111-22222-33333', 'email3@email.com', now(), now());
+INSERT INTO `MEMBER` VALUES('user-11111-22222-33334', 'email4@email.com', now(), now());
+INSERT INTO `MEMBER` VALUES('user-11111-22222-33335', 'email5@email.com', now(), now());
 
 INSERT INtO `ORDERS` VALUES('order-11111-22222-33331', 'user-11111-22222-33331', now(), now(), 10000, 'addr1', 123123, '배송_전');
 INSERT INtO `ORDERS` VALUES('order-11111-22222-33332', 'user-11111-22222-33331', now(), now(), 20000, 'addr2', 123123, '배송_전');
