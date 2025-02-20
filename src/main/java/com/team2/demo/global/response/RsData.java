@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.http.HttpStatus;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Builder
 public class RsData<T> {

@@ -4,6 +4,7 @@ import com.team2.demo.domain.order.dto.OrderDto;
 
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 
+import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
@@ -64,7 +65,7 @@ public class OrderController {
             Order order = orderService.payment(body);
             return null;
         } catch (Exception e) {
-            return RsData.badRequest("결제 실패:" + e.getMessage());
+            return RsData.badRequest("결제 실패:" + e.getMessage(), 400);
         }
     }
 
