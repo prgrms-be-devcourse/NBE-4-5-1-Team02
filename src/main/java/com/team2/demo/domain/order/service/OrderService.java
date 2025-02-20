@@ -15,10 +15,17 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
 
+    // 사용자: 주문 리스트 조회
     public Page<OrderDto> getOrdersByEmail(String email, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게.
         Page<Order> orders = orderRepository.findAllByUser_Email(email, pageable);
 
         return orders.map(OrderDto::new);
+    }
+
+    // 관리자: 주문 리스트 조회
+    public Page<OrderDto> getAllOrders(int page, int size) {
+
+        return null;
     }
 }
