@@ -17,7 +17,7 @@ public class ProductService {
 
     public Page<ProductDto> getProductList(String keywordType, String keyword, Pageable pageable) {
 
-        KeywordType searchKeywordType = KeywordType.valueOf(keywordType);
+        ProductKeywordType searchKeywordType = ProductKeywordType.valueOf(keywordType.toUpperCase());
         return searchKeywordType.getSearchResult(productRepository, keyword, pageable);
     }
 }

@@ -6,7 +6,10 @@ import com.team2.demo.global.response.PaginationData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public enum KeywordType {
+/**
+ * Product의 KeywordType을 나타내는 enum. <br/>
+ */
+public enum ProductKeywordType {
     TITLE("title") {
         @Override
         public Page<ProductDto> getSearchResult(ProductRepository productRepository, String keyword, Pageable pageable) {
@@ -22,27 +25,27 @@ public enum KeywordType {
 
         }
     };
-    private final String value;
+    private final String typeName;
 
-    public String getValue() {
-        return value;
+    public String getTypeName() {
+        return typeName;
     }
 
-    KeywordType(String value) {
-        this.value = value;
+    ProductKeywordType(String typeName) {
+        this.typeName = typeName;
     }
 
+    /**
+     * keyword type에 따라 {@link ProductRepository}의 메소드를 호출한다.
+     * @param productRepository {@link com.team2.demo.domain.product.entity.Product} 를 조회할 리포지토리
+     * @param keyword 검색할 keyword값
+     * @param pageable {@link Pageable}
+     * @return {@link Page<ProductDto>}
+     */
     public abstract Page<ProductDto> getSearchResult(ProductRepository productRepository, String keyword, Pageable pageable);
 
-    private static PaginationData<ProductDto> getProductPagination(Page<ProductDto> productPage) {
-        return PaginationData.<ProductDto>builder()
-                .data(productPage.getContent())
-                .page(productPage.getNumber())
-                .size(productPage.getSize())
-                .totalPages(productPage.getTotalPages()).build();
-    }
 
-    public static KeywordType of(String keywordType) {
-        return KeywordType.valueOf(keywordType);
+    public static ProductKeywordType of(String keywordType) {
+        return ProductKeywordType.valueOf(keywordType);
     }
 }
