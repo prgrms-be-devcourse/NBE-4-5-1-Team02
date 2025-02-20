@@ -1,11 +1,10 @@
 package com.team2.demo.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.team2.demo.domain.order.entity.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -15,13 +14,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Table(name = "MEMBER")
 public class User {
 
     @Id
     @Column(name = "USER_UUID")
+    @Builder.Default
     private final String id = "user-" + UUID.randomUUID();
 
     @Email
@@ -37,10 +40,8 @@ public class User {
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "buyer")
+    @JsonIgnore
+    @Builder.Default
     private final List<Order> orders = new ArrayList<>();
 
-    @Builder
-    public User(String email) {
-        this.email = email;
-    }
 }
