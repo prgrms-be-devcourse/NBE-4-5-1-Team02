@@ -17,7 +17,7 @@ public class OrderService {
 
     public Page<OrderDto> getOrdersByEmail(String email, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게.
-        Page<Order> orders = orderRepository.findAllByEmail(email, pageable);
+        Page<Order> orders = orderRepository.findAllByUser_Email(email, pageable);
 
         return orders.map(OrderDto::new);
     }
