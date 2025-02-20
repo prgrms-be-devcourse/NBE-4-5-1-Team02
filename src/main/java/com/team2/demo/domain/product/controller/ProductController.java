@@ -43,6 +43,7 @@ public class ProductController {
 
         Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);
         return RsData.success(
+                "Success.",
                 PaginationData.<ProductDto>builder()
                         .data(products.getContent())
                         .page(products.getNumber())

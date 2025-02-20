@@ -21,12 +21,12 @@ public class RsData<T> {
     private int code;
 
 
-    public static <T> RsData<T> success(T data) {
+    public static <T> RsData<T> success(String message, T data) {
         /*RsData<T> rsData = new RsData<>();
         rsData.data = data;
         return rsData;*/
 
-        return new RsData<>("Success", data, HttpStatus.OK.value());
+        return new RsData<>(message, data, HttpStatus.OK.value());
     }
     public static <T> RsData<T> badRequest(String message) {
         /*RsData<T> rsData = new RsData<>();
