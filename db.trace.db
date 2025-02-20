@@ -1,0 +1,15 @@
+2025-02-20 11:41:21.059055+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop table if exists [*]order cascade "; expected "identifier"; SQL statement:
+drop table if exists order cascade  [42001-232]
+2025-02-20 11:41:21.139263+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]order (total_amount integer, zip_code integer, create_date timestamp(6), modified_date timestamp(6), delivery_address varchar(255), delivery_status varchar(255), order_uuid varchar(255) not null, user_uuid varchar(255), primary key (order_uuid))"; expected "identifier"; SQL statement:
+create table order (total_amount integer, zip_code integer, create_date timestamp(6), modified_date timestamp(6), delivery_address varchar(255), delivery_status varchar(255), order_uuid varchar(255) not null, user_uuid varchar(255), primary key (order_uuid)) [42001-232]
+2025-02-20 11:41:21.166028+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists [*]order add constraint FK14auv24onrerlsy4e81dlifbu foreign key (user_uuid) references member"; expected "identifier"; SQL statement:
+alter table if exists order add constraint FK14auv24onrerlsy4e81dlifbu foreign key (user_uuid) references member [42001-232]
+2025-02-20 11:41:21.321136+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "alter table if exists product_order_relation add constraint FKdii7jdby69xl39bljvlvss0d8 foreign key (order_uuid) references [*]order"; expected "identifier"; SQL statement:
+alter table if exists product_order_relation add constraint FKdii7jdby69xl39bljvlvss0d8 foreign key (order_uuid) references order [42001-232]
+2025-02-20 11:41:37.385344+09:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop table if exists [*]order cascade "; expected "identifier"; SQL statement:
+drop table if exists order cascade  [42001-232]
