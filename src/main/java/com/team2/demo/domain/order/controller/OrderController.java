@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -54,5 +55,18 @@ public class OrderController {
                 .build();
 
         return RsData.success("success", response);
+    }
+
+    /*
+        사용자 주문 수정
+        PUT /orders/{orderId}?email=user@example.com
+    */
+    @PutMapping("/{orderId}")
+    public ResponseEntity<RsData<OrderDto>> updateOrder(
+            @PathVariable String orderId,
+            @RequestParam String email,
+            @RequestBody OrderDto request) {
+        RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
+        return ResponseEntity.ok(response);
     }
 }
