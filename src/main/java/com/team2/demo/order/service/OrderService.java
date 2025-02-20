@@ -13,12 +13,21 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
 
+    //주문 찾기
     @Transactional
     public Order updateOrder(String orderId, Order request) {
         Order order = orderRepository.findById(orderId).
-                orElseThrow(()-> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderId));
+                orElseThrow(() -> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderId));
 
+        //주문 정보 업데이트
+        order.updateOrder(
+                request.getTotalAmount(),
+                request.getDeliveryAddress(),
+                request.getDeliveryStatus(),
+                request.getZipCode()
+        );
+        return order;
     }
-
-
 }
+
+
