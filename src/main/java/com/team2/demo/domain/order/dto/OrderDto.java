@@ -19,6 +19,7 @@ public class OrderDto {
     private Integer totalPrice;
     private DeliveryStatus deliveryStatus;
     private String buyerEmail;
+    private List<String> productNames;
 
     private Integer zipCode;
     private String deliveryAddress;
@@ -30,5 +31,8 @@ public class OrderDto {
         this.totalPrice = order.getTotalAmount();
         this.deliveryStatus = order.getDeliveryStatus();
         this.buyerEmail = order.getUser().getEmail();
+        this.productNames = order.getProducts().stream()
+                .map(product -> product.getProductName())
+                .toList();
     }
 }
