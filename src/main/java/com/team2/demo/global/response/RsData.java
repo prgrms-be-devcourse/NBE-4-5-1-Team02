@@ -17,7 +17,7 @@ public class RsData<T> {
         return new RsData<>(message, data, HttpStatus.OK.value());
     }
     public static <T> RsData<T> badRequest(String message) {
-
+        return new RsData<>(message,null, HttpStatus.BAD_REQUEST.value());
     }
 
 }
