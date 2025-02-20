@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -63,8 +64,28 @@ public class Order {
         this.deliveryStatus = deliveryStatus;
     }
 
+    public void updateOrder(Integer totalAmount, String deliveryAddress, Integer zipCode, String deliveryStatus) {
+        if (totalAmount != null) {
+            this.totalAmount = totalAmount;
+        }
+        if (deliveryAddress != null && !deliveryAddress.isBlank()) {
+            this.deliveryAddress = deliveryAddress;
+        }
+        if (zipCode != null) {
+            this.zipCode = zipCode;
+        }
+        if (deliveryStatus != null && !deliveryStatus.isBlank()) {
+            this.deliveryStatus = deliveryStatus;
+        }
+        this.modifiedDate = LocalDateTime.now();
+    }
+
+    public void updateOrder(Integer totalAmount, String deliveryAddress, String deliveryStatus, Integer zipCode) {
+    }
+
     public enum DeliveryStatus {
 
     }
+
 
 }
