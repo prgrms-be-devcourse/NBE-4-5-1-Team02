@@ -27,10 +27,6 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "buyer_id")
-    private User buyer;
-
     @ManyToMany
     @JoinTable(name = "PRODUCT_ORDER_RELATION",
             joinColumns = @JoinColumn(name = "ORDER_UUID"),
