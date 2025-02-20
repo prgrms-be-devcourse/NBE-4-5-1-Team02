@@ -48,12 +48,15 @@ public class OrderService {
                         .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productId)))
                 .collect(Collectors.toList());
 
+        // 기존 상품 제거, 새로운 상품 추가
         order.getProducts().clear();
         order.getProducts().addAll(updatedProducts);
 
+        // 주소, 우편번호 수정
         order.setDeliveryAddress(request.getDeliveryAddress());
         order.setZipCode(request.getZipCode());
 
+        // 수정 시간 갱신
         order.setModifiedDate(LocalDateTime.now());
 
         orderRepository.save(order);
