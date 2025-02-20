@@ -4,7 +4,12 @@
 
 - URL: `/products`
 - Method: `POST`
-    - Success
+- Parameters
+  - `keyword-type` : string, default="title", not null
+  - `keyword` : string, nullable <br/>
+
+
+- Success
 
 ```json
 {

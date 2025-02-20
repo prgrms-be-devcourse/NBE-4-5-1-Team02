@@ -7,10 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Builder
 public class RsData<T> {
@@ -24,15 +24,15 @@ public class RsData<T> {
         /*RsData<T> rsData = new RsData<>();
         rsData.data = data;
         return rsData;*/
-
-        return new RsData<>(message, data, 200);
+        return new RsData<>(message, data, HttpStatus.OK.value());
     }
+  
     public static <T> RsData<T> badRequest(String message, int code) {
         /*RsData<T> rsData = new RsData<>();
         rsData.message = message;
         return rsData;*/
 
-        return new RsData<>(message, null, code);
+        return new RsData<>(message, null, HttpStatus.BAD_REQUEST.value());
     }
 
 }
