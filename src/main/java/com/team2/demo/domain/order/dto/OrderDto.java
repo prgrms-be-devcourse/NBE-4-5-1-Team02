@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -16,17 +17,23 @@ public class OrderDto {
     private Integer totalPrice;
     private Order.DeliveryStatus deliveryStatus;
     private String buyerEmail;
-    private List<String> productNames;
+    private List<ProductItem> items;
 
-    // 종현 : 반환 타입을 OrderDto로 변경
-    public OrderDto (Order order) {
+    @Getter
+    @AllArgsConstructor
+    public static class ProductItem {
+        private String name;
+        private int quantity;
+    }
+
+    public OrderDto(Order order) {
         this.orderId = order.getOrderUuid();
         this.orderDate = order.getCreateDate();
         this.totalPrice = order.getTotalAmount();
         this.deliveryStatus = order.getDeliveryStatus();
         this.buyerEmail = order.getUser().getEmail();
-        this.productNames = order.getProducts().stream()
-                .map(product -> product.getProductName())
-                .toList();
+        this.items = order.getProducts().stream()
+                .map(product -> new ProductItem(product.getProductName(), 1)) // 수량 수동 변경
+                .collect(Collectors.toList());
     }
 }
