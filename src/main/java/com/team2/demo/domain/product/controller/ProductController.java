@@ -3,6 +3,8 @@ package com.team2.demo.domain.product.controller;
 import com.team2.demo.domain.product.dto.ProductDto;
 import com.team2.demo.domain.product.service.ProductService;
 import com.team2.demo.global.response.RsData;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +34,21 @@ public class ProductController {
         private int totalPages;
     }
 
+    record SearchParams(@NotNull String keywordType, String keyword){
+        public SearchParams{
+            if(keywordType == null || keywordType.isEmpty())
+                keywordType = "title";
+            if(keyword == null)
+                keyword = "";
+        }
+    }
+
     @PostMapping
     public RsData<PaginationData<ProductDto>> getProductList(
-            @RequestParam(name = "keyword-type", defaultValue = "title") String keywordType,
-            @RequestParam(name = "keyword", defaultValue = "") String keyword,
+            @RequestParam @Valid SearchParams params,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
-        Page<ProductDto> products = productService.getProductList(keywordType, keyword, pageable);
+        Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);
         return RsData.success(
                 "성공했습니다.",
                         PaginationData.<ProductDto>builder()
