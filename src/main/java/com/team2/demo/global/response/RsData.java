@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @Getter
 @Builder
-@AllArgsConstructor
 public class RsData<T> {
 
     private String message;
@@ -25,10 +24,10 @@ public class RsData<T> {
         /*RsData<T> rsData = new RsData<>();
         rsData.data = data;
         return rsData;*/
-
         return new RsData<>(message, data, HttpStatus.OK.value());
     }
-    public static <T> RsData<T> badRequest(String message) {
+  
+    public static <T> RsData<T> badRequest(String message, int code) {
         /*RsData<T> rsData = new RsData<>();
         rsData.message = message;
         return rsData;*/

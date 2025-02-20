@@ -52,11 +52,11 @@ public class Order {
 
 
 //    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
-    private String deliveryStatus;
+    private DeliveryStatus deliveryStatus;
 
-
-    public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
+    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
@@ -64,7 +64,7 @@ public class Order {
     }
 
     public enum DeliveryStatus {
-
+        PENDING, SHIPPED, DELIVERED
     }
 
 }
