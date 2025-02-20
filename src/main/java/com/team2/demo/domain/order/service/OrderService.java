@@ -66,4 +66,10 @@ public class OrderService {
 
         return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
     }
+
+    // 관리자: 주문 리스트 조회
+    public Page<OrderDto> getAllOrders(int page, int size) {
+
+        return null;
+    }
 }
