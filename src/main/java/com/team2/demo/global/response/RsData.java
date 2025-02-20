@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public class RsData<T> {
 
+    private int resultCode;
     private String message;
     private T data;
     private int code;
