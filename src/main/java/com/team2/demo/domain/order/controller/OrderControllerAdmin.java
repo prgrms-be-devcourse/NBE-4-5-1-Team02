@@ -19,5 +19,12 @@ public class OrderControllerAdmin {
         관리자 주문 목록 조회
         GET /admin/orders?page=1&size=10
     */
+    @GetMapping
+    public RsData<OrderListResponse> getAllOrders(@RequestParam(defaultValue = "1") int page,
+                                                  @RequestParam(defaultValue = "10") int size) {
 
+        Page<OrderDto> orderPage = orderService.getAllOrders(page, size);
+
+        return RsData.success(response);
+    }
 }
