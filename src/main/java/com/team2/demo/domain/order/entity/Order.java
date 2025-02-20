@@ -51,7 +51,7 @@ public class Order {
     @Column(name = "ZIP_CODE")
     private Integer zipCode;
 
-    @Enumerated(EnumType.STRING)
+    // @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private String deliveryStatus;
 
