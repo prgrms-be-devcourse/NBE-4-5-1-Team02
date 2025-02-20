@@ -13,7 +13,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "ORDER")
+@Table(name = "orders")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,7 +25,6 @@ public class Order {
     private String orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_UUID")
     private User user;
 
     @ManyToMany
@@ -52,10 +51,10 @@ public class Order {
     private Integer zipCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "DELIVERY_STATUS")
-    private String deliveryStatus;
+    @Column(name = "DELIVERY_STATUS", columnDefinition = "varchar(255)")
+    private DeliveryStatus deliveryStatus;
 
-    public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
+    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
