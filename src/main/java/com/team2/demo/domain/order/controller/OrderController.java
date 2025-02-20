@@ -70,4 +70,16 @@ public class OrderController {
         RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/orders")
+    public RsData<OrderDto> payment(@RequestBody Order body){
+
+        try{
+            Order order = orderService.payment(body);
+            OrderDto orderDto = OrderDto.of(order);
+            return RsData.success(orderDto);
+        }catch (Exception e){
+            return RsData.badRequest("결제 실패:" +e.getMessage());
+        }
+    }
 }

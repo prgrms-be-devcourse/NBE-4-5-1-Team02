@@ -78,4 +78,10 @@ public class OrderService {
 
         return orders.map(OrderDto::new);
     }
+
+    public Order payment(Order order){
+        System.out.println("결제 진행 서비스 시작");
+        return orderRepository.save(order);
+        //return null;
+    }
 }

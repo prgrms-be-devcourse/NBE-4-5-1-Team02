@@ -21,6 +21,7 @@ import java.util.List;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ORDER_UUID")
     private String orderUuid;
 
