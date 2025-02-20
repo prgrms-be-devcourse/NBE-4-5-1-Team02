@@ -10,7 +10,7 @@ public enum KeywordType {
     TITLE("title") {
         @Override
         public Page<ProductDto> getSearchResult(ProductRepository productRepository, String keyword, Pageable pageable) {
-            return productRepository.findAllByCategoryLike(keyword, pageable)
+            return productRepository.findAllByProductNameLike(keyword, pageable)
                     .map(ProductDto::of);
         }
     },
