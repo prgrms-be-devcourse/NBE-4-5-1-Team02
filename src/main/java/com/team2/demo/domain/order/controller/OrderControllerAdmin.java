@@ -32,6 +32,6 @@ public class OrderControllerAdmin {
                 .totalPages(orderPage.getTotalPages())
                 .build();
 
-        return RsData.success(response);
+        return RsData.success("ok", response);
     }
 }

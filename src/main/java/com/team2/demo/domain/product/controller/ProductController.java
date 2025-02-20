@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -51,7 +49,7 @@ public class ProductController {
 
         Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);
         return RsData.success(
-                "성공했습니다.",
+                "성공했습니다",
                         PaginationData.<ProductDto>builder()
                         .data(products.getContent())
                         .page(products.getNumber())
