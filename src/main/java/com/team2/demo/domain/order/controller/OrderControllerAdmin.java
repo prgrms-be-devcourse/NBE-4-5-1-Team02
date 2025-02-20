@@ -25,6 +25,13 @@ public class OrderControllerAdmin {
 
         Page<OrderDto> orderPage = orderService.getAllOrders(page, size);
 
+        OrderListResponse response = OrderListResponse.builder()
+                .content(orderPage.getContent())
+                .page(orderPage.getNumber() + 1)
+                .size(orderPage.getSize())
+                .totalPages(orderPage.getTotalPages())
+                .build();
+
         return RsData.success(response);
     }
 }
