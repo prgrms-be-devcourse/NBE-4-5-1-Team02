@@ -37,10 +37,6 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
 
-        if (!order.getUser().getEmail().equals(email)) {
-            return RsData.fail("주문 수정 권한이 없습니다.");
-        }
-
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
             return RsData.fail("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.");
