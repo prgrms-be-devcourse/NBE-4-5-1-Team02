@@ -51,12 +51,12 @@ public class Order {
     private Integer zipCode;
 
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "DELIVERY_STATUS", columnDefinition = "varchar(255)")
-    private DeliveryStatus deliveryStatus;
+//    @Enumerated(EnumType.STRING)
+    @Column(name = "DELIVERY_STATUS")
+    private String deliveryStatus;
 
 
-    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
+    public Order(User user, String deliveryAddress, Integer zipCode, String deliveryStatus) {
         this.user = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
