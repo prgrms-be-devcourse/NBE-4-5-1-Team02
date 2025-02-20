@@ -30,7 +30,7 @@ public class UserController
         try{
             User user = userService.addUser(userBody);
             UserDto userDto = UserDto.of(user);
-            return RsData.success(userDto);
+            return RsData.success("success",userDto);
         }catch (Exception e){
             return RsData.badRequest("유저 등록 실패:" +e.getMessage());
         }
