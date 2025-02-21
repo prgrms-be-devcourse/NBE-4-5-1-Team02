@@ -99,11 +99,11 @@ public class OrderController {
          DELETE /orders/{orderId}?email=user@example.com
     */
     @DeleteMapping("/{orderId}")
-    public ResponseEntity<RsData<String>> cancelOrder(
+    public ResponseEntity<RsData<Void>> cancelOrder(
             @PathVariable String orderId,
             @RequestParam String email) {
         RsData<Void> response = orderService.cancelOrder(orderId, email);
-        return ResponseEntity.ok(RsData.success("주문이 성공적으로 취소되었습니다.", orderId));
+        return ResponseEntity.ok(response);
     }
 
 }

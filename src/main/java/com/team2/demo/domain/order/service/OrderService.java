@@ -16,8 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +26,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 
+    // 사용자: 주문 리스트 조회
     public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게
         Page<Order> orders = orderRepository.findAllByUser_Email(orderForm.email(), pageable);
@@ -67,6 +68,28 @@ public class OrderService {
         return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
     }
 
+    // 사용자: 주문 취소
+    @Transactional
+    public RsData<Void> cancelOrder(String orderId, String email) {
+        Optional<Order> optionalOrder = orderRepository.findByOrderUuid(orderId);
+
+        if (optionalOrder.isEmpty()) {
+            return RsData.badRequest("해당 주문을 찾을 수 없습니다.", 404);
+        }
+
+        Order order = optionalOrder.get();
+        if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
+                order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
+            return RsData.badRequest("배송 중이거나 배송 완료된 주문은 취소할 수 없습니다.", 400);
+        }
+
+        order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
+        orderRepository.save(order);
+
+        return RsData.success("주문이 취소되었습니다.", null);
+    }
+
+
     // 관리자: 주문 리스트 조회
     public Page<OrderDto> getAllOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
@@ -82,6 +105,5 @@ public class OrderService {
     public Order payment(Order order){
         System.out.println("결제 진행 서비스 시작");
         return orderRepository.save(order);
-        //return null;
     }
 }
