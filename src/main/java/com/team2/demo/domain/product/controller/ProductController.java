@@ -6,19 +6,13 @@ import com.team2.demo.global.response.PaginationData;
 import com.team2.demo.global.response.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -34,7 +28,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/products")
     public RsData<PaginationData<ProductDto>> getProductList(
             @RequestParam @Valid SearchParams params,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
@@ -49,5 +43,22 @@ public class ProductController {
                         .totalPages(products.getTotalPages())
                         .build()
         );
+    }
+
+    @GetMapping("/admin/orders/{orderId}/products")
+    public RsData<PaginationData<ProductDto>> getProductsInOrder(
+            @PathVariable(name = "orderId") String orderId,
+            @PageableDefault(page = 0, size = 10) Pageable pageable
+    ){
+        Page<ProductDto> items = productService.getProductsInOrder(orderId, pageable);
+
+        PaginationData<ProductDto> products = PaginationData.<ProductDto>builder()
+                .data(items.getContent())
+                .page(items.getNumber())
+                .size(items.getSize())
+                .totalPages(items.getTotalPages())
+                .build();
+
+        return RsData.success("Success.", products);
     }
 }
