@@ -1,8 +1,8 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
-import com.team2.demo.domain.order.dto.OrderInfoDtoAdmin;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.service.ProductService;
 import com.team2.demo.global.response.OrderListResponse;
@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class OrderControllerAdmin {
 
     private final OrderService orderService;
+    private final AdminOrderService adminOrderService;
     private final ProductService productService;
+
 
     /*
         관리자 주문 목록 조회
@@ -45,6 +47,12 @@ public class OrderControllerAdmin {
         return RsData.success("ok", response);
     }
 
+    @PutMapping("/{orderUuid}")
+    public RsData<OrderDto> updateOrder(
+            @PathVariable String orderUuid,
+            @RequestBody Order order) {
+        OrderDto updateOrder = adminOrderService.updateOrder(orderUuid, order);
+        return RsData.success("success.", updateOrder);
 
     @GetMapping("{orderId}")
     public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId){
