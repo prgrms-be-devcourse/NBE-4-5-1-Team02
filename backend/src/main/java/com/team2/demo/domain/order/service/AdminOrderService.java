@@ -29,4 +29,13 @@ public class AdminOrderService {
         );
         return new OrderDto(order);
     }
+
+    // 주문 삭제 기능
+    public void deleteOrder(String orderUuid){
+        Order order = orderRepository.findByOrderUuid(orderUuid)
+                .orElseThrow(()-> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderUuid));
+
+        orderRepository.delete(order);
+    }
+
 }
