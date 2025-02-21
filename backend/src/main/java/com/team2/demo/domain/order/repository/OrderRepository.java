@@ -16,4 +16,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     Optional<Order> findByOrderUuid(String orderUuid);
 
     void deleteByOrderUuid(String orderUuid);
+
+    long countByOrderUuid(String orderUuid);
 }
