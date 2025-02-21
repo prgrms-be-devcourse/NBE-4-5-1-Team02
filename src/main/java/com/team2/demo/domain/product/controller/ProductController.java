@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
@@ -34,9 +31,9 @@ public class ProductController {
         }
     }
 
-    @PostMapping
+    @GetMapping
     public RsData<PaginationData<ProductDto>> getProductList(
-            @RequestParam @Valid SearchParams params,
+            @ModelAttribute @Valid SearchParams params,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);

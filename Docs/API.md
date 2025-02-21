@@ -2,48 +2,81 @@
 
 ### 상품 목록 조회
 
-- URL: `/products`
-- Method: `POST`
-- Parameters
-  - `keyword-type` : string, default="title", not null
-  - `keyword` : string, nullable <br/>
+- **URL:** `/products`
+- **Method:** `POST`
+- **Parameters**
+  - **Query string**
+    - `keyword-type` : string, default=`"title"`, not null
+    - `keyword` : string, nullable <br/>
 
-
-- Success
-
-```json
-{
-  "data": 
-      [
-        {"uuid": 1,
-          "name":"커피",
-          "category":"커피콩",
-          "image_url":"url~~"
+  <details>
+  <summary>success</summary> 
+  
+    ```json
+    {
+        "message": "Success.",
+        "data": {
+            "data": [
+                {
+                    "productUuid": "product-11111-22222-33331",
+                    "productName": "product1",
+                    "category": "coffeeBean",
+                    "productPrice": 1000,
+                    "productDescription": "커피콩1",
+                    "imageUrl": "image_url1"
+                },
+                {
+                    "productUuid": "product-11111-22222-33332",
+                    "productName": "product2",
+                    "category": "coffeeBean",
+                    "productPrice": 5000,
+                    "productDescription": "커피콩2",
+                    "imageUrl": "image_url2"
+                },
+                {
+                    "productUuid": "product-11111-22222-33333",
+                    "productName": "product3",
+                    "category": "coffeeBean",
+                    "productPrice": 1000,
+                    "productDescription": "커피콩3",
+                    "imageUrl": "image_url3"
+                },
+                {
+                    "productUuid": "product-11111-22222-33334",
+                    "productName": "product4",
+                    "category": "coffeeBean",
+                    "productPrice": 5000,
+                    "productDescription": "커피콩4",
+                    "imageUrl": "image_url4"
+                },
+                {
+                    "productUuid": "product-11111-22222-33335",
+                    "productName": "product5",
+                    "category": "coffeeBean",
+                    "productPrice": 1000,
+                    "productDescription": "커피콩5",
+                    "imageUrl": "image_url5"
+                }
+            ],
+            "page": 0,
+            "size": 10,
+            "totalPages": 1
         },
-        {
-          "uuid": 2,
-          "name":"차",
-          "category":"허브",
-          "image_url":"url~~"
-        }
-      ],
-  "pagination": {
-      "page": 1,
-      "size": 10,
-      "totalPages": 1
-  },
-  "msg" : "성공했습니다."
-}
-```
+        "code": 200
+    }
+    ```  
+  </details>
+  <details>
+  <summary>fail</summary>
 
-- fail
+    ```json
+    {
+      "errcode": "PRODUCT001",
+      "errmsg": "상품 목록 조회를 불러오지 못했습니다."
+    }
+    ```
+  </details>
 
-```json
-{
-	"errcode": "PRODUCT001",
-	"errmsg": "상품 목록 조회를 불러오지 못했습니다."
-}
-```
 
 ## 1. 사용자 API
 
