@@ -1,13 +1,13 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderRequestDto;
+import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,7 +63,7 @@ public class OrderController {
             Order order = orderService.payment(body);
             return null;
         } catch (Exception e) {
-            return RsData.badRequest("결제 실패:" + e.getMessage(), 400);
+            return RsData.badRequest("결제 실패:" + e.getMessage());
         }
     }
 
@@ -79,20 +79,6 @@ public class OrderController {
         RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
         return ResponseEntity.ok(response);
     }
-
-
-    @PostMapping("/orders")
-    public RsData<OrderDto> payment(@RequestBody Order body){
-
-        try{
-            Order order = orderService.payment(body);
-            OrderDto orderDto = OrderDto.of(order);
-            return RsData.success(orderDto);
-        }catch (Exception e){
-            return RsData.badRequest("결제 실패:" +e.getMessage());
-        }
-    }
-
 
     /*
         사용자 주문 취소
