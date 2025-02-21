@@ -15,7 +15,6 @@ public class OrderRequestDto {
     @NotNull(message = "우편번호를 입력해야 합니다.")
     private Integer zipCode;
 
-    @NotNull(message = "상품 ID 리스트는 필수입니다.")
     private List<String> productIds;
 
 }
