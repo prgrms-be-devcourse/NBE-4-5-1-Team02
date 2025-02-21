@@ -6,40 +6,18 @@ import com.team2.demo.global.response.PaginationData;
 import com.team2.demo.global.response.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-<<<<<<< HEAD
-import java.util.List;
-
-=======
->>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
 @RestController
-@RequestMapping("/products")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-<<<<<<< HEAD
-    @Builder
-    @AllArgsConstructor
-    public static class PaginationData<T> {
-        private List<T> data;
-        private int page;
-        private int size;
-        private int totalPages;
-    }
-=======
->>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
 
     record SearchParams(@NotNull String keywordType, String keyword){
         public SearchParams{
@@ -50,25 +28,38 @@ public class ProductController {
         }
     }
 
-    @PostMapping
+
+    @GetMapping("/products")
     public RsData<PaginationData<ProductDto>> getProductList(
-            @RequestParam @Valid SearchParams params,
+            @ModelAttribute @Valid SearchParams params,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);
         return RsData.success(
-<<<<<<< HEAD
-                "성공했습니다",
-                        PaginationData.<ProductDto>builder()
-=======
                 "Success.",
                 PaginationData.<ProductDto>builder()
->>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
                         .data(products.getContent())
                         .page(products.getNumber())
                         .size(products.getSize())
                         .totalPages(products.getTotalPages())
                         .build()
         );
+    }
+
+    @GetMapping("/admin/orders/{orderId}/products")
+    public RsData<PaginationData<ProductDto>> getProductsInOrder(
+            @PathVariable(name = "orderId") String orderId,
+            @PageableDefault(page = 0, size = 10) Pageable pageable
+    ){
+        Page<ProductDto> items = productService.getProductsInOrder(orderId, pageable);
+
+        PaginationData<ProductDto> products = PaginationData.<ProductDto>builder()
+                .data(items.getContent())
+                .page(items.getNumber())
+                .size(items.getSize())
+                .totalPages(items.getTotalPages())
+                .build();
+
+        return RsData.success("Success.", products);
     }
 }
