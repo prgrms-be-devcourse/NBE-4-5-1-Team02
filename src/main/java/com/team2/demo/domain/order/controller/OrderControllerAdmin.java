@@ -1,19 +1,15 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
+import com.team2.demo.domain.order.entity.Order;
+import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.service.ProductService;
 import com.team2.demo.global.response.OrderListResponse;
-import com.team2.demo.global.response.PaginationData;
 import com.team2.demo.global.response.RsData;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -53,6 +49,7 @@ public class OrderControllerAdmin {
             @RequestBody Order order) {
         OrderDto updateOrder = adminOrderService.updateOrder(orderUuid, order);
         return RsData.success("success.", updateOrder);
+    }
 
     @GetMapping("{orderId}")
     public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId){
