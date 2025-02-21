@@ -26,8 +26,3 @@ logging:
         #highlight_sql: true             # SQL 출력을 ANSI escape codes를 사용하여 색을 부여합니다.
         #use_sql_comments: true          # 보다 쉬운 디버깅을 위해 SQL 내부에 /* */의 주석을 추가합니다.
     database-platform: org.hibernate.dialect.H2Dialect
-# Logging
-logging:
-  level:                                 # 각 package 별로 로깅 레벨을 지정할 수 있다.
-    org.hibernate.type: trace            # 콘솔차에 조건에 바인딩되는 값 및 조회 결과 출력
-    sql: debug
