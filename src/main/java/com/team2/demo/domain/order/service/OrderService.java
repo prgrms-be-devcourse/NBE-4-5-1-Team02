@@ -2,12 +2,15 @@ package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.global.response.RsData;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -83,5 +86,11 @@ public class OrderService {
     public Order payment(Order order){
         System.out.println("결제 진행 서비스 시작");
         return orderRepository.save(order);
+    }
+
+    public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
+        return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
+                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+        );
     }
 }
