@@ -24,6 +24,7 @@ public class OrderControllerAdmin {
 
     /*
         관리자 주문 목록 조회
+
         GET /admin/orders?page=1&size=10
     */
     @GetMapping
@@ -57,4 +58,13 @@ public class OrderControllerAdmin {
 
         return RsData.success("Success.", data);
     }
+
+    //주문 삭제
+    @DeleteMapping("/{orderUuid}")
+    public RsData<Void> deleteOrder(@PathVariable String orderUuid){
+        adminOrderService.deleteOrder(orderUuid);
+        return RsData.success("주문이 성공적으로 삭제되었습니다.",null);
+    }
+
+
 }

@@ -1,3 +1,4 @@
+
 package com.team2.demo.domain.order.repository;
 
 import com.team2.demo.domain.order.entity.Order;
@@ -13,4 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     Page<Order> findAllByUser_Email(String email, Pageable pageable);
 
     Optional<Order> findByOrderUuid(String orderUuid);
+
+    void deleteByOrderUuid(String orderUuid);
 }
