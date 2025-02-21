@@ -80,9 +80,6 @@ public class Order {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public void updateOrder(Integer totalAmount, String deliveryAddress, String deliveryStatus, Integer zipCode) {
-    }
-
     public enum DeliveryStatus {
         PENDING, SHIPPED, DELIVERED, CANCELLED
     }

@@ -8,7 +8,6 @@ import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.global.response.RsData;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,10 +80,8 @@ public class OrderService {
         return orders.map(order -> new OrderDto(order, true)); // 상품 포함
     }
   
-  
     public Order payment(Order order){
         System.out.println("결제 진행 서비스 시작");
         return orderRepository.save(order);
     }
-
 }

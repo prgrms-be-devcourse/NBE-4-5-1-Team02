@@ -39,10 +39,10 @@ public class OrderControllerAdmin {
         return RsData.success("ok", response);
     }
     @PutMapping("/{orderUuid}")
-    public ResponseEntity<Order> updateOrder(
+    public RsData<OrderDto> updateOrder(
             @PathVariable String orderUuid,
             @RequestBody Order order) {
-        Order updateOrder = adminOrderService.updateOrder(orderUuid, order);
-        return ResponseEntity.ok(updateOrder);
+        OrderDto updateOrder = adminOrderService.updateOrder(orderUuid, order);
+        return RsData.success("success.", updateOrder);
     }
 }
