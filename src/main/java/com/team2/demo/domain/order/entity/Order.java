@@ -25,7 +25,7 @@ public class Order {
     private String orderUuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_UUID")
+    @JoinColumn(name = "USER_UUID", referencedColumnName = "USER_UUID")
     private User user;
 
     @ManyToMany
@@ -68,7 +68,6 @@ public class Order {
     }
 
     public enum DeliveryStatus {
-
         PENDING, SHIPPED, DELIVERED, CANCELLED
     }
 
