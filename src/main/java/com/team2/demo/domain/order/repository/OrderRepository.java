@@ -11,5 +11,6 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
     Page<Order> findAllByUser_Email(String email, Pageable pageable);
+
     Optional<Order> findByOrderUuid(String orderUuid);
 }
