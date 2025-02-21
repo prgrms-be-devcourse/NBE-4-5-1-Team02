@@ -57,6 +57,16 @@ public class OrderController {
         return RsData.success("ok", response);
     }
 
+    @PostMapping
+    public RsData<OrderDto> payment(@RequestBody Order body) {
+        try {
+            Order order = orderService.payment(body);
+            return null;
+        } catch (Exception e) {
+            return RsData.badRequest("결제 실패:" + e.getMessage(), 400);
+        }
+    }
+
     /*
         사용자 주문 수정
         PUT /orders/{orderId}?email=user@example.com
@@ -70,6 +80,7 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+
     @PostMapping("/orders")
     public RsData<OrderDto> payment(@RequestBody Order body){
 
@@ -81,4 +92,18 @@ public class OrderController {
             return RsData.badRequest("결제 실패:" +e.getMessage());
         }
     }
+
+
+    /*
+        사용자 주문 취소
+         DELETE /orders/{orderId}?email=user@example.com
+    */
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<RsData<String>> cancelOrder(
+            @PathVariable String orderId,
+            @RequestParam String email) {
+        RsData<Void> response = orderService.cancelOrder(orderId, email);
+        return ResponseEntity.ok(RsData.success("주문이 성공적으로 취소되었습니다.", orderId));
+    }
+
 }
