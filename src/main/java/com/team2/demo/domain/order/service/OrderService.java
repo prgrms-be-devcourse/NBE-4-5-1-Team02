@@ -35,15 +35,16 @@ public class OrderService {
 
     @Transactional
     public RsData<OrderDto> updateOrder(String orderId, String email, OrderRequestDto request) {
-        Order order = orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
+        Optional<Order> optionalOrder = orderRepository.findByOrderUuid(orderId);
+        if (optionalOrder.isEmpty()) {
+            return RsData.badRequest("해당 주문을 찾을 수 없습니다.", 404);
+        }
 
-
+        Order order = optionalOrder.get();
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
             return RsData.badRequest("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.", 400);
         }
-
 
         List<Product> updatedProducts = request.getProductIds().stream()
                 .map(productUuid -> productRepository.findByProductUuid(productUuid)
@@ -60,7 +61,7 @@ public class OrderService {
 
         if (updatedProducts.isEmpty()) {
             order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-            orderRepository.delete(order);
+            orderRepository.save(order);
             return RsData.success("주문이 취소되었습니다.", null);
         }
 
@@ -71,7 +72,6 @@ public class OrderService {
     @Transactional
     public RsData<Void> cancelOrder(String orderId, String email) {
         Optional<Order> optionalOrder = orderRepository.findByOrderUuid(orderId);
-
         if (optionalOrder.isEmpty()) {
             return RsData.badRequest("해당 주문을 찾을 수 없습니다.", 404);
         }
