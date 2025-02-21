@@ -8,7 +8,6 @@ import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
