@@ -1,43 +1,65 @@
 package com.team2.demo.domain.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.team2.demo.domain.order.entity.Order;
-import com.team2.demo.domain.product.entity.Product;
-import com.team2.demo.domain.user.entity.User;
-import lombok.*;
+import com.team2.demo.domain.order.entity.Order.DeliveryStatus;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
+    private String orderId;
+    private LocalDateTime orderDate;
+    private Integer totalPrice;
 
-    private Long orderUuid;
-    private User user;
-    private User buyer;
-    private List<Product> products;
-    private LocalDateTime createDate;
-    private LocalDateTime modifiedDate;
-    private Integer totalAmount;
-    private String deliveryAddress;
-    private Integer zipCode;
-    private Order.DeliveryStatus deliveryStatus;
+    private DeliveryStatus deliveryStatus;
 
-    public static OrderDto of(Order order) {
-        return OrderDto.builder()
-                .orderUuid(order.getOrderUuid())
-                .user(order.getUser())
-                .buyer(order.getBuyer())
-                .products(order.getProducts())
-                .createDate(order.getCreateDate())
-                .modifiedDate(order.getModifiedDate())
-                .totalAmount(order.getTotalAmount())
-                .deliveryAddress(order.getDeliveryAddress())
-                .zipCode(order.getZipCode())
-                .deliveryStatus(order.getDeliveryStatus())
-                .build();
+    private String buyerEmail;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<ProductItem> items;
+
+    @Getter
+    @AllArgsConstructor
+    public static class ProductItem {
+        private String name;
+        private int quantity;
     }
+
+    // 상품 항목을 포함하지 않는 생성자 (사용자 리스트 조회용)
+    public OrderDto(Order order) {
+        this.orderId = order.getOrderUuid();
+        this.orderDate = order.getCreateDate();
+        this.totalPrice = order.getTotalAmount();
+        this.deliveryStatus = order.getDeliveryStatus();
+        this.buyerEmail = order.getUser().getEmail();
+    }
+
+    /* 없애지 말아주세요! : Reference
+    // 상품 항목을 포함하는 생성자 (관리자 리스트 조회용)
+    public OrderDto(Order order, boolean includeItems) {
+        this.orderId = order.getOrderUuid();
+        this.orderDate = order.getCreateDate();
+        this.totalPrice = order.getTotalAmount();
+        this.deliveryStatus = order.getDeliveryStatus();
+        this.buyerEmail = order.getUser().getEmail();
+        if (includeItems) {
+            Map<String, Integer> productCountMap = OrderItemGrouper.countProducts(order.getProducts());
+
+            *//*this.items = order.getProducts().stream()
+                    .map(product -> new ProductItem(product.getProductName(), productCountMap.get(product.getProductName())))
+                    .collect(Collectors.toList());*//*
+
+            this.items = productCountMap.entrySet().stream()
+                    .map(entry -> new ProductItem(entry.getKey(), entry.getValue()))
+                    .collect(Collectors.toList());
+        } else {
+            this.items = null;  // 상품 항목을 제외
+        }
+    }*/
 }

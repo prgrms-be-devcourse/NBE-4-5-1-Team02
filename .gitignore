@@ -31,3 +31,8 @@ db.mv.db
 src/main/resources/application.yml
 !/db.trace.db
 /db.trace.db
+
+.gradle/
+.idea/
+out/
+

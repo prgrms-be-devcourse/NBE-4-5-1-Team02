@@ -63,7 +63,7 @@ public class OrderController {
             Order order = orderService.payment(body);
             return null;
         } catch (Exception e) {
-            return RsData.badRequest("결제 실패:" + e.getMessage());
+            return RsData.badRequest("결제 실패:" + e.getMessage(),400);
         }
     }
 
