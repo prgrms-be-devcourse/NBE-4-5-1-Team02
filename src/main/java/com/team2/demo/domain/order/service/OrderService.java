@@ -50,8 +50,7 @@ public class OrderService {
                         .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
                 .collect(Collectors.toList());
 
-        order.getProducts().clear();
-        order.getProducts().addAll(updatedProducts);
+        order.updateProducts(updatedProducts); // clear() + addAll()
 
         order.updateDeliveryInfo(request.getDeliveryAddress(), request.getZipCode());
 
