@@ -1,8 +1,6 @@
 package com.team2.demo.global.response;
 
 
-import lombok.*;
-
 import lombok.AllArgsConstructor;
 import lombok.*;
 import org.springframework.http.HttpStatus;

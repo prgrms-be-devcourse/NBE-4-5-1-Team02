@@ -67,7 +67,7 @@
     ```json
     {
       "buyer": {
-        "email": "user@example.com",
+        "email": "user@example.com"
       },
       "address": "서울시 강남구 테헤란로 123",
       "zipcode": "12345",
@@ -541,4 +541,43 @@
 
 ---
 
-1.
+### 1. 유저 API
+
+1.1 유저 생성
+
+- **URL:**  `/users`
+- **Method:** `POST`
+- **설명:** 사용자가 주문 요청을 생성합니다. 생성하면서 유저의 정보를 저장
+
+- 파라미터
+
+| 키 | 값 예시 | 필수 여부 |
+| --- | --- | --- |
+| buyer.email | user@example.com | true |
+- **Request Body 예시:**
+
+    ```json
+    {
+      "buyer":{
+    	  "email": "user@example.com"
+      }
+    }
+    
+    ```
+
+  - **유효성 검사:**
+    - `buyer.email`: 이메일 형식, 비어있지 않음
+- **Response 예시:**
+
+    ```json
+    {
+        "message": "Success",
+        "data": {
+            "id": "user-43837299-71ef-4421-b2e1-03c19f43b75d",
+            "email": "user@example.com",
+            "createdDate": "2025-02-20T15:37:21.1689457",
+            "modifiedDate": "2025-02-20T15:37:21.1689457"
+        }
+    }
+    
+    ```
