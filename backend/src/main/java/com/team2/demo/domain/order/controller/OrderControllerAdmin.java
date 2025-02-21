@@ -63,7 +63,7 @@ public class OrderControllerAdmin {
     @DeleteMapping("/{orderUuid}")
     public RsData<Void> deleteOrder(@PathVariable String orderUuid){
         adminOrderService.deleteOrder(orderUuid);
-        return RsData.success("주문이 성공적으로 삭제되었습니다.",null);
+        return RsData.success("주문이 성공적으로 삭제되었습니다.", null);
     }
 
 
