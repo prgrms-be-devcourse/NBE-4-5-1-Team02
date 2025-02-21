@@ -70,7 +70,7 @@ public class OrderService {
     }
 
     // 관리자: 주문 리스트 조회
-    public Page<OrderDto> getAllOrders(int page, int size) {
+    public Page<OrderDto> getAllOrders(int page, int size, int maxItems) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
         Page<Order> orders = orderRepository.findAll(pageable);
 
@@ -78,7 +78,17 @@ public class OrderService {
             throw new IllegalArgumentException("주문 내역이 없습니다.");
         }
 
-        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
+        return orders.map(order -> {
+            List<OrderDto.ProductItem> limitedItems = order.getProducts().stream()
+                    .map(product -> new OrderDto.ProductItem(product.getProductName(), 1))
+                    .limit(maxItems) // 보여줄 상품 개수 제한
+                    .collect(Collectors.toList());
+
+            return new OrderDto(order.getOrderUuid(), order.getCreateDate(), order.getTotalAmount(),
+                    order.getDeliveryStatus(), order.getUser().getEmail(), limitedItems);
+        });
+
+//        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
     }
   
   
