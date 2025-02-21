@@ -43,19 +43,19 @@ public class OrderController {
         GET /orders?email=user@example.com&page=1&size=10
     */
     @GetMapping
-    public RsData<OrderListResponse> getOrders(@RequestParam @Valid OrderForm orderForm,
-                                               @RequestParam(defaultValue = "1") int page,
+    public RsData<OrderListResponse> getOrders(@ModelAttribute @Valid OrderForm orderForm,
+                                               @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {
 
         Page<OrderDto> orderPage = orderService.getOrdersByEmail(orderForm, page, size);
 
         OrderListResponse response = OrderListResponse.builder()
                 .content(orderPage.getContent())
-                .page(orderPage.getNumber() + 1)
+                .page(orderPage.getNumber())
                 .size(orderPage.getSize())
                 .totalPages(orderPage.getTotalPages())
                 .build();
-      
+
         return RsData.success("ok", response);
     }
 
