@@ -38,3 +38,4 @@ out/
 gradle/wrapper
 db.mv.db
 dt.trace.db
+src/main/resources/application.yml
