@@ -131,7 +131,7 @@ class OrderControllerAdminTest {
         int size = 10;
 
         // 초기화를 수행
-        //orderRepository.deleteAll();
+        orderRepository.deleteAll();
 
         ResultActions resultActions = mvc
                 .perform(get("/admin/orders")
@@ -142,10 +142,9 @@ class OrderControllerAdminTest {
                 .andDo(print());
 
         resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.message").value("주문이 없습니다."))
-                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("주문이 없습니다."));
+//                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
 
 

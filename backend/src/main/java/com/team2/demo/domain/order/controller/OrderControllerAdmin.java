@@ -35,10 +35,6 @@ public class OrderControllerAdmin {
 
         Page<OrderDto> orderPage = orderService.getAllOrders(page, size, maxProducts);
 
-        if (orderPage.getContent().isEmpty()) {
-            throw new ServiceException("주문이 없습니다.");
-        }
-
         OrderListResponse response = OrderListResponse.builder()
                 .content(orderPage.getContent())
                 .page(orderPage.getNumber() + 1)
