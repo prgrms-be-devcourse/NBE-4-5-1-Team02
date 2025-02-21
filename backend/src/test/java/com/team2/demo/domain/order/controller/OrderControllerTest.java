@@ -2,8 +2,6 @@ package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.service.OrderService;
-import com.team2.demo.domain.user.entity.User;
-import com.team2.demo.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +9,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.matchesPattern;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
-//@ActiveProfiles("test")
 @AutoConfigureMockMvc
 class OrderControllerTest {
 
@@ -33,8 +28,8 @@ class OrderControllerTest {
     @Autowired
     private OrderService orderService;
 
-    @Autowired
-    private UserService userService;
+    /*@Autowired
+    private UserService userService;*/
 
     private void checkOrder(ResultActions resultActions, OrderDto orderDto) throws Exception {
         resultActions
