@@ -2,6 +2,7 @@ package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderItemGrouper;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,8 +81,11 @@ public class OrderService {
         }
 
         return orders.map(order -> {
-            List<OrderDto.ProductItem> limitedItems = order.getProducts().stream()
-                    .map(product -> new OrderDto.ProductItem(product.getProductName(), 1))
+
+            Map<String, Integer> productCountMap = OrderItemGrouper.countProducts(order.getProducts());
+
+            List<OrderDto.ProductItem> limitedItems = productCountMap.entrySet().stream()
+                    .map(entry -> new OrderDto.ProductItem(entry.getKey(), entry.getValue()))
                     .limit(maxItems) // 보여줄 상품 개수 제한
                     .collect(Collectors.toList());
 
