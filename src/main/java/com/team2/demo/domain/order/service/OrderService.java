@@ -2,6 +2,7 @@ package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderItemGrouper;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,7 +74,7 @@ public class OrderService {
     }
 
     // 관리자: 주문 리스트 조회
-    public Page<OrderDto> getAllOrders(int page, int size) {
+    public Page<OrderDto> getAllOrders(int page, int size, int maxItems) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
         Page<Order> orders = orderRepository.findAll(pageable);
 
@@ -80,7 +82,20 @@ public class OrderService {
             throw new IllegalArgumentException("주문 내역이 없습니다.");
         }
 
-        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
+        return orders.map(order -> {
+
+            Map<String, Integer> productCountMap = OrderItemGrouper.countProducts(order.getProducts());
+
+            List<OrderDto.ProductItem> limitedItems = productCountMap.entrySet().stream()
+                    .map(entry -> new OrderDto.ProductItem(entry.getKey(), entry.getValue()))
+                    .limit(maxItems) // 보여줄 상품 개수 제한
+                    .collect(Collectors.toList());
+
+            return new OrderDto(order.getOrderUuid(), order.getCreateDate(), order.getTotalAmount(),
+                    order.getDeliveryStatus(), order.getUser().getEmail(), limitedItems);
+        });
+
+//        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
     }
   
   

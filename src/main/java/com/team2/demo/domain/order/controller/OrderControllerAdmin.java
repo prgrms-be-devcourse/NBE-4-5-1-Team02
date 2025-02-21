@@ -30,9 +30,10 @@ public class OrderControllerAdmin {
     */
     @GetMapping
     public RsData<OrderListResponse> getAllOrders(@RequestParam(defaultValue = "1") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
+                                                  @RequestParam(defaultValue = "10") int size,
+                                                  @RequestParam(name = "max-products" ,defaultValue = "2") int maxProducts) {
 
-        Page<OrderDto> orderPage = orderService.getAllOrders(page, size);
+        Page<OrderDto> orderPage = orderService.getAllOrders(page, size, maxProducts);
 
         OrderListResponse response = OrderListResponse.builder()
                 .content(orderPage.getContent())

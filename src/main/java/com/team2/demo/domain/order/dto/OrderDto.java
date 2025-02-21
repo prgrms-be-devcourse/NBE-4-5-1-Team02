@@ -9,6 +9,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Getter
@@ -41,7 +42,7 @@ public class OrderDto {
         this.buyerEmail = order.getUser().getEmail();
     }
 
-    // 종현 : 반환 타입을 OrderDto로 변경
+    /* 없애지 말아주세요! : Reference
     // 상품 항목을 포함하는 생성자 (관리자 리스트 조회용)
     public OrderDto(Order order, boolean includeItems) {
         this.orderId = order.getOrderUuid();
@@ -50,11 +51,17 @@ public class OrderDto {
         this.deliveryStatus = order.getDeliveryStatus();
         this.buyerEmail = order.getUser().getEmail();
         if (includeItems) {
-            this.items = order.getProducts().stream()
-                    .map(product -> new ProductItem(product.getProductName(), 1)) // 수량 수동 변경
+            Map<String, Integer> productCountMap = OrderItemGrouper.countProducts(order.getProducts());
+
+            *//*this.items = order.getProducts().stream()
+                    .map(product -> new ProductItem(product.getProductName(), productCountMap.get(product.getProductName())))
+                    .collect(Collectors.toList());*//*
+
+            this.items = productCountMap.entrySet().stream()
+                    .map(entry -> new ProductItem(entry.getKey(), entry.getValue()))
                     .collect(Collectors.toList());
         } else {
             this.items = null;  // 상품 항목을 제외
         }
-    }
+    }*/
 }
