@@ -1,15 +1,13 @@
 package com.team2.demo.global.response;
 
 
-import lombok.*;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
-
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
@@ -18,7 +16,6 @@ public class RsData<T> {
     private String message;
     private T data;
     private int code;
-
 
     public static <T> RsData<T> success(String message, T data) {
         /*RsData<T> rsData = new RsData<>();

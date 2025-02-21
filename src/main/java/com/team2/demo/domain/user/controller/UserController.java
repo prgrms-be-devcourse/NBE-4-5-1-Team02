@@ -32,7 +32,7 @@ public class UserController
             UserDto userDto = UserDto.of(user);
             return RsData.success("success",userDto);
         }catch (Exception e){
-            return RsData.badRequest("유저 등록 실패:" +e.getMessage());
+            return RsData.badRequest("err",500);
         }
     }
 }

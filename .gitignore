@@ -37,4 +37,6 @@ out/
 .vscode/
 gradle/wrapper
 db.mv.db
-src/resources/application.yml
+db_dev.mv.db
+db_dev.trace.db
+src/main/resources/application.yml

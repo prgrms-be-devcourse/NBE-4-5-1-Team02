@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 @Entity
@@ -22,7 +23,8 @@ public class Order {
 
     @Id
     @Column(name = "ORDER_UUID")
-    private String orderUuid;
+    @Builder.Default
+    private String orderUuid = "order-" + UUID.randomUUID();
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -31,7 +33,8 @@ public class Order {
     @JoinTable(name = "PRODUCT_ORDER_RELATION",
             joinColumns = @JoinColumn(name = "ORDER_UUID"),
             inverseJoinColumns = @JoinColumn(name = "PRODUCT_UUID"))
-    private final List<Product> products = new ArrayList<>();
+    @Builder.Default
+    private List<Product> products = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "CREATE_DATE")
