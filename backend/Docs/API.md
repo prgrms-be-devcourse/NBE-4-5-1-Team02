@@ -253,7 +253,7 @@
 
 ### 1.4. 주문 수정 (사용자)
 
-- **URL:** `/odrers/{orderId}?email=email@email.com`
+- **URL:** `/orders/{orderId}?email=email@email.com`
 - **Method:** `PUT`
 - **설명:** 사용자가 주문 상세 페이지에서 주문을 수정합니다. 배송 상태가 **배송 중/배송 완료** 일 때 수정이 불가능합니다.
 - **Query Parameter (옵션):**
