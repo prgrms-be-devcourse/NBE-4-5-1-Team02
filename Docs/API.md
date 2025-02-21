@@ -2,48 +2,81 @@
 
 ### 상품 목록 조회
 
-- URL: `/products`
-- Method: `POST`
-- Parameters
-  - `keyword-type` : string, default="title", not null
-  - `keyword` : string, nullable <br/>
+- **URL:** `/products`
+- **Method:** `POST`
+- **Parameters**
+  - **Query string**
+    - `keyword-type` : string, default=`"title"`, not null
+    - `keyword` : string, nullable <br/>
 
-
-- Success
-
-```json
-{
-  "data": 
-      [
-        {"uuid": 1,
-          "name":"커피",
-          "category":"커피콩",
-          "image_url":"url~~"
+  <details>
+  <summary>success</summary> 
+  
+    ```json
+    {
+        "message": "Success.",
+        "data": {
+            "data": [
+                {
+                    "productUuid": "product-11111-22222-33331",
+                    "productName": "product1",
+                    "category": "coffeeBean",
+                    "productPrice": 1000,
+                    "productDescription": "커피콩1",
+                    "imageUrl": "image_url1"
+                },
+                {
+                    "productUuid": "product-11111-22222-33332",
+                    "productName": "product2",
+                    "category": "coffeeBean",
+                    "productPrice": 5000,
+                    "productDescription": "커피콩2",
+                    "imageUrl": "image_url2"
+                },
+                {
+                    "productUuid": "product-11111-22222-33333",
+                    "productName": "product3",
+                    "category": "coffeeBean",
+                    "productPrice": 1000,
+                    "productDescription": "커피콩3",
+                    "imageUrl": "image_url3"
+                },
+                {
+                    "productUuid": "product-11111-22222-33334",
+                    "productName": "product4",
+                    "category": "coffeeBean",
+                    "productPrice": 5000,
+                    "productDescription": "커피콩4",
+                    "imageUrl": "image_url4"
+                },
+                {
+                    "productUuid": "product-11111-22222-33335",
+                    "productName": "product5",
+                    "category": "coffeeBean",
+                    "productPrice": 1000,
+                    "productDescription": "커피콩5",
+                    "imageUrl": "image_url5"
+                }
+            ],
+            "page": 0,
+            "size": 10,
+            "totalPages": 1
         },
-        {
-          "uuid": 2,
-          "name":"차",
-          "category":"허브",
-          "image_url":"url~~"
-        }
-      ],
-  "pagination": {
-      "page": 1,
-      "size": 10,
-      "totalPages": 1
-  },
-  "msg" : "성공했습니다."
-}
-```
+        "code": 200
+    }
+    ```  
+  </details>
+  <details>
+  <summary>fail</summary>
 
-- fail
+    ```json
+    {
+      "errcode": "PRODUCT001",
+      "errmsg": "상품 목록 조회를 불러오지 못했습니다."
+    }
+    ```
+  </details>
 
-```json
-{
-	"errcode": "PRODUCT001",
-	"errmsg": "상품 목록 조회를 불러오지 못했습니다."
-}
-```
 
 ## 1. 사용자 API
 
@@ -98,7 +131,7 @@
       "createdAt": "2025-02-18T14:00:00Z",
       "updatedAt": "2025-02-18T14:00:00Z",
       "buyer": {
-        "email": "user@example.com",
+        "email": "user@example.com"
       },
       "address": "서울시 강남구 테헤란로 123",
       "zipcode": "12345",
@@ -126,7 +159,7 @@
     
     fail
     
-    ```java
+    ```json
     {
     	"errcode": "PRODUCT001",
     	"errmsg": "상품 목록 조회를 불러오지 못했습니다."
@@ -187,10 +220,10 @@
       "updatedAt": "2025-02-18T14:00:00Z",
       "image_url": "url/",
       "buyer": {
-        "email": "user@example.com",
+        "email": "user@example.com"
       },
       "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345"
+      "zipcode": "12345",
       "items": [
         {
           "productId": "p123",
@@ -242,7 +275,7 @@
     ```json
     {
       "address": "서울시 강남구 새로운주소 456",
-      "zipcode": "67890"
+      "zipcode": "67890",
       "items": [
         {
           "productId": "p123",
@@ -278,10 +311,10 @@
       "updatedAt": "2025-02-18T16:00:00Z",
       "image_url": "url/",
       "buyer": {
-        "email": "user@example.com",
+        "email": "user@example.com"
       },
       "address": "서울시 강남구 새로운주소 456",
-      "zipcode": "67890"
+      "zipcode": "67890",
       "items": [
         {
           "productId": "p123",
@@ -350,43 +383,63 @@
 
     ```json
     {
-    	"content": [
-    	  {
-    	    "orderId": "order789",
-    	    "orderDate": "2025-02-18T14:00:00Z",
-    	    "totalPrice": 40000,
-    	    "buyerEmail": "user@example.com",
-    	    "items": [
-    	      {
-    	        "name": "상품명1",
-    	        "quantity": 2
-    	      },
-    	      {
-    	        "name": "상품명2",
-    	        "quantity": 1
-    	      }
-    	    ],
-    	    "deliveryStatus": "대기중"
-    	  },
-    	  {
-    	    "orderId": "order791",
-    	    "orderDate": "2025-02-18T15:00:00Z",
-    	    "totalPrice": 50000,
-    	    "buyerEmail": "another@example.com",
-    	    "items": [
-    	      {
-    	        "name": "상품명4",
-    	        "quantity": 5
-    	      }
-    	    ],
-    	    "deliveryStatus": "배송중"
-    	  },
-    	],
-    	"pagination": {
-    		  "page": 1,
-    		  "size": 10,
-    		  "totalPages": 1
-    	 }
+      "message": "Success.",
+      "data": {
+        "data": [
+        {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "image_url1"
+        },
+        {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "image_url1"
+        },
+        {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "image_url1"
+        },
+        {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "image_url1"
+        },
+        {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "image_url1"
+        },
+        {
+        "productUuid": "product-11111-22222-33332",
+        "productName": "product2",
+        "category": "coffeeBean",
+        "productPrice": 5000,
+        "productDescription": "커피콩2",
+        "imageUrl": "image_url2"
+        }
+        ],
+        "page": 0,
+        "size": 10,
+        "totalPages": 1
+        },
+      "code": 200
     }
     ```
 
@@ -413,36 +466,24 @@
 
 ```json
 {
-  "orderId": "order789",
-  "createdAt": "2025-02-18T14:00:00Z",
-  "updatedAt": "2025-02-18T14:00:00Z",
-  "buyer": {
-    "email": "user@example.com"
-  }.
-  "address": "서울시 강남구 테헤란로 123",
-  "zipcode": "12345"
-  "deliveryStatus": "대기중"
-  "items": [
-    {
-      "productId": "p123",
-      "name": "상품명1",
-      "quantity": 2,
-      "price": 10000
+  "message": "Success.",
+  "data": {
+    "orderUuid": "order-11111-22222-33331",
+    "user": {
+      "id": "user-11111-22222-33331",
+      "email": "email1@email.com",
+      "createdDate": "2025-02-21T10:14:11.083775",
+      "modifiedDate": "2025-02-21T10:14:11.083775",
+      "orders": null
     },
-    {
-      "productId": "p456",
-      "name": "상품명2",
-      "quantity": 1,
-      "price": 20000
-    }
-  ],
-  "totalPrice": 40000,
-  "deliveryStatus": "배송중",
-  "pagination": {
-	  "page": 1,
-	  "size": 10,
-	  "totalPages": 1
-  }
+    "createDate": "2025-02-21T10:14:11.084784",
+    "modifiedDate": "2025-02-21T10:14:11.084784",
+    "totalAmount": 10000,
+    "deliveryAddress": "addr1",
+    "zipCode": 123123,
+    "deliveryStatus": "PENDING"
+  },
+  "code": 200
 }
 ```
 
@@ -479,7 +520,7 @@
     ```json
     {
       "buyer": {
-    	  "email": "user@example.com",
+    	  "email": "user@example.com"
       }
     }
     
@@ -493,8 +534,8 @@
       "createdAt": "2025-02-18T14:00:00Z",
       "updatedAt": "2025-02-18T14:00:00Z",
       "buyer": {
-        "email": "user@example.com",
-      }.
+        "email": "user@example.com"
+      },
       "address": "서울시 강남구 테헤란로 123",
       "zipcode": "12345",
       "deliveryStatus": "대기중"
@@ -541,6 +582,94 @@
 
 ---
 
+### 2.5 주문에 포함된 상품 리스트 조회 (관리자)
+
+- **URL:** `/admin/orders/{orderId}/products`
+- **Method:** `GET`
+- **설명:** 주문에 포함된 모든 상품 리스트를 페이지네이션 해서 조회합니다.
+- **Parameters** 
+  - **QueryParameter**
+    - `size` : 한 페이지에 출력할 item 개수
+    - `page` : 페이지 번호
+  - **PathParameter** 
+    - `orderId` : 주문 번호
+- **Response 예시:**
+  <details>
+  <summary>success</summary>
+  
+  ```json
+  {
+    "message": "Success.",
+    "data": {
+      "data": [
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33332",
+          "productName": "product2",
+          "category": "coffeeBean",
+          "productPrice": 5000,
+          "productDescription": "커피콩2",
+          "imageUrl": "image_url2"
+        }
+      ],
+      "page": 0,
+      "size": 10,
+      "totalPages": 1
+    },
+    "code": 200
+  }
+  ```
+  </details>
+  <details>
+  <summary>fail</summary> 
+
+  ```json
+  {
+    "error": "NotFoundException",
+    "orderId": "order789",
+    "message": "해당 주문에 포함된 상품을 가져올 수 없습니다."
+  }
+  ```
+  </details> 
 ### 1. 유저 API
 
 1.1 유저 생성
