@@ -433,16 +433,24 @@
 
 ```json
 {
-  "orderId": "order789",
-  "createdAt": "2025-02-18T14:00:00Z",
-  "updatedAt": "2025-02-18T14:00:00Z",
-  "buyer": {
-    "email": "user@example.com"
+  "message": "Success.",
+  "data": {
+    "orderUuid": "order-11111-22222-33331",
+    "user": {
+      "id": "user-11111-22222-33331",
+      "email": "email1@email.com",
+      "createdDate": "2025-02-21T10:14:11.083775",
+      "modifiedDate": "2025-02-21T10:14:11.083775",
+      "orders": null
+    },
+    "createDate": "2025-02-21T10:14:11.084784",
+    "modifiedDate": "2025-02-21T10:14:11.084784",
+    "totalAmount": 10000,
+    "deliveryAddress": "addr1",
+    "zipCode": 123123,
+    "deliveryStatus": "PENDING"
   },
-  "address": "서울시 강남구 테헤란로 123",
-  "zipcode": "12345",
-  "totalPrice": 40000,
-  "deliveryStatus": "배송중"
+  "code": 200
 }
 ```
 
