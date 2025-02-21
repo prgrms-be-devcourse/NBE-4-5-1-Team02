@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import java.util.List;
 
+=======
+>>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class ProductController {
 
     private final ProductService productService;
 
+<<<<<<< HEAD
     @Builder
     @AllArgsConstructor
     public static class PaginationData<T> {
@@ -34,6 +38,8 @@ public class ProductController {
         private int size;
         private int totalPages;
     }
+=======
+>>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
 
     record SearchParams(@NotNull String keywordType, String keyword){
         public SearchParams{
@@ -51,8 +57,13 @@ public class ProductController {
 
         Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);
         return RsData.success(
+<<<<<<< HEAD
                 "성공했습니다",
                         PaginationData.<ProductDto>builder()
+=======
+                "Success.",
+                PaginationData.<ProductDto>builder()
+>>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
                         .data(products.getContent())
                         .page(products.getNumber())
                         .size(products.getSize())

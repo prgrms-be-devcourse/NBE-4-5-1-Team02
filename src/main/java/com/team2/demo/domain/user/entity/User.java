@@ -23,6 +23,10 @@ public class User {
 
     @Id
     @Column(name = "USER_UUID")
+<<<<<<< HEAD
+=======
+    @Builder.Default
+>>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
     private final String id = "user-" + UUID.randomUUID();
 
     @Email
@@ -38,10 +42,17 @@ public class User {
     private LocalDateTime modifiedDate;
 
     @OneToMany(mappedBy = "user")
+<<<<<<< HEAD
     private final List<Order> orders = new ArrayList<>();
 
     @Builder
     public User(String email) {
         this.email = email;
     }
+=======
+    @JsonIgnore
+    @Builder.Default
+    private final List<Order> orders = new ArrayList<>();
+
+>>>>>>> 9afa7b447a054d0dc8a1bf1a71ff070596e106b6
 }

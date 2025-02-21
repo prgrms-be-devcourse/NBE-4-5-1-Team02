@@ -1,9 +1,13 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
+
 import com.team2.demo.domain.order.dto.OrderRequestDto;
+
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
+import com.team2.demo.domain.user.entity.User;
+import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
 import jakarta.validation.Valid;
@@ -14,12 +18,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService orderService;
+    private final UserService userService;
 
     /*
         [정상적인 이메일 형식]
@@ -41,15 +49,15 @@ public class OrderController {
         GET /orders?email=user@example.com&page=1&size=10
     */
     @GetMapping
-    public RsData<OrderListResponse> getOrders(@RequestParam @Valid OrderForm orderForm,
-                                               @RequestParam(defaultValue = "1") int page,
+    public RsData<OrderListResponse> getOrders(@ModelAttribute @Valid OrderForm orderForm,
+                                               @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {
 
         Page<OrderDto> orderPage = orderService.getOrdersByEmail(orderForm, page, size);
 
         OrderListResponse response = OrderListResponse.builder()
                 .content(orderPage.getContent())
-                .page(orderPage.getNumber() + 1)
+                .page(orderPage.getNumber())
                 .size(orderPage.getSize())
                 .totalPages(orderPage.getTotalPages())
                 .build();
@@ -57,14 +65,29 @@ public class OrderController {
         return RsData.success("ok", response);
     }
 
-    @PostMapping
-    public RsData<OrderDto> payment(@RequestBody Order body) {
-        try {
-            Order order = orderService.payment(body);
-            return null;
-        } catch (Exception e) {
-            return RsData.badRequest("결제 실패:" + e.getMessage(),400);
-        }
+    @PostMapping("/payment")
+    public RsData<String> payment(@RequestBody Map<String, Object> body) {
+
+        System.out.println(body);
+
+        Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
+
+        User user = userService.findByEmail(buyer.get("email").toString());
+        System.out.println("유저이메일조회"+user);
+
+        Order orderBody = Order.builder()
+                .createDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .deliveryAddress(buyer.get("email").toString())
+                .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
+                .zipCode(Integer.parseInt(body.get("zipcode").toString()))
+                .user(user)
+                .deliveryStatus(Order.DeliveryStatus.PENDING)
+                .build();
+
+        orderService.payment(orderBody);
+        return RsData.success("ok", "사용자 등록 완료");
+
     }
 
     /*
@@ -81,9 +104,9 @@ public class OrderController {
     }
 
     /*
-        사용자 주문 취소
-         DELETE /orders/{orderId}?email=user@example.com
-    */
+           사용자 주문 취소
+            DELETE /orders/{orderId}?email=user@example.com
+       */
     @DeleteMapping("/{orderId}")
     public ResponseEntity<RsData<Void>> cancelOrder(
             @PathVariable String orderId,
