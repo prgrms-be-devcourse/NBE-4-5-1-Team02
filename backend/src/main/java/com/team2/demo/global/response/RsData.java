@@ -32,5 +32,12 @@ public class RsData<T> {
         return new RsData<>(message, null, HttpStatus.BAD_REQUEST.value());
     }
 
+    public static <T> RsData<T> badRequest(RuntimeException e) {
+        /*RsData<T> rsData = new RsData<>();
+        rsData.message = message;
+        return rsData;*/
+        e.printStackTrace();
+        return new RsData<>(e.getMessage(), null, HttpStatus.BAD_REQUEST.value());
+    }
 
 }
