@@ -98,8 +98,11 @@ public class Order {
 
     public void updateModifiedDate() {
         this.modifiedDate = LocalDateTime.now();
-
     }
 
+    public void updateProducts(List<Product> newProducts) {
+        this.products.clear();
+        this.products.addAll(newProducts);
+    }
 
 }

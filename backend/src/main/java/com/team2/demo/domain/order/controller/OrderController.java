@@ -95,11 +95,23 @@ public class OrderController {
         PUT /orders/{orderId}?email=user@example.com
     */
     @PutMapping("/{orderId}")
-    public ResponseEntity<RsData<OrderDto>> updateOrder(
+    public RsData<OrderDto> updateOrder(
             @PathVariable String orderId,
             @RequestParam String email,
             @RequestBody OrderRequestDto request) {
         RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
-        return ResponseEntity.ok(response);
+        return response;
+    }
+
+    /*
+    사용자 주문 취소
+     DELETE /orders/{orderId}?email=user@example.com
+    */
+    @DeleteMapping("/{orderId}")
+    public RsData<Void> cancelOrder(
+            @PathVariable String orderId,
+            @RequestParam String email) {
+        RsData<Void> response = orderService.cancelOrder(orderId, email);
+        return response;
     }
 }
