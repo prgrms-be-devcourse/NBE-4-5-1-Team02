@@ -17,4 +17,10 @@ public class UserService {
         return userRepository.save(user);
         //return null;
     }
+
+    @Transactional
+    public User findByEmail(String reqEmail) {
+        System.out.println("오브젝트체크"+reqEmail);
+        return userRepository.findByEmail(reqEmail);
+    }
 }
