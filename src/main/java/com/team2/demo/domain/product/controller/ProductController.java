@@ -28,9 +28,10 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/products")
+
+    @GetMapping("/products")
     public RsData<PaginationData<ProductDto>> getProductList(
-            @RequestParam @Valid SearchParams params,
+            @ModelAttribute @Valid SearchParams params,
             @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         Page<ProductDto> products = productService.getProductList(params.keywordType(), params.keyword(), pageable);
