@@ -99,7 +99,8 @@ public class OrderController {
             @PathVariable String orderId,
             @RequestParam String email,
             @RequestBody OrderRequestDto request) {
-          return ResponseEntity.ok(response);
+        RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
+        return response;
     }
 
     /*
@@ -110,6 +111,7 @@ public class OrderController {
     public RsData<Void> cancelOrder(
             @PathVariable String orderId,
             @RequestParam String email) {
-        return ResponseEntity.ok(response);
+        RsData<Void> response = orderService.cancelOrder(orderId, email);
+        return response;
     }
 }
