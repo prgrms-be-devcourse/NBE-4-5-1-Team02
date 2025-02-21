@@ -2,8 +2,8 @@ package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderItemGrouper;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
+import com.team2.demo.domain.order.dto.OrderItemGrouper;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +39,7 @@ public class OrderService {
     }
 
 
+    // 사용자: 주문 수정
     @Transactional
     public RsData<OrderDto> updateOrder(String orderId, String email, OrderRequestDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
@@ -55,8 +57,7 @@ public class OrderService {
                         .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
                 .collect(Collectors.toList());
 
-        order.getProducts().clear();
-        order.getProducts().addAll(updatedProducts);
+        order.updateProducts(updatedProducts); // clear() + addAll()
 
         order.updateDeliveryInfo(request.getDeliveryAddress(), request.getZipCode());
 
@@ -107,5 +108,26 @@ public class OrderService {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
+    }
+
+    // 사용자: 주문 취소
+    @Transactional
+    public RsData<Void> cancelOrder(String orderId, String email) {
+        Optional<Order> optionalOrder = orderRepository.findByOrderUuid(orderId);
+
+        if (optionalOrder.isEmpty()) {
+            return RsData.badRequest("해당 주문을 찾을 수 없습니다.", 404);
+        }
+
+        Order order = optionalOrder.get();
+        if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
+                order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
+            return RsData.badRequest("배송 중이거나 배송 완료된 주문은 취소할 수 없습니다.", 400);
+        }
+
+        order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
+        orderRepository.save(order);
+
+        return RsData.success("주문이 취소되었습니다.", null);
     }
 }

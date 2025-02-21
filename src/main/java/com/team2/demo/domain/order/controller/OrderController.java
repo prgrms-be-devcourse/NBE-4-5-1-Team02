@@ -102,4 +102,16 @@ public class OrderController {
         RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
         return ResponseEntity.ok(response);
     }
+
+    /*
+    사용자 주문 취소
+     DELETE /orders/{orderId}?email=user@example.com
+*/
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<RsData<Void>> cancelOrder(
+            @PathVariable String orderId,
+            @RequestParam String email) {
+        RsData<Void> response = orderService.cancelOrder(orderId, email);
+        return ResponseEntity.ok(response);
+    }
 }
