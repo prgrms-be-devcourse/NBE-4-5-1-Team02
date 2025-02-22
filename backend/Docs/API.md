@@ -161,8 +161,8 @@
     
     ```json
     {
-    	"errcode": "PRODUCT001",
-    	"errmsg": "상품 목록 조회를 불러오지 못했습니다."
+    	"errcode": "ORDER-1",
+    	"errmsg": "주문 생성에 실패했습니다. 필수 값을 체크해주세요."
     }
     ```
     
@@ -630,47 +630,6 @@
 
 ---
 
-### 1. 유저 API
-
-1.1 유저 생성
-
-- **URL:**  `/users`
-- **Method:** `POST`
-- **설명:** 사용자가 주문 요청을 생성합니다. 생성하면서 유저의 정보를 저장
-
-- 파라미터
-
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.email | user@example.com | true |
-- **Request Body 예시:**
-
-    ```json
-    {
-      "buyer":{
-    	  "email": "user@example.com"
-      }
-    }
-    
-    ```
-
-  - **유효성 검사:**
-    - `buyer.email`: 이메일 형식, 비어있지 않음
-- **Response 예시:**
-
-    ```json
-    {
-        "message": "Success",
-        "data": {
-            "id": "user-43837299-71ef-4421-b2e1-03c19f43b75d",
-            "email": "user@example.com",
-            "createdDate": "2025-02-20T15:37:21.1689457",
-            "modifiedDate": "2025-02-20T15:37:21.1689457"
-        }
-    }
-    
-    ```
-
 ### 2.5 주문에 포함된 상품 리스트 조회 (관리자)
 
 - **URL:** `/admin/orders/{orderId}/products`
@@ -760,3 +719,53 @@
   ```
   </details> 
 
+---
+
+### 1. 유저 API
+
+1.1 유저 생성
+
+- **URL:**  `/users`
+- **Method:** `POST`
+- **설명:** 사용자가 주문 요청을 생성합니다. 생성하면서 유저의 정보를 저장
+
+- 파라미터
+
+| 키 | 값 예시 | 필수 여부 |
+| --- | --- | --- |
+| buyer.email | user@example.com | true |
+- **Request Body 예시:**
+
+    ```json
+    {
+      "buyer":{
+    	  "email": "user@example.com"
+      }
+    }
+    
+    ```
+
+  - **유효성 검사:**
+    - `buyer.email`: 이메일 형식, 비어있지 않음
+- **Response 예시:**
+
+    ```json
+    {
+        "message": "Success",
+        "data": {
+            "id": "user-43837299-71ef-4421-b2e1-03c19f43b75d",
+            "email": "user@example.com",
+            "createdDate": "2025-02-20T15:37:21.1689457",
+            "modifiedDate": "2025-02-20T15:37:21.1689457"
+        }
+    }
+    
+    ```
+-fail
+```json
+{
+    "message": "사용자 생성에 실패했습니다.",
+    "data": null,
+    "code": 400
+}
+```

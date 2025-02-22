@@ -20,19 +20,19 @@ public class UserController
 
     @PostMapping("/users")
     public RsData<UserDto> payment(@RequestBody Map<String, Object> body){
-
+        try{
         Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
         User userBody = User.builder()
                 .email(buyer.get("email").toString())
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .build();
-        try{
+
             User user = userService.addUser(userBody);
             UserDto userDto = UserDto.of(user);
             return RsData.success("success",userDto);
         }catch (Exception e){
-            return RsData.badRequest("유저 등록 실패:" +e.getMessage(), 400);
+            return RsData.badRequest("사용자 생성에 실패했습니다.", 400);
         }
     }
 }

@@ -95,25 +95,34 @@ public class OrderController {
     @PostMapping("/payment")
     public RsData<String> payment(@RequestBody Map<String, Object> body) {
 
-        System.out.println(body);
+        try {
+            System.out.println(body);
 
-        Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
+            Object buyerObj = body.get("buyer");
 
-        User user = userService.findByEmail(buyer.get("email").toString());
-        System.out.println("유저이메일조회" + user);
+            if (buyerObj instanceof Map) {
 
-        Order orderBody = Order.builder()
-                .createDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
-                .deliveryAddress(buyer.get("email").toString())
-                .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
-                .zipCode(Integer.parseInt(body.get("zipcode").toString()))
-                .user(user)
-                .deliveryStatus(Order.DeliveryStatus.PENDING)
-                .build();
+                Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
+                User user = userService.findByEmail(buyer.get("email").toString());
+                System.out.println("유저이메일조회" + user);
 
-        orderService.payment(orderBody);
-        return RsData.success("ok", "사용자 등록 완료");
+                Order orderBody = Order.builder()
+                        .createDate(LocalDateTime.now())
+                        .modifiedDate(LocalDateTime.now())
+                        .deliveryAddress(buyer.get("email").toString())
+                        .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
+                        .zipCode(Integer.parseInt(body.get("zipcode").toString()))
+                        .user(user)
+                        .deliveryStatus(Order.DeliveryStatus.PENDING)
+                        .build();
+
+                orderService.payment(orderBody);
+            }
+
+            return RsData.success("ok", "주문 생성 완료");
+        } catch (Exception e) {
+            return RsData.badRequest("주문 생성에 실패했습니다. 필수 값을 체크해주세요.", 400);
+        }
     }
 
     /*
@@ -130,7 +139,7 @@ public class OrderController {
 
         return RsData.success("ok", response);
     }
-
+}
     /*
     사용자 주문 취소
      DELETE /orders/{orderId}?email=user@example.com
