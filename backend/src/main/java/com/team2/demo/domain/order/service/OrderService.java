@@ -45,6 +45,11 @@ public class OrderService {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
+        User loggedInUser = userRepository.findByEmail(email);
+
+        if(!loggedInUser.isMine(order))
+            throw new AccessDeniedException("자신이 주문하지 않은 주문을 수정할 수 없습니다.");
+
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
