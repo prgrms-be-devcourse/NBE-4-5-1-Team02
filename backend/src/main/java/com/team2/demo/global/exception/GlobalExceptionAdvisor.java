@@ -23,3 +23,10 @@ public class GlobalExceptionAdvisor {
         return RsData.badRequest("주문이 없습니다.", HttpStatus.BAD_REQUEST.value());
     }
 }
+
+    @ExceptionHandler(ServiceException.class)
+    public RsData<Void> handleServiceException(ServiceException e, HttpServletResponse response) {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        return RsData.badRequest(e);
+    }
+}
