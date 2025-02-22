@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
@@ -30,6 +31,8 @@ class OrderControllerTest {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private MockMvc mockMvc;
 
     /*@Autowired
     private UserService userService;*/
@@ -151,4 +154,82 @@ class OrderControllerTest {
     @DisplayName("주문 목록 조회 - 검색")
     void getOrdersSearch() throws Exception {
     }*/
+
+    @Test
+    @DisplayName("주문 생성")
+    void paymentTest() throws Exception{
+        //초기 데이터
+        String jsonRequest = """
+                {
+                      "address": "addr1",
+                      "zipcode": 1073,
+                      "items": [
+                        {
+                          "productId": "product-11111-22222-33331",
+                          "quantity": 3
+                        }
+                      ],
+                      "buyer": {
+                        "email": "email1@email.com"
+                      }
+                    }
+            """;
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 생성 - 제품 id 찾지 못함.")
+    void paymentTest2() throws Exception{
+        //초기 데이터
+        String jsonRequest = """
+                {
+                      "address": "addr1",
+                      "zipcode": 1073,
+                      "items": [
+                        {
+                          "productId": "product-11111-22222",
+                          "quantity": 3
+                        }
+                      ],
+                      "buyer": {
+                        "email": "email1@email.com"
+                      }
+                    }
+            """;
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 생성 - 제품 id 찾지 못함.")
+    void paymentTest3() throws Exception{
+        //초기 데이터
+        String jsonRequest = """
+                {
+                      "address": "addr1",
+                      "zipcode": 1073,
+                      "items": [
+                        {
+                          "productId": "product-11111-22222-33331",
+                          "quantity": 3
+                        }
+                      ],
+                      "buyer": {
+                        "email": "email1@email..com"
+                      }
+                    }
+            """;
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
