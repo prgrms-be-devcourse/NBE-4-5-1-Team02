@@ -43,4 +43,7 @@ public class User {
     @Builder.Default
     private final List<Order> orders = new ArrayList<>();
 
+    public boolean isMine(Order order) {
+        return order.getUser().equals(this);
+    }
 }
