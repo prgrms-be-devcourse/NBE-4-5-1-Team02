@@ -1,9 +1,6 @@
 package com.team2.demo.domain.order.controller;
 
-import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderInfoDto;
-import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
-import com.team2.demo.domain.order.dto.OrderRequestDto;
+import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.user.entity.User;
@@ -117,17 +114,17 @@ public class OrderController {
 
         return RsData.success("ok", response);
     }
+
     /*
     사용자 주문 취소
      DELETE /orders/{orderId}?email=user@example.com
     */
     @Operation(summary = "주문 삭제 ", description = "사용자가 자신이 생성한 주문을 삭제한다.")
     @DeleteMapping("/{orderId}")
-    public RsData<Void> cancelOrder(
+    public RsData<OrderResponseCancelDto> cancelOrder(
             @PathVariable String orderId,
             @RequestParam String email) {
-        RsData<Void> response = orderService.cancelOrder(orderId, email);
-        return response;
+        return orderService.cancelOrder(orderId, email);
     }
 }
 
