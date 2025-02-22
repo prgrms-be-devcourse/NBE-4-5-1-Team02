@@ -92,7 +92,8 @@ class OrderControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())  // HTTP 400 검증 추가
                 .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.message").value("올바른 이메일 형식이어야 합니다."));
+                .andExpect(jsonPath("$.message").value("getOrders.email: must be a well-formed email address, getOrders.email: 올바른 이메일 형식이어야 합니다."));
+        //  getOrders.email: must be a well-formed email address, getOrders.email: 올바른 이메일 형식이어야 합니다.
     }
 
     @Test

@@ -25,7 +25,6 @@ public class OrderDto {
     private String buyerEmail;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ProductItem> items;
-
     @Getter
     @AllArgsConstructor
     public static class ProductItem {

@@ -1,6 +1,7 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
@@ -8,7 +9,10 @@ import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -68,6 +72,14 @@ public class OrderController {
         return RsData.success("ok", response);
     }
 
+    @GetMapping("/{orderId}")
+    public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId,
+                                                        @RequestParam(name = "email") String email) {
+        OrderInfoWithoutItemDto order = orderService.findOrder(orderId, email);
+
+        return RsData.success("주문 상세 조회 성공", order);
+    }
+
     @PostMapping("/payment")
     public RsData<String> payment(@RequestBody Map<String, Object> body) {
 
@@ -101,9 +113,10 @@ public class OrderController {
     public RsData<OrderDto> updateOrder(
             @PathVariable String orderId,
             @RequestParam String email,
-            @RequestBody OrderRequestDto request) {
-        RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
-        return response;
+            @Valid @RequestBody OrderRequestDto request) {
+        OrderDto response = orderService.updateOrder(orderId, email, request);
+
+        return RsData.success("ok", response);
     }
 
     /*
