@@ -22,5 +22,4 @@ public class OrderRequestDto {
 
     @NotNull(message = "상품 ID 리스트는 필수입니다.")
     private List<ProductListDto> items;
-
 }
