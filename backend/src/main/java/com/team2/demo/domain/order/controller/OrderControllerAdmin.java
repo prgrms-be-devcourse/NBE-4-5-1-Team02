@@ -2,7 +2,7 @@ package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
-import com.team2.demo.domain.order.entity.Order;
+import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.service.ProductService;
@@ -24,7 +24,6 @@ public class OrderControllerAdmin {
 
     private final OrderService orderService;
     private final AdminOrderService adminOrderService;
-    private final ProductService productService;
 
 
     /*
@@ -50,11 +49,11 @@ public class OrderControllerAdmin {
         return RsData.success("ok", response);
     }
 
-    @Operation(summary = "주문 수저", description = "특정 유저의 주문을 수정한다.")
+    @Operation(summary = "주문 수정", description = "특정 유저의 주문을 수정한다.")
     @PutMapping("/{orderUuid}")
     public RsData<OrderDto> updateOrder(
             @PathVariable String orderUuid,
-            @RequestBody Order order) {
+            @RequestBody OrderRequestDto order) {
         OrderDto updateOrder = adminOrderService.updateOrder(orderUuid, order);
         return RsData.success("success.", updateOrder);
     }
