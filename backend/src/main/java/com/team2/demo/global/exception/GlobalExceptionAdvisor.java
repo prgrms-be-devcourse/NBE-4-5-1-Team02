@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionAdvisor {
 
     @ExceptionHandler(ServiceException.class)
-    public RsData<Void> serviceException(ServiceException e, HttpServletResponse response) {
+    public RsData<Void> handleServiceException(ServiceException e, HttpServletResponse response) {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         e.printStackTrace();
         return RsData.badRequest(e.getMessage(), HttpStatus.BAD_REQUEST.value());
@@ -24,9 +24,3 @@ public class GlobalExceptionAdvisor {
     }
 }
 
-    @ExceptionHandler(ServiceException.class)
-    public RsData<Void> handleServiceException(ServiceException e, HttpServletResponse response) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        return RsData.badRequest(e);
-    }
-}
