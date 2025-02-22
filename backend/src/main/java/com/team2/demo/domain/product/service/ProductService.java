@@ -32,6 +32,8 @@ public class ProductService {
     }
 
     public Page<ProductDto> getProductsInOrder(@NotEmpty String orderId, Pageable pageable) {
+        orderService.orderIsExist(orderId);
+
         return productRepository.findAllByOrderId(orderId, pageable)
                 .map(ProductDto::of);
     }

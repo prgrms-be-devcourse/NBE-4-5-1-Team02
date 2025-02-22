@@ -1,10 +1,8 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
-
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
-
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.user.entity.User;
@@ -18,7 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,6 +24,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping("/orders")
 public class OrderController {
 
@@ -42,7 +41,7 @@ public class OrderController {
      */
     public record OrderForm(@Email
                             @Pattern(
-                                    regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+                                    regexp = "^[a-z0-9]+@[a-z]+\\.com$",
                                     message = "올바른 이메일 형식이어야 합니다."
                             ) String email) {
     }
@@ -52,12 +51,16 @@ public class OrderController {
         GET /orders?email=user@example.com&page=1&size=10
     */
     @GetMapping
-    public RsData<OrderListResponse> getOrders(@ModelAttribute @Valid OrderForm orderForm,
-                                               @RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "10") int size) {
+    public RsData<OrderListResponse> getOrders(
+            @RequestParam
+            @Email
+            @Pattern(regexp = "^[a-z0-9]+@[a-z]+\\.com$",
+                    message = "올바른 이메일 형식이어야 합니다.")
+            String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-
-        Page<OrderDto> orderPage = orderService.getOrdersByEmail(orderForm, page, size);
+        Page<OrderDto> orderPage = orderService.getOrdersByEmail(email, page, size);
 
         OrderListResponse response = OrderListResponse.builder()
                 .content(orderPage.getContent())
@@ -85,7 +88,7 @@ public class OrderController {
         Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
 
         User user = userService.findByEmail(buyer.get("email").toString());
-        System.out.println("유저이메일조회"+user);
+        System.out.println("유저이메일조회" + user);
 
         Order orderBody = Order.builder()
                 .createDate(LocalDateTime.now())
