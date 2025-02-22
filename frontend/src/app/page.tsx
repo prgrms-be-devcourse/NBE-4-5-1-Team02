@@ -1,14 +1,25 @@
-import Image from "next/image";
+import createClient from "openapi-fetch";
+import ClientPage from "./ClientPage";
+import { paths } from "@/lib/backend/apiV1/schema";
 
-export default function Home() {
-  return (
-    <div className="w-screen h-screen flex ">
-      <div className="w-[75%] h-screen p-[4rem]">
-        <div className=" flex-grow h-[100%] bg-blue-300">
-          사진
-        </div>
-      </div>
-      <div className="w-[35%] h-screen bg-gray-400"></div>
-    </div>
-  );
+export default async function Home() {
+  const client = createClient<paths>({
+    baseUrl: "http://localhost:8080",
+  });
+  const response = await client.GET("/products", {
+    params: {
+      query: {
+        size: 10,
+        page: 0,
+        pageable: {},
+      },
+    },
+  });
+
+  if (response.error) {
+    console.log(response);
+  }
+  const responseBody = response.data!.data!;
+
+  return <ClientPage productList={responseBody}></ClientPage>;
 }
