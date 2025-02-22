@@ -266,7 +266,7 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("주문 수정 - 배송 중, 배송 완료 수정 불가")
-    public void updateOrder_FailDeliveryStatus() throws Exception {
+    public void updateOrder2() throws Exception {
         String orderId = "order-11111-22222-33333";
         String email = "email2@email.com";
         String requestJson = String.format("""
@@ -293,7 +293,7 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("주문 수정 - 주문 상품 모두 삭제로 주문 취소")
-    public void updateOrderFailureTest_EmptyItems() throws Exception {
+    public void updateOrder3() throws Exception {
         String orderId = "order-11111-22222-33332";
         String email = "email1@email.com";
         String requestJson = String.format("""
