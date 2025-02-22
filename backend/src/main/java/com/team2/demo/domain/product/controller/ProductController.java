@@ -37,12 +37,30 @@ public class ProductController {
         );
     }
 
-    @GetMapping("/admin/orders/{orderId}/products")
-    public RsData<PaginationData<ProductDto>> getProductsInOrder(
+    @GetMapping(path={"/admin/orders/{orderId}/products"})
+    public RsData<PaginationData<ProductDto>> getProductsInOrderAdmin(
             @PathVariable(name = "orderId") String orderId,
             @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
         Page<ProductDto> items = productService.getProductsInOrder(orderId, pageable);
+
+        PaginationData<ProductDto> products = PaginationData.<ProductDto>builder()
+                .data(items.getContent())
+                .page(items.getNumber())
+                .size(items.getSize())
+                .totalPages(items.getTotalPages())
+                .build();
+
+        return RsData.success("Success.", products);
+    }
+
+    @GetMapping(path="/orders/{orderId}/products")
+    public RsData<PaginationData<ProductDto>> getProductsInOrder(
+            @PathVariable(name = "orderId") String orderId,
+            @RequestParam(name="email") String email,
+            @PageableDefault(page = 0, size = 10) Pageable pageable
+    ){
+        Page<ProductDto> items = productService.getProductsInOrder(orderId, email,pageable);
 
         PaginationData<ProductDto> products = PaginationData.<ProductDto>builder()
                 .data(items.getContent())
