@@ -83,6 +83,23 @@ public class Order {
         this.modifiedDate = LocalDateTime.now();
     }
 
+    public void updateOrder(List<Product> updatedProducts, String address, Integer zipCode, DeliveryStatus deliveryStatus) {
+        int totalPrice = calculateTotalPrice(updatedProducts);
+        this.totalAmount = totalPrice;
+        this.deliveryAddress= address;
+        this.zipCode = zipCode;
+        this.deliveryStatus = deliveryStatus;
+        this.modifiedDate = LocalDateTime.now();
+    }
+
+    private static int calculateTotalPrice(List<Product> updatedProducts) {
+        int totalPrice = 0;
+        for(Product item : updatedProducts){
+            totalPrice += item.getProductPrice();
+        }
+        return totalPrice;
+    }
+
     public enum DeliveryStatus {
         PENDING, SHIPPED, DELIVERED, CANCELLED
     }
