@@ -2,17 +2,21 @@ package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderItemGrouper;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
+import com.team2.demo.domain.order.dto.OrderItemGrouper;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
+import com.team2.demo.domain.user.entity.User;
+import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +29,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final UserService userService;
 
     // 사용자: 주문 리스트 조회
     public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
@@ -129,5 +135,17 @@ public class OrderService {
         orderRepository.save(order);
 
         return RsData.success("주문이 취소되었습니다.", null);
+    }
+
+    public OrderInfoWithoutItemDto findOrder(String orderId, String email) {
+        Order order =  orderRepository.findByOrderUuid(orderId).
+                orElseThrow(() -> new EntityNotFoundException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
+
+        User loggedInUser = userService.findByEmail(email);
+
+        if(!loggedInUser.isMine(order))
+            throw new ServiceException("다른 사람의 주문을 조회할 수 없습니다.");
+
+        return new OrderInfoWithoutItemDto(order);
     }
 }
