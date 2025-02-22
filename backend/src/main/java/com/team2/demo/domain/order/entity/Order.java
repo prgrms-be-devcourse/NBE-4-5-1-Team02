@@ -91,6 +91,8 @@ public class Order {
         this.zipCode = zipCode;
         this.deliveryStatus = deliveryStatus;
         this.modifiedDate = LocalDateTime.now();
+        this.products.clear();
+        this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
     }
 
     private static int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
