@@ -42,13 +42,13 @@ public class User {
     @Column(name = "MODIFIED_DATE")
     private LocalDateTime modifiedDate;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "buyer")
     @JsonIgnore
     @Builder.Default
     private final List<Order> orders = new ArrayList<>();
 
     public boolean isMine(Order order) {
-        return order.getUser().equals(this);
+        return order.getBuyer().equals(this);
     }
 
     @Override

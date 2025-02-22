@@ -38,7 +38,7 @@ public class OrderDto {
         this.orderDate = order.getCreateDate();
         this.totalPrice = order.getTotalAmount();
         this.deliveryStatus = order.getDeliveryStatus();
-        this.buyerEmail = order.getUser().getEmail();
+        this.buyerEmail = order.getBuyer().getEmail();
     }
 
     /* 없애지 말아주세요! : Reference

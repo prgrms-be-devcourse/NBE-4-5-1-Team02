@@ -25,7 +25,7 @@ public class OrderInfoWithoutItemDto {
 
     public OrderInfoWithoutItemDto(Order order){
         this.orderUuid = order.getOrderUuid();
-        this.user = UserDto.of(order.getUser());
+        this.user = UserDto.of(order.getBuyer());
         this.createDate = order.getCreateDate();
         this.modifiedDate = order.getModifiedDate();
         this.totalAmount = order.getTotalAmount();
