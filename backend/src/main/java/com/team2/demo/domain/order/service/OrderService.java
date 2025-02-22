@@ -72,8 +72,7 @@ public class OrderService {
 
         if (updatedProducts.isEmpty()) {
             order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-            orderRepository.delete(order);
-            return RsData.success("주문이 취소되었습니다.", null);
+            throw new NoProductsInOrderException("주문에 상품이 하나도 없어 주문이 취소되었습니다.");
         }
 
         return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
