@@ -15,4 +15,18 @@ public class GlobalExceptionAdvisor {
         e.printStackTrace();
         return RsData.badRequest(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public RsData<Void> handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        e.printStackTrace();
+        return RsData.badRequest("주문이 없습니다.", HttpStatus.BAD_REQUEST.value());
+    }
+}
+
+    @ExceptionHandler(ServiceException.class)
+    public RsData<Void> handleServiceException(ServiceException e, HttpServletResponse response) {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        return RsData.badRequest(e);
+    }
 }

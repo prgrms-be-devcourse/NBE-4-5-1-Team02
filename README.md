@@ -7,7 +7,7 @@
 ---
 
 # API 문서
-[API 문서](Docs/API.md)
+[API 문서](backend/Docs/API.md)
 
 ---
 
