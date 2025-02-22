@@ -1,6 +1,7 @@
 package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderInfoDto;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
@@ -93,14 +94,13 @@ public class OrderController {
 
     @Operation(summary = "주문 생성 ", description = "사용자가 주문을 생성한다.")
     @PostMapping
-    public RsData<OrderRequestDto> payment(@RequestBody OrderRequestDto body) {
+    public RsData<OrderInfoDto> payment(@RequestBody OrderRequestDto body) {
 
         System.out.println("이메일조회"+body.getBuyer().getEmail());
 
         Order response = orderService.payment(body);
-        OrderRequestDto orderRequestDto = OrderRequestDto.of(response);
+        OrderInfoDto orderRequestDto = OrderInfoDto.of(response);
         return RsData.success("ok", orderRequestDto);
-
     }
 
     /*

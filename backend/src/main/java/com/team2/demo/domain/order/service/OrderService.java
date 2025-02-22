@@ -4,12 +4,15 @@ import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
+import com.team2.demo.domain.product.dto.ProductListDto;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
+import com.team2.demo.domain.product.service.ProductService;
 import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.repository.UserRepository;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.exception.order.NoProductsInOrderException;
+import com.team2.demo.global.exception.product.NoSuchProductException;
 import com.team2.demo.global.exception.user.AccessDeniedException;
 import com.team2.demo.global.exception.order.NoSuchOrderException;
 import com.team2.demo.global.response.RsData;
@@ -113,11 +116,20 @@ public class OrderService {
 
         User user = userService.findByEmail(body.getBuyer().getEmail());
 
+        int totalAmount = 0;
+
+        List<ProductListDto> items = body.getItems();
+        for (ProductListDto item: items){
+            Product product = productRepository.findByProductUuid(item.getProductId())
+                    .orElseThrow(() -> new NoSuchProductException("id가 %s인 product는 없습니다."));
+            totalAmount += product.getProductPrice() * item.getQuantity();
+        }
+
         Order order = Order.builder()
                 .buyer(user)
                 .createDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
-                .totalAmount(body.getTotalAmount())
+                .totalAmount(totalAmount)
                 .deliveryStatus(Order.DeliveryStatus.PENDING)
                 .zipCode(body.getZipcode())
                 .deliveryAddress(body.getAddress())
