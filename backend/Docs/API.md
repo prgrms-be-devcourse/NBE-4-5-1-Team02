@@ -188,6 +188,7 @@
           "totalPrice": 40000,
           "deliveryStatus":"배송 전",
           "buyerEmail": "user@example.com",
+          "address": "add1",
         },
         {
           "orderId": "order790",
@@ -195,6 +196,7 @@
           "totalPrice": 15000,
           "deliveryStatus":"배송 ",
           "buyerEmail": "user@example.com",
+          "address": "add2",
         }
       ],
       "page": 1,
