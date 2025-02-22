@@ -28,6 +28,7 @@ public class OrderDto {
 
     @Getter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class ProductItem {
         private String name;
         private int quantity;
@@ -64,4 +65,5 @@ public class OrderDto {
             this.items = null;  // 상품 항목을 제외
         }
     }*/
+
 }

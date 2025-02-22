@@ -9,10 +9,13 @@ import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
+import com.team2.demo.domain.user.entity.User;
+import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +35,7 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final UserService userService;
 
     // 사용자: 주문 리스트 조회
     public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
@@ -100,8 +106,21 @@ public class OrderService {
 //        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
     }
   
-    public Order payment(Order order){
+    public Order payment(OrderRequestDto body){
         System.out.println("결제 진행 서비스 시작");
+
+        User user = userService.findByEmail(body.getBuyer().getEmail());
+
+        Order order = Order.builder()
+                .user(user)
+                .createDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .totalAmount(body.getTotalAmount())
+                .deliveryStatus(Order.DeliveryStatus.PENDING)
+                .zipCode(body.getZipCode())
+                .deliveryAddress(body.getDeliveryAddress())
+                .build();
+
         return orderRepository.save(order);
     }
 

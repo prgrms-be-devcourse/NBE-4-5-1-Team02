@@ -24,9 +24,3 @@ public class GlobalExceptionAdvisor {
     }
 }
 
-    @ExceptionHandler(ServiceException.class)
-    public RsData<Void> handleServiceException(ServiceException e, HttpServletResponse response) {
-        response.setStatus(HttpStatus.BAD_REQUEST.value());
-        return RsData.badRequest(e);
-    }
-}

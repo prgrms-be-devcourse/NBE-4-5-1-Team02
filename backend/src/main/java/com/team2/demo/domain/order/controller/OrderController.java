@@ -6,6 +6,7 @@ import com.team2.demo.domain.order.dto.OrderRequestDto;
 
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
+import com.team2.demo.domain.user.dto.UserDto;
 import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.OrderListResponse;
@@ -66,36 +67,14 @@ public class OrderController {
     }
 
     @PostMapping
-    public RsData<String> payment(@RequestBody Map<String, Object> body) {
+    public RsData<OrderRequestDto> payment(@RequestBody OrderRequestDto body) {
 
-        try {
-            System.out.println(body);
+        System.out.println("이메일조회"+body.getBuyer().getEmail());
 
-            Object buyerObj = body.get("buyer");
+        Order response = orderService.payment(body);
+        OrderRequestDto orderRequestDto = OrderRequestDto.of(response);
+        return RsData.success("ok", orderRequestDto);
 
-            if (buyerObj instanceof Map) {
-
-                Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
-                User user = userService.findByEmail(buyer.get("email").toString());
-                System.out.println("유저이메일조회" + user);
-
-                Order orderBody = Order.builder()
-                        .createDate(LocalDateTime.now())
-                        .modifiedDate(LocalDateTime.now())
-                        .deliveryAddress(buyer.get("email").toString())
-                        .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
-                        .zipCode(Integer.parseInt(body.get("zipcode").toString()))
-                        .user(user)
-                        .deliveryStatus(Order.DeliveryStatus.PENDING)
-                        .build();
-
-                orderService.payment(orderBody);
-            }
-
-            return RsData.success("ok", "주문 생성 완료");
-        } catch (Exception e) {
-            return RsData.badRequest("주문 생성에 실패했습니다. 필수 값을 체크해주세요.", 400);
-        }
     }
 
     /*
@@ -110,11 +89,11 @@ public class OrderController {
         RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
         return ResponseEntity.ok(response);
     }
-}
+
     /*
-    사용자 주문 취소
-     DELETE /orders/{orderId}?email=user@example.com
-    */
+사용자 주문 취소
+ DELETE /orders/{orderId}?email=user@example.com
+*/
     @DeleteMapping("/{orderId}")
     public RsData<Void> cancelOrder(
             @PathVariable String orderId,
@@ -123,3 +102,7 @@ public class OrderController {
         return response;
     }
 }
+
+
+
+
