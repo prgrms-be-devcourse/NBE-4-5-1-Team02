@@ -19,17 +19,11 @@ public class UserController
     private final UserService userService;
 
     @PostMapping("/users")
-    public RsData<UserDto> payment(@RequestBody Map<String, Object> body){
+    public RsData<UserDto> addUser(@RequestBody UserDto body){
         try{
-        Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
-        User userBody = User.builder()
-                .email(buyer.get("email").toString())
-                .createdDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
-                .build();
+            User savedUser = userService.addUser(body);
+            UserDto userDto = UserDto.of(savedUser);
 
-            User user = userService.addUser(userBody);
-            UserDto userDto = UserDto.of(user);
             return RsData.success("success",userDto);
         }catch (Exception e){
             return RsData.badRequest("사용자 생성에 실패했습니다.", 400);
