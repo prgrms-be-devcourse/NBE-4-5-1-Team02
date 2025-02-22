@@ -154,7 +154,7 @@ public class OrderService {
 
         User user = userService.findByEmail(email);
         if (!user.isMine(order)) {
-            return new RsData<>("주문 취소 권한이 없습니다.", null, 403);
+            return RsData.badRequest("주문 취소 권한이 없습니다.", 403);
         }
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
