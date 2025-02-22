@@ -92,37 +92,15 @@ public class OrderController {
 
 
     @Operation(summary = "주문 생성 ", description = "사용자가 주문을 생성한다.")
-    @PostMapping("/payment")
-    public RsData<String> payment(@RequestBody Map<String, Object> body) {
+    @PostMapping
+    public RsData<OrderRequestDto> payment(@RequestBody OrderRequestDto body) {
 
-        try {
-            System.out.println(body);
+        System.out.println("이메일조회"+body.getBuyer().getEmail());
 
-            Object buyerObj = body.get("buyer");
+        Order response = orderService.payment(body);
+        OrderRequestDto orderRequestDto = OrderRequestDto.of(response);
+        return RsData.success("ok", orderRequestDto);
 
-            if (buyerObj instanceof Map) {
-
-                Map<String, Object> buyer = (Map<String, Object>) body.get("buyer");
-                User user = userService.findByEmail(buyer.get("email").toString());
-                System.out.println("유저이메일조회" + user);
-
-        Order orderBody = Order.builder()
-                .createDate(LocalDateTime.now())
-                .modifiedDate(LocalDateTime.now())
-                .deliveryAddress(buyer.get("email").toString())
-                .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
-                .zipCode(Integer.parseInt(body.get("zipcode").toString()))
-                .buyer(user)
-                .deliveryStatus(Order.DeliveryStatus.PENDING)
-                .build();
-
-                orderService.payment(orderBody);
-            }
-
-            return RsData.success("ok", "주문 생성 완료");
-        } catch (Exception e) {
-            return RsData.badRequest("주문 생성에 실패했습니다. 필수 값을 체크해주세요.", 400);
-        }
     }
 
     /*
@@ -152,3 +130,4 @@ public class OrderController {
         return response;
     }
 }
+

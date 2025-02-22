@@ -1,8 +1,10 @@
 package com.team2.demo.domain.order.service;
 
+import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
+import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.repository.UserRepository;
@@ -14,6 +16,7 @@ import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -102,15 +106,29 @@ public class OrderService {
 
 //        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
     }
-  
-    public Order payment(Order order){
+
+    //사용자: 주문 생성
+    public Order payment(OrderRequestDto body){
         System.out.println("결제 진행 서비스 시작");
+
+        User user = userService.findByEmail(body.getBuyer().getEmail());
+
+        Order order = Order.builder()
+                .buyer(user)
+                .createDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .totalAmount(body.getTotalAmount())
+                .deliveryStatus(Order.DeliveryStatus.PENDING)
+                .zipCode(body.getZipcode())
+                .deliveryAddress(body.getAddress())
+                .build();
+
         return orderRepository.save(order);
     }
 
     public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new NoSuchOrderException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
     }
 
