@@ -32,24 +32,13 @@ public class OrderRequestDto {
 
     @NotNull(message = "이메일 입력은 필수입니다.")
     private Buyer buyer;
-    private LocalDateTime orderDate;
-    private Integer totalAmount;
-    private Order.DeliveryStatus deliveryStatus;
-    private User user;
 
     // 엔티티 -> DTO 변환
     public static OrderRequestDto of(Order order) {
 
         return OrderRequestDto.builder()
-                .orderDate(order.getCreateDate())
-                .user(order.getBuyer())
                 .zipcode(order.getZipCode())
                 .address(order.getDeliveryAddress())
-                .totalAmount(order.getTotalAmount())
-                .deliveryStatus(order.getDeliveryStatus())
-//                .orders(user.getOrders().stream()
-//                        .map(OrderDto::of) // Order 엔티티 -> OrderDto 변환
-//                        .collect(Collectors.toList()))
                 .build();
 
     }
