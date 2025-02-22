@@ -151,13 +151,18 @@ public class OrderService {
         }
 
         Order order = optionalOrder.get();
+
+        User user = userService.findByEmail(email);
+        if (!user.isMine(order)) {
+            return RsData.badRequest("주문 취소 권한이 없습니다.", 403);
+        }
+
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
             return RsData.badRequest("배송 중이거나 배송 완료된 주문은 취소할 수 없습니다.", 400);
         }
 
         order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-
 
         OrderResponseCancelDto responseDto = OrderResponseCancelDto.builder()
                 .orderId(order.getOrderUuid())
