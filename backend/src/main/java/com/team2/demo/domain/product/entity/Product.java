@@ -3,6 +3,8 @@ package com.team2.demo.domain.product.entity; // Order 와 다른 패키지에 �
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "PRODUCT")
 @Getter
@@ -30,4 +32,14 @@ public class Product {
     @Column(name = "IMAGE_URL")
     private String imageUrl;
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product product)) return false;
+        return Objects.equals(productUuid, product.productUuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(productUuid);
+    }
 }
