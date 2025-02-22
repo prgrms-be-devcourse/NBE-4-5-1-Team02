@@ -2,6 +2,7 @@ package com.team2.demo.domain.order.controller;
 
 import com.team2.demo.domain.order.dto.OrderDto;
 
+import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 
 import com.team2.demo.domain.order.entity.Order;
@@ -12,6 +13,8 @@ import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -53,6 +56,7 @@ public class OrderController {
                                                @RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {
 
+
         Page<OrderDto> orderPage = orderService.getOrdersByEmail(orderForm, page, size);
 
         OrderListResponse response = OrderListResponse.builder()
@@ -63,6 +67,14 @@ public class OrderController {
                 .build();
 
         return RsData.success("ok", response);
+    }
+
+    @GetMapping("/{orderId}")
+    public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId,
+                                                        @RequestParam(name = "email") String email) {
+        OrderInfoWithoutItemDto order = orderService.findOrder(orderId, email);
+
+        return RsData.success("주문 상세 조회 성공", order);
     }
 
     @PostMapping("/payment")

@@ -248,6 +248,54 @@
     }
     ```
 
+### 1.3.1 주문 내 상품 페이지네이션 조회 (사용자)
+- **URL:** `/orders/{orderId}/products`
+- **Method:** `GET`
+- **설명:** 사용자가 주문 내 상품을 페이지네이션 해서 조회합니다.
+- **Query Parameter**:
+  - `email`: 필수
+  - `page` : 기본값=0, 필수 아님
+  - `size` : 기본값=10, 필수 아님
+
+- **Response예시**
+
+  ```json
+  {
+    "message": "Success.",
+    "data": {
+      "data": [
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33331",
+          "productName": "product1",
+          "category": "coffeeBean",
+          "productPrice": 1000,
+          "productDescription": "커피콩1",
+          "imageUrl": "image_url1"
+        },
+        {
+          "productUuid": "product-11111-22222-33332",
+          "productName": "product2",
+          "category": "coffeeBean",
+          "productPrice": 5000,
+          "productDescription": "커피콩2",
+          "imageUrl": "image_url2"
+        }
+      ],
+      "page": 0,
+      "size": 10,
+      "totalPages": 1
+    },
+    "code": 200
+  }
+  ```
 
 ---
 
