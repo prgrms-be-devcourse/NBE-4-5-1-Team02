@@ -104,7 +104,7 @@ public class OrderService {
                     .collect(Collectors.toList());
 
             return new OrderDto(order.getOrderUuid(), order.getCreateDate(), order.getTotalAmount(),
-                    order.getDeliveryStatus(), order.getBuyer().getEmail(), limitedItems);
+                    order.getDeliveryStatus(), order.getBuyer().getEmail(), order.getDeliveryAddress(), limitedItems);
         });
 
 //        return orders.map(order -> new OrderDto(order, true)); // 상품 포함

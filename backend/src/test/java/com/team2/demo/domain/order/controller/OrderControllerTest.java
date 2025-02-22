@@ -41,7 +41,8 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.data.orderDate").value(orderDto.getOrderDate().toString()))
                 .andExpect(jsonPath("$.data.totalPrice").value(orderDto.getTotalPrice()))
                 .andExpect(jsonPath("$.data.deliveryStatus").value(orderDto.getDeliveryStatus().toString()))
-                .andExpect(jsonPath("$.data.buyerEmail").value(orderDto.getBuyerEmail()));
+                .andExpect(jsonPath("$.data.buyerEmail").value(orderDto.getBuyerEmail()))
+                .andExpect(jsonPath("$.data.deliveryAddress").value(orderDto.getAddress()));
 //                .andExpect(jsonPath("$.data.createdDate").value(matchesPattern(orderDto.getCreatedDate().toString().replaceAll("0+$", "") + ".*")))
 //                .andExpect(jsonPath("$.data.modifiedDate").value(matchesPattern(orderDto.getModifiedDate().toString().replaceAll("0+$", "") + ".*")));
     }

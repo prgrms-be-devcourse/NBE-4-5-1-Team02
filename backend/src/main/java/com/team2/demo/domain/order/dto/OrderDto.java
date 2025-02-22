@@ -23,8 +23,10 @@ public class OrderDto {
     private DeliveryStatus deliveryStatus;
 
     private String buyerEmail;
+    private String address;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<ProductItem> items;
+
     @Getter
     @AllArgsConstructor
     public static class ProductItem {
@@ -39,6 +41,7 @@ public class OrderDto {
         this.totalPrice = order.getTotalAmount();
         this.deliveryStatus = order.getDeliveryStatus();
         this.buyerEmail = order.getBuyer().getEmail();
+        this.address = order.getDeliveryAddress();
     }
 
     /* 없애지 말아주세요! : Reference
