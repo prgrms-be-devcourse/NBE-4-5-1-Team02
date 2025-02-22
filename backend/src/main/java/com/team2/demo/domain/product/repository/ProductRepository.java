@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findAllByCategoryLike(String category, Pageable pageable);
 
     Page<Product> findAllByProductNameLike(String productName, Pageable pageable);

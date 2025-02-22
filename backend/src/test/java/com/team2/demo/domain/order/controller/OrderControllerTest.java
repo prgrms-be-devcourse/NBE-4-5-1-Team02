@@ -64,7 +64,7 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
-        Page<OrderDto> orderPage = orderService.getOrdersByEmail(new OrderController.OrderForm(email), page, size);
+        Page<OrderDto> orderPage = orderService.getOrdersByEmail(email, page, size);
         List<OrderDto> orderList = orderPage.getContent();
 
         for (int i = 0; i < orderList.size(); i++) {
@@ -80,7 +80,6 @@ class OrderControllerTest {
         int page = 0;
         int size = 10;
 
-        // Mock 요청
         ResultActions resultActions = mvc
                 .perform(get("/orders")
                         .param("email", email)
@@ -90,8 +89,11 @@ class OrderControllerTest {
                 .andDo(print());
 
         resultActions
-                .andExpect(jsonPath("$.code").value(404))
-                .andExpect(jsonPath("$.message").value("올바른 이메일 형식이어야 합니다."));
+                .andDo(print())
+                .andExpect(status().isBadRequest())  // HTTP 400 검증 추가
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("getOrders.email: must be a well-formed email address, getOrders.email: 올바른 이메일 형식이어야 합니다."));
+        //  getOrders.email: must be a well-formed email address, getOrders.email: 올바른 이메일 형식이어야 합니다.
     }
 
     @Test
@@ -116,7 +118,7 @@ class OrderControllerTest {
         resultActions
                 .andExpect(status().isBadRequest())  // BadRequest 400
                 .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.message").value("Invalid page number"));
+                .andExpect(jsonPath("$.message").value("Page index must not be less than zero"));
     }
 
     @Test

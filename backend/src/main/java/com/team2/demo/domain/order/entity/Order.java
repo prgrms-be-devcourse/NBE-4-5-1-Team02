@@ -1,5 +1,6 @@
 package com.team2.demo.domain.order.entity;
 
+import com.team2.demo.domain.order.dto.ProductWithAmount;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -81,6 +82,25 @@ public class Order {
             this.deliveryStatus = deliveryStatus;
         }
         this.modifiedDate = LocalDateTime.now();
+    }
+
+    public void updateOrder(List<ProductWithAmount> updatedProducts, String address, Integer zipCode, DeliveryStatus deliveryStatus) {
+        int totalPrice = calculateTotalPrice(updatedProducts);
+        this.totalAmount = totalPrice;
+        this.deliveryAddress= address;
+        this.zipCode = zipCode;
+        this.deliveryStatus = deliveryStatus;
+        this.modifiedDate = LocalDateTime.now();
+        this.products.clear();
+        this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
+    }
+
+    private static int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
+        int totalPrice = 0;
+        for(ProductWithAmount item : updatedProducts){
+            totalPrice += item.product().getProductPrice()*item.amount();
+        }
+        return totalPrice;
     }
 
     public enum DeliveryStatus {

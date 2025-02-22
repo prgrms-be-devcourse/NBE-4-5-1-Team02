@@ -1,18 +1,23 @@
 package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
-import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderItemGrouper;
-import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
-import com.team2.demo.domain.order.dto.OrderRequestDto;
+import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
+import com.team2.demo.domain.user.entity.User;
+import com.team2.demo.domain.user.repository.UserRepository;
+import com.team2.demo.domain.user.service.UserService;
+import com.team2.demo.global.exception.order.NoProductsInOrderException;
+import com.team2.demo.global.exception.user.AccessDeniedException;
+import com.team2.demo.global.exception.order.NoSuchOrderException;
 import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,48 +35,49 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     // 사용자: 주문 리스트 조회
-    public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
+    public Page<OrderDto> getOrdersByEmail(String email, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게
-        Page<Order> orders = orderRepository.findAllByUser_Email(orderForm.email(), pageable);
+        Page<Order> orders = orderRepository.findAllByUser_Email(email, pageable);
         return orders.map(order -> new OrderDto(order)); // 상품 미포함
     }
 
 
     // 사용자: 주문 수정
     @Transactional
-    public RsData<OrderDto> updateOrder(String orderId, String email, OrderRequestDto request) {
+    public OrderDto updateOrder(String orderId, String email, OrderRequestDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
+        User loggedInUser = userRepository.findByEmail(email);
+
+        if(!loggedInUser.isMine(order))
+            throw new AccessDeniedException("자신이 주문하지 않은 주문을 수정할 수 없습니다.");
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
-            return RsData.badRequest("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.", 400);
+            throw new IllegalStateException("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다.");
         }
 
-
-        List<Product> updatedProducts = request.getProductIds().stream()
-                .map(productUuid -> productRepository.findByProductUuid(productUuid)
-                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
-                .collect(Collectors.toList());
-
-        order.updateProducts(updatedProducts); // clear() + addAll()
-
-        order.updateDeliveryInfo(request.getDeliveryAddress(), request.getZipCode());
-
-        order.updateModifiedDate();
-
-        orderRepository.save(order);
+        List<ProductWithAmount> updatedProducts = request.getItems().stream()
+                .map(item ->
+                                new ProductWithAmount(
+                                        productRepository.findByProductUuid(item.getProductId())
+                                                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + item.getProductId()))
+                                        , item.getQuantity()))
+                        .collect(Collectors.toList());
 
         if (updatedProducts.isEmpty()) {
             order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-            orderRepository.delete(order);
-            return RsData.success("주문이 취소되었습니다.", null);
+            throw new NoProductsInOrderException("주문에 상품이 하나도 없어 주문이 취소되었습니다.");
         }
 
-        return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
+        order.updateOrder(updatedProducts,  request.getAddress(), request.getZipcode(), order.getDeliveryStatus());
+
+        return new OrderDto(order);
     }
 
     // 관리자: 주문 리스트 조회
@@ -107,7 +113,7 @@ public class OrderService {
 
     public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+                .orElseThrow(() -> new NoSuchOrderException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
     }
 
@@ -130,5 +136,23 @@ public class OrderService {
         orderRepository.save(order);
 
         return RsData.success("주문이 취소되었습니다.", null);
+    }
+
+    public OrderInfoWithoutItemDto findOrder(String orderId, String email) {
+        Order order =  orderRepository.findByOrderUuid(orderId).
+                orElseThrow(() -> new EntityNotFoundException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
+
+        User loggedInUser = userService.findByEmail(email);
+
+        if(!loggedInUser.isMine(order))
+            throw new ServiceException("다른 사람의 주문을 조회할 수 없습니다.");
+
+        return new OrderInfoWithoutItemDto(order);
+    }
+
+    public void orderIsExist(@NotEmpty String orderId) {
+        if(orderRepository.countByOrderUuid(orderId)==0){
+            throw new NoSuchOrderException("id가 %s인 Order는 없습니다.".formatted(orderId));
+        }
     }
 }

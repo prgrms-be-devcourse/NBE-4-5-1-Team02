@@ -3,28 +3,20 @@ package com.team2.demo.domain.order.controller;
 import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.order.service.OrderService;
-import com.team2.demo.domain.product.entity.Product;
-import com.team2.demo.domain.product.repository.ProductRepository;
-import com.team2.demo.domain.user.entity.User;
-import com.team2.demo.domain.user.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.team2.demo.domain.product.controller.ProductController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -38,6 +30,33 @@ class OrderControllerAdminTest {
     @Autowired
     OrderService orderService;
 
+    @Test
+    @DisplayName("주문 내 모든 상품 조회 성공")
+    void getOrderInfoTest() throws Exception {
+
+        ResultActions perform = mvc.perform(get("/admin/orders/%s/products".formatted("order-11111-22222-33331")));
+
+        perform
+                .andExpect(status().isOk())
+                .andExpect(handler().handlerType(ProductController.class))
+                .andExpect(handler().methodName("getProductsInOrderAdmin"))
+                .andExpect(jsonPath("$.message").value("Success."))
+                .andExpect(jsonPath("$.data.data").exists())
+                .andExpect(jsonPath("$.data.data[0].productUuid").value("product-11111-22222-33331"));
+    }
+    @Test
+    @DisplayName("존재하지 않는 주문 선택시 에러")
+    void getOrderInfoTest2() throws Exception {
+
+        ResultActions perform = mvc.perform(get("/admin/orders/%s/products".formatted("order-notExist")));
+
+        perform
+                .andExpect(status().isBadRequest())
+                .andExpect(handler().handlerType(ProductController.class))
+                .andExpect(handler().methodName("getProductsInOrderAdmin"))
+                .andExpect(jsonPath("$.message")
+                        .value("id가 %s인 Order는 없습니다.".formatted("order-notExist")));
+    }
     @Autowired
     OrderRepository orderRepository;
     private void checkOrder(ResultActions resultActions, OrderDto orderDto) throws Exception {
@@ -143,9 +162,7 @@ class OrderControllerAdminTest {
 
         resultActions
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("주문이 없습니다."));
+                .andExpect(jsonPath("$.message").value("주문 내역이 없습니다."));
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
-
-
 }

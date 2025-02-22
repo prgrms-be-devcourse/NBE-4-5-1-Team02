@@ -6,16 +6,20 @@ import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.service.ProductService;
-import com.team2.demo.global.exception.ServiceException;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+
+@Tag(name = "AdminOrders", description = "관리자 주문 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/orders")
+@RequestMapping(value = "/admin/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderControllerAdmin {
 
     private final OrderService orderService;
@@ -28,6 +32,7 @@ public class OrderControllerAdmin {
 
         GET /admin/orders?page=1&size=10
     */
+    @Operation(summary = "주문 목록 조회", description = "모든 유저의 주문을 조회한다.")
     @GetMapping
     public RsData<OrderListResponse> getAllOrders(@RequestParam(defaultValue = "1") int page,
                                                   @RequestParam(defaultValue = "10") int size,
@@ -45,6 +50,7 @@ public class OrderControllerAdmin {
         return RsData.success("ok", response);
     }
 
+    @Operation(summary = "주문 수저", description = "특정 유저의 주문을 수정한다.")
     @PutMapping("/{orderUuid}")
     public RsData<OrderDto> updateOrder(
             @PathVariable String orderUuid,
@@ -53,6 +59,7 @@ public class OrderControllerAdmin {
         return RsData.success("success.", updateOrder);
     }
 
+    @Operation(summary = "주문 상세 조회", description = "특정 유저의 주문 상세를 조회한다.")
     @GetMapping("{orderId}")
     public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId){
         OrderInfoWithoutItemDto data= orderService.getOrderAdmin(orderId);
@@ -61,11 +68,11 @@ public class OrderControllerAdmin {
     }
 
     //주문 삭제
+
+    @Operation(summary = "주문 삭제", description = "특정 유저의 주문을 삭제한다.")
     @DeleteMapping("/{orderUuid}")
     public RsData<Void> deleteOrder(@PathVariable String orderUuid){
         adminOrderService.deleteOrder(orderUuid);
         return RsData.success("주문이 성공적으로 삭제되었습니다.", null);
     }
-
-
 }
