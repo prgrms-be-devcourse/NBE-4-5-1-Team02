@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -233,4 +234,33 @@ class OrderControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("주문 수정")
+    public void updateOrder() throws Exception {
+        String orderId = "order-11111-22222-33331";
+        String email = "email1@email.com";
+        String requestJson = String.format("""
+            {
+                "address": "updated addr",
+                "zipcode": 456456,
+                "items": [
+                    {"productId": "product-11111-22222-33331", "quantity": 3},
+                    {"productId": "product-11111-22222-33332", "quantity": 2}
+                ],
+                "buyer": {
+                    "email": "%s"
+                }
+            }
+            """, email);
+
+        mvc.perform(put("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("ok"))
+                .andExpect(jsonPath("$.data.orderId").value(orderId));
+    }
+
 }
