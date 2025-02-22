@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -313,6 +312,21 @@ class OrderControllerTest {
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("주문에 상품이 하나도 없어 주문이 취소되었습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 취소")
+    public void cancelOrder() throws Exception {
+        String orderId = "order-11111-22222-33331";
+        String email = "email1@email.com";
+
+        mvc.perform(delete("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("주문이 성공적으로 취소되었습니다."))
+                .andExpect(jsonPath("$.data.orderId").value(orderId))
                 .andDo(print());
     }
 
