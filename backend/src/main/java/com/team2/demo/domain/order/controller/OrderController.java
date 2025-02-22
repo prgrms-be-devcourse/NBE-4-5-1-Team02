@@ -9,23 +9,26 @@ import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
+
+@Tag(name = "Orders", description = "주문 API")
 @RestController
 @RequiredArgsConstructor
 @Validated
-@RequestMapping("/orders")
+@RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
 
     private final OrderService orderService;
@@ -50,6 +53,8 @@ public class OrderController {
         사용자 주문 목록 조회
         GET /orders?email=user@example.com&page=1&size=10
     */
+
+    @Operation(summary = "주문 리스트 조회 ", description = "사용자의 모든 주문 목록을 조회한다.")
     @GetMapping
     public RsData<OrderListResponse> getOrders(
             @RequestParam
@@ -72,7 +77,12 @@ public class OrderController {
         return RsData.success("ok", response);
     }
 
-    @GetMapping("/{orderId}")
+    @Operation(summary = "주문 상세 조회 ",
+            description = """
+                    사용자의 주문 하나의 상세 정보를 조회한다.<br/>
+                    주문에 포함된 모든 상품을 페이지네이션된 결과로 보여주는 API를 추가로 호출해야 완전한 주문 상세 결과를 얻을 수 있다.
+                    """)
+    @GetMapping(value = "/{orderId}")
     public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId,
                                                         @RequestParam(name = "email") String email) {
         OrderInfoWithoutItemDto order = orderService.findOrder(orderId, email);
@@ -80,6 +90,8 @@ public class OrderController {
         return RsData.success("주문 상세 조회 성공", order);
     }
 
+
+    @Operation(summary = "주문 생성 ", description = "사용자가 주문을 생성한다.")
     @PostMapping("/payment")
     public RsData<String> payment(@RequestBody Map<String, Object> body) {
 
@@ -102,13 +114,13 @@ public class OrderController {
 
         orderService.payment(orderBody);
         return RsData.success("ok", "사용자 등록 완료");
-
     }
 
     /*
         사용자 주문 수정
         PUT /orders/{orderId}?email=user@example.com
     */
+    @Operation(summary = "주문 수정 ", description = "사용자가 자신이 생성한 주문을 수정한다.")
     @PutMapping("/{orderId}")
     public RsData<OrderDto> updateOrder(
             @PathVariable String orderId,
@@ -123,6 +135,7 @@ public class OrderController {
     사용자 주문 취소
      DELETE /orders/{orderId}?email=user@example.com
     */
+    @Operation(summary = "주문 삭제 ", description = "사용자가 자신이 생성한 주문을 삭제한다.")
     @DeleteMapping("/{orderId}")
     public RsData<Void> cancelOrder(
             @PathVariable String orderId,
