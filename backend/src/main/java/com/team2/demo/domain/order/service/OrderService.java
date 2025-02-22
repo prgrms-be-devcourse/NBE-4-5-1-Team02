@@ -1,16 +1,15 @@
 package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
-import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
-import com.team2.demo.domain.order.dto.OrderItemGrouper;
-import com.team2.demo.domain.order.dto.OrderRequestDto;
+import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
-import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.domain.user.entity.User;
+import com.team2.demo.domain.user.repository.UserRepository;
 import com.team2.demo.domain.user.service.UserService;
+import com.team2.demo.global.exception.order.NoProductsInOrderException;
+import com.team2.demo.global.exception.user.AccessDeniedException;
 import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
@@ -35,6 +34,7 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
     // 사용자: 주문 리스트 조회
@@ -47,37 +47,36 @@ public class OrderService {
 
     // 사용자: 주문 수정
     @Transactional
-    public RsData<OrderDto> updateOrder(String orderId, String email, OrderRequestDto request) {
+    public OrderDto updateOrder(String orderId, String email, OrderRequestDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
+        User loggedInUser = userRepository.findByEmail(email);
+
+        if(!loggedInUser.isMine(order))
+            throw new AccessDeniedException("자신이 주문하지 않은 주문을 수정할 수 없습니다.");
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
-            return RsData.badRequest("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.", 400);
+            throw new IllegalStateException("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다.");
         }
 
-
-        List<Product> updatedProducts = request.getProductIds().stream()
-                .map(productUuid -> productRepository.findByProductUuid(productUuid)
-                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
-                .collect(Collectors.toList());
-
-        order.updateProducts(updatedProducts); // clear() + addAll()
-
-        order.updateDeliveryInfo(request.getDeliveryAddress(), request.getZipCode());
-
-        order.updateModifiedDate();
-
-        orderRepository.save(order);
+        List<ProductWithAmount> updatedProducts = request.getItems().stream()
+                .map(item ->
+                                new ProductWithAmount(
+                                        productRepository.findByProductUuid(item.getProductId())
+                                                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + item.getProductId()))
+                                        , item.getQuantity()))
+                        .collect(Collectors.toList());
 
         if (updatedProducts.isEmpty()) {
             order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-            orderRepository.delete(order);
-            return RsData.success("주문이 취소되었습니다.", null);
+            throw new NoProductsInOrderException("주문에 상품이 하나도 없어 주문이 취소되었습니다.");
         }
 
-        return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
+        order.updateOrder(updatedProducts,  request.getAddress(), request.getZipcode(), order.getDeliveryStatus());
+
+        return new OrderDto(order);
     }
 
     // 관리자: 주문 리스트 조회

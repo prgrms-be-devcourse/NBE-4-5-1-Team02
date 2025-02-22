@@ -110,9 +110,10 @@ public class OrderController {
     public RsData<OrderDto> updateOrder(
             @PathVariable String orderId,
             @RequestParam String email,
-            @RequestBody OrderRequestDto request) {
-        RsData<OrderDto> response = orderService.updateOrder(orderId, email, request);
-        return response;
+            @Valid @RequestBody OrderRequestDto request) {
+        OrderDto response = orderService.updateOrder(orderId, email, request);
+
+        return RsData.success("ok", response);
     }
 
     /*
