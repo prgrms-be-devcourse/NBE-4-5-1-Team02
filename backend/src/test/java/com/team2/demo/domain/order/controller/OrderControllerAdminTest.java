@@ -39,7 +39,7 @@ class OrderControllerAdminTest {
         perform
                 .andExpect(status().isOk())
                 .andExpect(handler().handlerType(ProductController.class))
-                .andExpect(handler().methodName("getProductsInOrder"))
+                .andExpect(handler().methodName("getProductsInOrderAdmin"))
                 .andExpect(jsonPath("$.message").value("Success."))
                 .andExpect(jsonPath("$.data.data").exists())
                 .andExpect(jsonPath("$.data.data[0].productUuid").value("product-11111-22222-33331"));
@@ -53,7 +53,7 @@ class OrderControllerAdminTest {
         perform
                 .andExpect(status().isBadRequest())
                 .andExpect(handler().handlerType(ProductController.class))
-                .andExpect(handler().methodName("getProductsInOrder"))
+                .andExpect(handler().methodName("getProductsInOrderAdmin"))
                 .andExpect(jsonPath("$.message")
                         .value("id가 %s인 Order는 없습니다.".formatted("order-notExist")));
     }
@@ -162,7 +162,7 @@ class OrderControllerAdminTest {
 
         resultActions
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("주문이 없습니다."));
+                .andExpect(jsonPath("$.message").value("주문 내역이 없습니다."));
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
 }

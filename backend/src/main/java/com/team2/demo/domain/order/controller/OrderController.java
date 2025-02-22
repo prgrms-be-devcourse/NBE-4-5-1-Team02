@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import java.util.Map;
 @Tag(name = "Orders", description = "주문 API")
 @RestController
 @RequiredArgsConstructor
+@Validated
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController {
 
@@ -42,7 +44,7 @@ public class OrderController {
      */
     public record OrderForm(@Email
                             @Pattern(
-                                    regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+                                    regexp = "^[a-z0-9]+@[a-z]+\\.com$",
                                     message = "올바른 이메일 형식이어야 합니다."
                             ) String email) {
     }
@@ -54,11 +56,16 @@ public class OrderController {
 
     @Operation(summary = "주문 리스트 조회 ", description = "사용자의 모든 주문 목록을 조회한다.")
     @GetMapping
-    public RsData<OrderListResponse> getOrders(@ModelAttribute @Valid OrderForm orderForm,
-                                               @RequestParam(defaultValue = "0") int page,
-                                               @RequestParam(defaultValue = "10") int size) {
+    public RsData<OrderListResponse> getOrders(
+            @RequestParam
+            @Email
+            @Pattern(regexp = "^[a-z0-9]+@[a-z]+\\.com$",
+                    message = "올바른 이메일 형식이어야 합니다.")
+            String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        Page<OrderDto> orderPage = orderService.getOrdersByEmail(orderForm, page, size);
+        Page<OrderDto> orderPage = orderService.getOrdersByEmail(email, page, size);
 
         OrderListResponse response = OrderListResponse.builder()
                 .content(orderPage.getContent())
