@@ -117,7 +117,7 @@ class OrderControllerTest {
         resultActions
                 .andExpect(status().isBadRequest())  // BadRequest 400
                 .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.message").value("Invalid page number"));
+                .andExpect(jsonPath("$.message").value("Page index must not be less than zero"));
     }
 
     @Test

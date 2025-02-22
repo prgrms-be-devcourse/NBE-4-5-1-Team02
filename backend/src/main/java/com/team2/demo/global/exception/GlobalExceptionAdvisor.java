@@ -32,6 +32,13 @@ public class GlobalExceptionAdvisor {
         e.printStackTrace();
         return RsData.badRequest(e.getMessage(), HttpStatus.BAD_REQUEST.value());
     }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public RsData<Void> handleIllegalArgumentException
+            (IllegalArgumentException e, HttpServletResponse response) {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        e.printStackTrace();
+        return RsData.badRequest(e.getMessage(), HttpStatus.BAD_REQUEST.value());
+    }
 }
 
 
