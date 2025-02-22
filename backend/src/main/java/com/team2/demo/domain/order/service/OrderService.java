@@ -75,8 +75,9 @@ public class OrderService {
     }
 
     // 관리자: 주문 리스트 조회
+    @Transactional
     public Page<OrderDto> getAllOrders(int page, int size, int maxItems) {
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "createDate");
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.DESC, "orderUuid");
         Page<Order> orders = orderRepository.findAll(pageable);
 
         if (orders.isEmpty()) {
