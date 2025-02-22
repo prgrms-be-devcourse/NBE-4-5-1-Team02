@@ -10,6 +10,7 @@ import com.team2.demo.domain.user.repository.UserRepository;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.exception.order.NoProductsInOrderException;
 import com.team2.demo.global.exception.user.AccessDeniedException;
+import com.team2.demo.global.exception.order.NoSuchOrderException;
 import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
@@ -112,7 +113,7 @@ public class OrderService {
 
     public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+                .orElseThrow(() -> new NoSuchOrderException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
     }
 
@@ -147,5 +148,11 @@ public class OrderService {
             throw new ServiceException("다른 사람의 주문을 조회할 수 없습니다.");
 
         return new OrderInfoWithoutItemDto(order);
+    }
+
+    public void orderIsExist(@NotEmpty String orderId) {
+        if(orderRepository.countByOrderUuid(orderId)==0){
+            throw new NoSuchOrderException("id가 %s인 Order는 없습니다.".formatted(orderId));
+        }
     }
 }

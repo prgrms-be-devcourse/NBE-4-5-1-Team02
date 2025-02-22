@@ -41,6 +41,9 @@ public class ProductService {
         // 내부에서 조건에 안맞으면 exception throw
         orderService.findOrder(orderId, email);
 
+
+        orderService.orderIsExist(orderId);
+
         return productRepository.findAllByOrderId(orderId, pageable)
                 .map(ProductDto::of);
     }
