@@ -64,7 +64,7 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print());
 
-        Page<OrderDto> orderPage = orderService.getOrdersByEmail(new OrderController.OrderForm(email), page, size);
+        Page<OrderDto> orderPage = orderService.getOrdersByEmail(email, page, size);
         List<OrderDto> orderList = orderPage.getContent();
 
         for (int i = 0; i < orderList.size(); i++) {
@@ -89,6 +89,8 @@ class OrderControllerTest {
                 .andDo(print());
 
         resultActions
+                .andDo(print())
+                .andExpect(status().isBadRequest())  // HTTP 400 검증 추가
                 .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.message").value("올바른 이메일 형식이어야 합니다."));
     }

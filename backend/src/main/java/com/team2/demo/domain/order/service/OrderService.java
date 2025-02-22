@@ -32,9 +32,9 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     // 사용자: 주문 리스트 조회
-    public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
+    public Page<OrderDto> getOrdersByEmail(String email, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게
-        Page<Order> orders = orderRepository.findAllByUser_Email(orderForm.email(), pageable);
+        Page<Order> orders = orderRepository.findAllByUser_Email(email, pageable);
         return orders.map(order -> new OrderDto(order)); // 상품 미포함
     }
 

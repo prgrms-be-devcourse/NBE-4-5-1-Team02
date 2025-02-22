@@ -30,7 +30,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api
 	// validation
-	implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+	// implementation 'jakarta.validation:jakarta.validation-api:3.1.1'
+
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.4.3'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
