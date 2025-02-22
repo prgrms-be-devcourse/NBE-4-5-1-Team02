@@ -4,6 +4,7 @@ import com.team2.demo.domain.user.dto.UserDto;
 import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.RsData;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class UserController
     private final UserService userService;
 
     @PostMapping("/users")
-    public RsData<UserDto> addUser(@RequestBody UserDto body){
+    public RsData<UserDto> addUser(@RequestBody @Valid UserDto body){
         try{
             User savedUser = userService.addUser(body);
             UserDto userDto = UserDto.of(savedUser);

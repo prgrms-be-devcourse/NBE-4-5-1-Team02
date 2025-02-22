@@ -43,4 +43,22 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("유저 생성 - 올바르지 않은 이메일 형식")
+    void addUserTest2() throws Exception{
+        //초기 데이터
+        String jsonRequest = """
+            {
+              "buyer": {
+                "email": "user@example...com"
+              }
+            }
+            """;
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
 }
