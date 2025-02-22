@@ -260,7 +260,60 @@ class OrderControllerTest {
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("ok"))
-                .andExpect(jsonPath("$.data.orderId").value(orderId));
+                .andExpect(jsonPath("$.data.orderId").value(orderId))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 수정 - 배송 중, 배송 완료 수정 불가")
+    public void updateOrder_FailDeliveryStatus() throws Exception {
+        String orderId = "order-11111-22222-33333";
+        String email = "email2@email.com";
+        String requestJson = String.format("""
+            {
+                "address": "updated addr for shipped order",
+                "zipcode": 789789,
+                "items": [
+                    {"productId": "product-11111-22222-33331", "quantity": 1}
+                ],
+                "buyer": {
+                    "email": "%s"
+                }
+            }
+            """, email);
+
+        mvc.perform(put("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 수정 - 주문 상품 모두 삭제로 주문 취소")
+    public void updateOrderFailureTest_EmptyItems() throws Exception {
+        String orderId = "order-11111-22222-33332";
+        String email = "email1@email.com";
+        String requestJson = String.format("""
+            {
+                "address": "updated addr for empty items",
+                "zipcode": 999999,
+                "items": [],
+                "buyer": {
+                    "email": "%s"
+                }
+            }
+            """, email);
+
+        mvc.perform(put("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("주문에 상품이 하나도 없어 주문이 취소되었습니다."))
+                .andDo(print());
     }
 
 }
