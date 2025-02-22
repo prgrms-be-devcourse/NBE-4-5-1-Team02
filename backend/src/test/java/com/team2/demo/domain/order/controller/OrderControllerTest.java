@@ -286,7 +286,7 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다."))
+                .andExpect(jsonPath("$.message").value("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다."))
                 .andDo(print());
     }
 
@@ -342,6 +342,21 @@ class OrderControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(403))
                 .andExpect(jsonPath("$.message").value("주문 취소 권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 취소 - 배송 중, 배송 완료 취소 불가")
+    public void cancelOrder3() throws Exception {
+        String orderId = "order-11111-22222-33333";
+        String email = "email2@email.com";
+
+        mvc.perform(delete("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("배송 중이거나 배송 완료된 주문은 취소할 수 없습니다."))
                 .andDo(print());
     }
 }
