@@ -1,10 +1,8 @@
 package com.team2.demo.domain.order.service;
 
-import com.team2.demo.domain.order.controller.OrderController;
 import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
-import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.repository.UserRepository;
@@ -16,7 +14,6 @@ import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +38,7 @@ public class OrderService {
     // 사용자: 주문 리스트 조회
     public Page<OrderDto> getOrdersByEmail(String email, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게
-        Page<Order> orders = orderRepository.findAllByUser_Email(email, pageable);
+        Page<Order> orders = orderRepository.findAllByBuyer_Email(email, pageable);
         return orders.map(order -> new OrderDto(order)); // 상품 미포함
     }
 
@@ -100,7 +97,7 @@ public class OrderService {
                     .collect(Collectors.toList());
 
             return new OrderDto(order.getOrderUuid(), order.getCreateDate(), order.getTotalAmount(),
-                    order.getDeliveryStatus(), order.getUser().getEmail(), limitedItems);
+                    order.getDeliveryStatus(), order.getBuyer().getEmail(), limitedItems);
         });
 
 //        return orders.map(order -> new OrderDto(order, true)); // 상품 포함

@@ -29,7 +29,7 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_UUID", referencedColumnName = "USER_UUID")
-    private User user;
+    private User buyer;
 
     @ManyToMany
     @JoinTable(name = "PRODUCT_ORDER_RELATION",
@@ -62,7 +62,7 @@ public class Order {
 
     public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus  deliveryStatus) {
 
-        this.user = user;
+        this.buyer= user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
         this.deliveryStatus = deliveryStatus;

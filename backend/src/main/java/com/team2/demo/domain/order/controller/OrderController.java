@@ -106,15 +106,15 @@ public class OrderController {
                 User user = userService.findByEmail(buyer.get("email").toString());
                 System.out.println("유저이메일조회" + user);
 
-                Order orderBody = Order.builder()
-                        .createDate(LocalDateTime.now())
-                        .modifiedDate(LocalDateTime.now())
-                        .deliveryAddress(buyer.get("email").toString())
-                        .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
-                        .zipCode(Integer.parseInt(body.get("zipcode").toString()))
-                        .user(user)
-                        .deliveryStatus(Order.DeliveryStatus.PENDING)
-                        .build();
+        Order orderBody = Order.builder()
+                .createDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .deliveryAddress(buyer.get("email").toString())
+                .totalAmount(Integer.parseInt(body.get("totalAmount").toString()))
+                .zipCode(Integer.parseInt(body.get("zipcode").toString()))
+                .buyer(user)
+                .deliveryStatus(Order.DeliveryStatus.PENDING)
+                .build();
 
                 orderService.payment(orderBody);
             }
@@ -139,7 +139,6 @@ public class OrderController {
 
         return RsData.success("ok", response);
     }
-}
     /*
     사용자 주문 취소
      DELETE /orders/{orderId}?email=user@example.com
