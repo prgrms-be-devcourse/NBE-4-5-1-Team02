@@ -92,8 +92,20 @@ public class OrderController {
 
         return RsData.success("ok", response);
     }
-}
+
     /*
+사용자 주문 취소
+ DELETE /orders/{orderId}?email=user@example.com
+*/
+    @DeleteMapping("/{orderId}")
+    public RsData<Void> cancelOrder(
+            @PathVariable String orderId,
+            @RequestParam String email) {
+        RsData<Void> response = orderService.cancelOrder(orderId, email);
+        return response;
+    }
+    
+        /*
     사용자 주문 취소
      DELETE /orders/{orderId}?email=user@example.com
     */
@@ -106,4 +118,5 @@ public class OrderController {
         return response;
     }
 }
+
 
