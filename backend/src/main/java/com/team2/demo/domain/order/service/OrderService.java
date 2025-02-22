@@ -1,20 +1,21 @@
 package com.team2.demo.domain.order.service;
 
-import com.team2.demo.domain.order.dto.*;
+import com.team2.demo.domain.order.controller.OrderController;
+import com.team2.demo.domain.order.dto.OrderDto;
+import com.team2.demo.domain.order.dto.OrderItemGrouper;
+import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
+import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
+import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.domain.user.entity.User;
-import com.team2.demo.domain.user.repository.UserRepository;
 import com.team2.demo.domain.user.service.UserService;
-import com.team2.demo.global.exception.order.NoProductsInOrderException;
-import com.team2.demo.global.exception.user.AccessDeniedException;
-import com.team2.demo.global.exception.order.NoSuchOrderException;
 import com.team2.demo.global.response.RsData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -32,49 +35,49 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     // 사용자: 주문 리스트 조회
-    public Page<OrderDto> getOrdersByEmail(String email, int page, int size) {
+    public Page<OrderDto> getOrdersByEmail(OrderController.OrderForm orderForm, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createDate"); // 최근 주문이 가장 먼저 보이게
-        Page<Order> orders = orderRepository.findAllByBuyer_Email(email, pageable);
+        Page<Order> orders = orderRepository.findAllByUser_Email(orderForm.email(), pageable);
         return orders.map(order -> new OrderDto(order)); // 상품 미포함
     }
 
 
     // 사용자: 주문 수정
     @Transactional
-    public OrderDto updateOrder(String orderId, String email, OrderRequestDto request) {
+    public RsData<OrderDto> updateOrder(String orderId, String email, OrderRequestDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
-        User loggedInUser = userRepository.findByEmail(email);
-
-        if(!loggedInUser.isMine(order))
-            throw new AccessDeniedException("자신이 주문하지 않은 주문을 수정할 수 없습니다.");
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
-            throw new IllegalStateException("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다.");
+            return RsData.badRequest("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.", 400);
         }
 
-        List<ProductWithAmount> updatedProducts = request.getItems().stream()
-                .map(item ->
-                                new ProductWithAmount(
-                                        productRepository.findByProductUuid(item.getProductId())
-                                                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + item.getProductId()))
-                                        , item.getQuantity()))
-                        .collect(Collectors.toList());
+
+        List<Product> updatedProducts = request.getProductIds().stream()
+                .map(productUuid -> productRepository.findByProductUuid(productUuid)
+                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
+                .collect(Collectors.toList());
+
+        order.updateProducts(updatedProducts); // clear() + addAll()
+
+        order.updateDeliveryInfo(request.getDeliveryAddress(), request.getZipCode());
+
+        order.updateModifiedDate();
+
+        orderRepository.save(order);
 
         if (updatedProducts.isEmpty()) {
             order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-            throw new NoProductsInOrderException("주문에 상품이 하나도 없어 주문이 취소되었습니다.");
+            orderRepository.delete(order);
+            return RsData.success("주문이 취소되었습니다.", null);
         }
 
-        order.updateOrder(updatedProducts,  request.getAddress(), request.getZipcode(), order.getDeliveryStatus());
-
-        return new OrderDto(order);
+        return RsData.success("주문이 수정되었습니다.", new OrderDto(order));
     }
 
     // 관리자: 주문 리스트 조회
@@ -97,20 +100,34 @@ public class OrderService {
                     .collect(Collectors.toList());
 
             return new OrderDto(order.getOrderUuid(), order.getCreateDate(), order.getTotalAmount(),
-                    order.getDeliveryStatus(), order.getBuyer().getEmail(), limitedItems);
+                    order.getDeliveryStatus(), order.getUser().getEmail(), limitedItems);
         });
 
 //        return orders.map(order -> new OrderDto(order, true)); // 상품 포함
     }
   
-    public Order payment(Order order){
+  	//사용자: 주문 생성
+    public Order payment(OrderRequestDto body){
         System.out.println("결제 진행 서비스 시작");
+
+        User user = userService.findByEmail(body.getBuyer().getEmail());
+
+        Order order = Order.builder()
+                .user(user)
+                .createDate(LocalDateTime.now())
+                .modifiedDate(LocalDateTime.now())
+                .totalAmount(body.getTotalAmount())
+                .deliveryStatus(Order.DeliveryStatus.PENDING)
+                .zipCode(body.getZipCode())
+                .deliveryAddress(body.getDeliveryAddress())
+                .build();
+
         return orderRepository.save(order);
     }
 
     public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new NoSuchOrderException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
     }
 
@@ -135,7 +152,7 @@ public class OrderService {
         return RsData.success("주문이 취소되었습니다.", null);
     }
 
-    public OrderInfoWithoutItemDto findOrder(String orderId, String email) {
+  public OrderInfoWithoutItemDto findOrder(String orderId, String email) {
         Order order =  orderRepository.findByOrderUuid(orderId).
                 orElseThrow(() -> new EntityNotFoundException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
 
