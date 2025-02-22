@@ -39,7 +39,7 @@ public class OrderController {
      */
     public record OrderForm(@Email
                             @Pattern(
-                                    regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$",
+                                    regexp = "^[a-z0-9]+@[a-z]+\\.com$",
                                     message = "올바른 이메일 형식이어야 합니다."
                             ) String email) {
     }

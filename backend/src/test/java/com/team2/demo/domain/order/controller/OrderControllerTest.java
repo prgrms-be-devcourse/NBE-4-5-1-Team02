@@ -80,7 +80,6 @@ class OrderControllerTest {
         int page = 0;
         int size = 10;
 
-        // Mock 요청
         ResultActions resultActions = mvc
                 .perform(get("/orders")
                         .param("email", email)
@@ -90,7 +89,7 @@ class OrderControllerTest {
                 .andDo(print());
 
         resultActions
-                .andExpect(jsonPath("$.code").value(404))
+                .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.message").value("올바른 이메일 형식이어야 합니다."));
     }
 
