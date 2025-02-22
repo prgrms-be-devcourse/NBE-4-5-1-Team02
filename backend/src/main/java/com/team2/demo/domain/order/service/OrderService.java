@@ -60,7 +60,7 @@ public class OrderService {
 
         if (order.getDeliveryStatus() == Order.DeliveryStatus.SHIPPED ||
                 order.getDeliveryStatus() == Order.DeliveryStatus.DELIVERED) {
-            throw new IllegalStateException("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다.");
+            throw new IllegalStateException("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다.");
         }
 
         List<ProductWithAmount> updatedProducts = request.getItems().stream()
