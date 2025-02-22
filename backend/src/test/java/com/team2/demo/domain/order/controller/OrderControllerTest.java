@@ -330,4 +330,18 @@ class OrderControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("주문 취소 - 다른 사람의 주문 취소 불가")
+    public void cancelOrder2() throws Exception {
+        String orderId = "order-11111-22222-33331";
+        String email = "email2@email.com";
+
+        mvc.perform(delete("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(403))
+                .andExpect(jsonPath("$.message").value("주문 취소 권한이 없습니다."))
+                .andDo(print());
+    }
 }
