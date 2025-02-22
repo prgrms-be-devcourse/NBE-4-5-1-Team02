@@ -1,5 +1,6 @@
 package com.team2.demo.domain.order.entity;
 
+import com.team2.demo.domain.order.dto.ProductWithAmount;
 import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -83,7 +84,7 @@ public class Order {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    public void updateOrder(List<Product> updatedProducts, String address, Integer zipCode, DeliveryStatus deliveryStatus) {
+    public void updateOrder(List<ProductWithAmount> updatedProducts, String address, Integer zipCode, DeliveryStatus deliveryStatus) {
         int totalPrice = calculateTotalPrice(updatedProducts);
         this.totalAmount = totalPrice;
         this.deliveryAddress= address;
@@ -92,10 +93,10 @@ public class Order {
         this.modifiedDate = LocalDateTime.now();
     }
 
-    private static int calculateTotalPrice(List<Product> updatedProducts) {
+    private static int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
         int totalPrice = 0;
-        for(Product item : updatedProducts){
-            totalPrice += item.getProductPrice();
+        for(ProductWithAmount item : updatedProducts){
+            totalPrice += item.product().getProductPrice()*item.amount();
         }
         return totalPrice;
     }

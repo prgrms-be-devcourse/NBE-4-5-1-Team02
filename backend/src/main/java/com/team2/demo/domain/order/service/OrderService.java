@@ -1,13 +1,9 @@
 package com.team2.demo.domain.order.service;
 
 import com.team2.demo.domain.order.controller.OrderController;
-import com.team2.demo.domain.order.dto.OrderDto;
-import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
-import com.team2.demo.domain.order.dto.OrderItemGrouper;
-import com.team2.demo.domain.order.dto.OrderRequestDto;
+import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.repository.OrderRepository;
-import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.repository.UserRepository;
@@ -60,16 +56,20 @@ public class OrderService {
             throw new IllegalStateException("배송 중이거나 배송 완료한 주문은 수정할 수 없습니다.");
         }
 
-        List<Product> updatedProducts = request.getItems().stream()
-                .map(productUuid -> productRepository.findByProductUuid(productUuid.getProductId())
-                        .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + productUuid)))
-                .collect(Collectors.toList());
+        List<ProductWithAmount> updatedProducts = request.getItems().stream()
+                .map(item ->
+                                new ProductWithAmount(
+                                        productRepository.findByProductUuid(item.getProductId())
+                                                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다: " + item.getProductId()))
+                                        , item.getQuantity()))
+                        .collect(Collectors.toList());
 
         if (updatedProducts.isEmpty()) {
             order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
             throw new NoProductsInOrderException("주문에 상품이 하나도 없어 주문이 취소되었습니다.");
         }
-        order.updateOrder(updatedProducts, request.getAddress(), request.getZipcode(), order.getDeliveryStatus());
+
+        order.updateOrder(updatedProducts,  request.getAddress(), request.getZipcode(), order.getDeliveryStatus());
 
         return new OrderDto(order);
     }
