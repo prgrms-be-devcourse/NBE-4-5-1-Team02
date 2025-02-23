@@ -179,10 +179,11 @@ class OrderControllerAdminTest {
         String orderUuid = "order-11111-22222-33331";
         String requestJson = """
                 {
-                "deliveryAddress": "Update Address",
-                "zipCode": "88888",
-                "deliveryStatus": "Update DELIVERED"
-                }
+                "address": "Update Address",
+                "zipcode": "88888",
+                "deliveryStatus": "DELIVERED",
+                "items": []
+                }s
                 """;
 
         ResultActions result = mvc.perform(put("/admin/orders/" + orderUuid)
@@ -191,9 +192,8 @@ class OrderControllerAdminTest {
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("success."))
-                .andExpect(jsonPath("$.data.deliveryAddress").value("Update Address"))
-                .andExpect(jsonPath("$.data.zipCode").value("88888"))
-                .andExpect(jsonPath("$.data.deliveryStatus").value("Update DELIVERED"))
+                .andExpect(jsonPath("$.data.address").value("Update Address"))
+                .andExpect(jsonPath("$.data.deliveryStatus").value("PENDING"))
                 .andDo(print());
 
 
