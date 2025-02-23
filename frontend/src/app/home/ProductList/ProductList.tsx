@@ -20,7 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { it } from "node:test";
+import { Button } from "@/components/ui/button";
 
 type TableProductData = {
   id?: string;
@@ -87,7 +87,6 @@ export default function ProductList({
   }, []);
 
   const addProduct = (item: TableProductData) => {
-    console.log(item);
     // 값을 바꿀 맵 선언
     const changedProductMap = new Map<
       string,
@@ -114,6 +113,31 @@ export default function ProductList({
     console.log(changedProductMap);
     setProductsMap(changedProductMap);
   };
+  const deleteProduct = (item: TableProductData) => {
+    // 값을 바꿀 맵 선언
+    const changedProductMap = new Map<
+      string,
+      {
+        product: components["schemas"]["ProductDto"];
+        quantity: number;
+      }
+    >(productsMap);
+    // 만약 상품이 존재하고 수량이 1보다 크면
+    if (changedProductMap.has(item.id!)) {
+      if (changedProductMap.get(item.id!)!.quantity! > 1) {
+        // 상품 수량을 1 줄인다
+        changedProductMap.set(item.id!, {
+          product: toProductDto(item),
+          quantity: changedProductMap.get(item.id!)!.quantity - 1,
+        });
+        // 상품이 존재하고 수량이 1개라면
+      } else if (changedProductMap.get(item.id!)?.quantity == 1) {
+        // 상품을 맵에서 제거한다.
+        changedProductMap.delete(item.id!);
+      }
+    }
+    setProductsMap(changedProductMap);
+  };
 
   const data = products.data!.map((item) => {
     return {
@@ -128,13 +152,22 @@ export default function ProductList({
 
   return (
     <div className="w-[100%] flex flex-col justify-center flex-grow my-3">
-      <div className="w-[80%] self-center h-[100%]">
+      <div className="w-[100%] self-center h-[100%]">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Image</TableHead>
-              <TableHead>name</TableHead>
-              <TableHead>price</TableHead>
+              <TableHead>
+                <span className="text-2xl font-semibold">이미지</span>
+              </TableHead>
+              <TableHead>
+                <span className="text-2xl font-semibold">
+                  상품 이름 및 설명
+                </span>
+              </TableHead>
+              <TableHead>
+                <span className="text-2xl font-semibold">가격</span>
+              </TableHead>
+              <TableHead className="w-[5%]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -149,25 +182,37 @@ export default function ProductList({
                     className="rounded"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className="w-[50%]">
                   <div>
-                    <span>{item.name}</span>
+                    <span className="text-xl">{item.name}</span>
                     <br />
-                    <span>{item.description}</span>
+                    <span className="text-l">{item.description}</span>
                   </div>
                 </TableCell>
-                <TableCell>{item.price}</TableCell>
+                <TableCell className="w-fit">
+                  <span className="text-l">{item.price}</span>
+                </TableCell>
                 <TableCell>
-                  <div>
-                    <input
+                  <div className="flex w-fit justify-end">
+                    <Button
                       type="button"
-                      value="추가"
                       onClick={(e) => {
                         e.preventDefault();
                         addProduct(item);
                       }}
-                    ></input>
-                    <input type="button" value="삭제"></input>
+                    >
+                      추가
+                    </Button>
+                    <Button
+                      type="button"
+                      className="bg-red-500"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteProduct(item);
+                      }}
+                    >
+                      삭제
+                    </Button>
                   </div>
                 </TableCell>
               </TableRow>
