@@ -39,6 +39,9 @@ dependencies {
 // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-data-rest
 	implementation 'org.springdoc:springdoc-openapi-data-rest:1.8.0'
 
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch:3.4.3'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
