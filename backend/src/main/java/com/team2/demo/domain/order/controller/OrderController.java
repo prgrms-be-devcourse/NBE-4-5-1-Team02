@@ -94,7 +94,7 @@ public class OrderController {
 
     @Operation(summary = "주문 생성 ", description = "사용자가 주문을 생성한다.")
     @PostMapping
-    public RsData<OrderInfoDto> payment(@RequestBody OrderRequestDto body) {
+    public RsData<OrderInfoDto> payment(@Valid @RequestBody OrderRequestDto body) {
 
         System.out.println("이메일조회"+body.getBuyer().getEmail());
 
