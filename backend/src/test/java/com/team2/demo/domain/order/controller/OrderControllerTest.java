@@ -18,8 +18,7 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -179,7 +178,12 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
+                .andExpect(handler().methodName("payment"))
+                .andExpect(handler().handlerType(OrderController.class))
+                .andExpect(jsonPath("$.data.products").isArray())
+                .andExpect(jsonPath("$.data.totalAmount").value(3000))
                 .andDo(print());
+
     }
 
     @Test
@@ -209,7 +213,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("주문 생성 - 제품 id 찾지 못함.")
+    @DisplayName("주문 생성 - email 형식 다름.")
     void paymentTest3() throws Exception{
         //초기 데이터
         String jsonRequest = """

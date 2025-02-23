@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -101,6 +102,14 @@ public class Order {
             totalPrice += item.product().getProductPrice()*item.amount();
         }
         return totalPrice;
+    }
+
+    public void addItems(List<Pair<Product, Integer>> productsInOrder) {
+        productsInOrder.forEach(pair -> {
+            for (int i = 0; i < pair.getSecond(); i++) {
+                products.add(pair.getFirst());
+            }
+        });
     }
 
     public enum DeliveryStatus {
