@@ -25,10 +25,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -119,9 +121,11 @@ public class OrderService {
         int totalAmount = 0;
 
         List<ProductListDto> items = body.getItems();
+        List<Pair<Product, Integer>> productsInOrder = new ArrayList<>();
         for (ProductListDto item: items){
             Product product = productRepository.findByProductUuid(item.getProductId())
                     .orElseThrow(() -> new NoSuchProductException("id가 %s인 product는 없습니다."));
+            productsInOrder.add(Pair.of(product, item.getQuantity()));
             totalAmount += product.getProductPrice() * item.getQuantity();
         }
 
@@ -134,6 +138,8 @@ public class OrderService {
                 .zipCode(body.getZipcode())
                 .deliveryAddress(body.getAddress())
                 .build();
+
+        order.addItems(productsInOrder);
 
         return orderRepository.save(order);
     }
