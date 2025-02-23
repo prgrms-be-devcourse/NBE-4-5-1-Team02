@@ -20,17 +20,30 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { it } from "node:test";
 
 type TableProductData = {
   id?: string;
   imageUrl?: string;
   name?: string;
   description?: string;
+  category?: string;
   price?: number;
 };
 
 type PaginationDatatProductDto =
   components["schemas"]["PaginationDataProductDto"];
+
+function toProductDto(tableProductData: TableProductData) {
+  return {
+    productUuid: tableProductData.id,
+    productName: tableProductData.name,
+    productPrice: tableProductData.price,
+    category: tableProductData.category,
+    imageUrl: tableProductData.imageUrl,
+    productDescription: tableProductData.description,
+  };
+}
 
 export default function ProductList({
   products,
@@ -74,6 +87,7 @@ export default function ProductList({
   }, []);
 
   const addProduct = (item: TableProductData) => {
+    console.log(item);
     // 값을 바꿀 맵 선언
     const changedProductMap = new Map<
       string,
@@ -83,20 +97,22 @@ export default function ProductList({
       }
     >(productsMap);
     // 만약 상품이 이 맵맵에 존재한다면
-    if (changedProductMap.has(item.productUuid!)) {
+    if (changedProductMap.has(item.id!)) {
       // 상품 수량을 1 늘린다
-      changedProductMap.set(item.productUuid!, {
-        product: item,
-        quantity: changedProductMap.get(item.productUuid!)!.quantity + 1,
+      changedProductMap.set(item.id!, {
+        product: toProductDto(item),
+        quantity: changedProductMap.get(item.id!)!.quantity + 1,
       });
       // 상품이 이 맵에 존재하지 않는다면
     } else {
       // 상품 수량을 1로 해 맵에 새로 추가한다
-      changedProductMap.set(item.productUuid!, {
-        product: item,
+      changedProductMap.set(item.id!, {
+        product: toProductDto(item),
         quantity: 1,
       });
     }
+    console.log(changedProductMap);
+    setProductsMap(changedProductMap);
   };
 
   const data = products.data!.map((item) => {
@@ -106,6 +122,7 @@ export default function ProductList({
       name: item.productName,
       description: item.productDescription,
       price: item.productPrice,
+      category: item.category,
     };
   });
 
@@ -125,7 +142,7 @@ export default function ProductList({
               <TableRow key={item.id}>
                 <TableCell className="w-fit p-0">
                   <Image
-                    src={item.imageUrl}
+                    src={item.imageUrl!}
                     alt={item.name!}
                     width={50}
                     height={50}
