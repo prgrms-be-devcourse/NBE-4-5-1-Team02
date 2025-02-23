@@ -1,14 +1,12 @@
-interface click {
-  onClick: (key: string) => void;
+interface ProductSummaryProps {
+  onDecrease: (key: string) => void;
+  products: Map<string, { productName: string; quantity: number }>;
 }
 
 export default function ProductSummary({
   products,
-  clickAction,
-}: {
-  products: Map<string, { productName: string; quantity: number }>;
-  clickAction: click;
-}) {
+  onDecrease,
+}: ProductSummaryProps) {
   return (
     <div>
       <h3>Summary</h3>
@@ -27,7 +25,7 @@ export default function ProductSummary({
               value="감소"
               onClick={(e) => {
                 e.preventDefault();
-                onclick(key);
+                onDecrease(key);
               }}
             ></input>
           </div>

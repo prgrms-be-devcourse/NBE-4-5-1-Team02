@@ -1,11 +1,12 @@
 "use client";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ProductSummary from "./home/ProductSummary/ProductSummary";
 import { components, paths } from "@/lib/backend/apiV1/schema";
 import createClient from "openapi-fetch";
 import UserDataInput from "./home/UserDataInput";
 import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
+import { it } from "node:test";
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -21,21 +22,21 @@ export default function ClientPage({
   );
 
   const [amount, setAmount] = useState(0);
-
-  const [selectedProducts, setSelectedProducts] =
-    useState<PaginationDataProductDto>({
-      data: [],
-      size: 10,
-      page: 0,
-      totalPages: 0,
-    });
-
   const [email, setEmail] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [zipcode, setZipcode] = useState<string>("");
   const [productsMap, setProductsMap] = useState<
-  Map<string, { productName: string; quantity: number }>
->(new Map<string, { productName: string; quantity: number }>());
+    Map<
+      string,
+      { product: components["schemas"]["ProductDto"]; quantity: number }
+    >
+  >(
+    new Map<
+      string,
+      { product: components["schemas"]["ProductDto"]; quantity: number }
+    >()
+  );
+
   const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
 
   const searchDataCallBack = useCallback(async (keyword: string) => {
@@ -57,45 +58,22 @@ export default function ClientPage({
     setProducts(responseBody);
   }, []);
 
+  const decreaseQuantityCallBack = useCallback(async (key: string) => {}, []);
   useEffect(() => {
-    const productWithQuantity = new Map<string, number>();
     let sum = 0;
     // 선택한 products들을 순회하면서 개수를 세서 맵에 저장장
-    selectedProducts.data?.forEach((item) => {
-      sum += item.productPrice!;
-      if (productWithQuantity.has(item.productUuid!)) {
-        productWithQuantity.set(
-          item.productUuid!,
-          productWithQuantity.get(item.productUuid!)! + 1
-        );
-      } else {
-        productWithQuantity.set(item.productUuid!, 1);
-      }
+    productsMap.forEach((item, key) => {
+      sum += item.product.productPrice!;
     });
-    setProductsMap(productWithQuantity);
     setAmount(sum);
-  }, [selectedProducts.data]);
+  }, [productsMap]);
 
   const makeOrder = async () => {
-    const productWithQuantity = new Map<string, number>();
-
-    // 선택한 products들을 순회하면서 개수를 세서 맵에 저장장
-    selectedProducts.data?.forEach((item) => {
-      if (productWithQuantity.has(item.productUuid!)) {
-        productWithQuantity.set(
-          item.productUuid!,
-          productWithQuantity.get(item.productUuid!)! + 1
-        );
-      } else {
-        productWithQuantity.set(item.productUuid!, 1);
-      }
-    });
-
     const productsData: { productId: string; quantity: number }[] = [];
-    productWithQuantity.forEach((value, key) => {
+    productsMap.forEach((value, key) => {
       productsData.push({
         productId: key,
-        quantity: value,
+        quantity: value.quantity,
       });
     });
 
@@ -124,14 +102,14 @@ export default function ClientPage({
           <SearchInput onSearch={searchDataCallBack}></SearchInput>
           <ProductList
             products={products}
-            selectedProducts={selectedProducts}
-            setSelectedProducts={setSelectedProducts}
+            productsMap={productsMap}
+            setProductsMap={setProductsMap}
           ></ProductList>
         </div>
       </div>
       <div className="w-[35%] p-10 h-screen bg-[#DDDDDD]">
         <div className="h-[100%] ">
-          <ProductSummary products={productsMap} />
+          <ProductSummary products={productsMap} onDecrease={decreaseQuantityCallBack} />
           <div>
             <UserDataInput
               addressStatus={[address, setAddress]}
