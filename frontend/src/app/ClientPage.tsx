@@ -6,6 +6,7 @@ import createClient from "openapi-fetch";
 import UserDataInput from "./home/UserDataInput";
 import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
+import { Button } from "@/components/ui/button";
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -115,7 +116,10 @@ export default function ClientPage({
     });
     setAmount(sum);
     console.log("productsMap in useEffect:", productsMap);
-    sessionStorage.setItem("selectedItems", JSON.stringify(Array.from(productsMap.entries())));
+    sessionStorage.setItem(
+      "selectedItems",
+      JSON.stringify(Array.from(productsMap.entries()))
+    );
   }, [productsMap]);
 
   const makeOrder = async () => {
@@ -178,18 +182,26 @@ export default function ClientPage({
               당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
             </span>
           </div>
-          <div>
-            <span>총 가격</span>
-            <span>{amount}</span>
+          <div className="h-[7.5%] flex flex-column justify-between w-full">
+            <div>
+              <span className="text-3xl font-bold">총 가격</span>
+            </div>
+            <div>
+              <span className="text-3xl font-bold">{amount}</span>
+            </div>
           </div>
-          <input
-            type="button"
-            value={"결제하기"}
-            onClick={(e) => {
-              e.preventDefault();
-              makeOrder();
-            }}
-          />
+          <div className="h-[7.5%]">
+            <Button
+              type="button"
+              className="w-full h-full"
+              onClick={(e) => {
+                e.preventDefault();
+                makeOrder();
+              }}
+            >
+              <span className="text-4xl font-bold">결제하기</span>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

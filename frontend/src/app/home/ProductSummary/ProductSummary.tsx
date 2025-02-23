@@ -18,7 +18,7 @@ export default function ProductSummary({
   onIncrease,
 }: ProductSummaryProps) {
   return (
-    <div className="h-[35%] flex flex-col mb-3">
+    <div className="h-[35%] flex flex-col mb-2">
       <div className="w-[100%] h-fit pb-5 border-b-2 border-black">
         <h3 className="text-3xl font-bold">Summary</h3>
       </div>
