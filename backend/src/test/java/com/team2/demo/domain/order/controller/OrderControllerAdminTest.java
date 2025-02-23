@@ -46,6 +46,7 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.data.data").exists())
                 .andExpect(jsonPath("$.data.data[0].productUuid").value("product-11111-22222-33331"));
     }
+
     @Test
     @DisplayName("존재하지 않는 주문 선택시 에러")
     void getOrderInfoTest2() throws Exception {
@@ -59,8 +60,10 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message")
                         .value("id가 %s인 Order는 없습니다.".formatted("order-notExist")));
     }
+
     @Autowired
     OrderRepository orderRepository;
+
     private void checkOrder(ResultActions resultActions, OrderDto orderDto) throws Exception {
         resultActions
                 .andExpect(jsonPath("$.data").exists())
@@ -174,8 +177,15 @@ class OrderControllerAdminTest {
 
         String orderId = "order-11111-22222-33331";
 
-        ResultActions result = mvc.perform(delete("/admin/orders{orderId}",orderId)
+        ResultActions result = mvc
+                .perform(delete("/admin/orders{orderId}", orderId)
                 .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isOk())
+                .andExpect(handler().handlerType(OrderControllerAdminTest.class))
+                .andExpect(handler().methodName("deleteOrder"))
+                .andExpect(jsonPath("$.message").value("sucess"))
+                .andExpect(jsonPath("$.code").value(200));
 
 
 
