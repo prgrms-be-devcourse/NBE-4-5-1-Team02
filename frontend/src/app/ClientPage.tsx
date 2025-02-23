@@ -6,7 +6,6 @@ import createClient from "openapi-fetch";
 import UserDataInput from "./home/UserDataInput";
 import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
-import { it } from "node:test";
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -58,7 +57,51 @@ export default function ClientPage({
     setProducts(responseBody);
   }, []);
 
-  const decreaseQuantityCallBack = useCallback(async (key: string) => {}, []);
+  const decreaseQuantityCallBack = useCallback(
+    (key: string) => {
+      const changedProductsMap = new Map<
+        string,
+        { product: components["schemas"]["ProductDto"]; quantity: number }
+      >(productsMap);
+
+      const item = changedProductsMap.get(key);
+
+      // 수량이 1개 이상이라면 개수 감소
+      if (
+        changedProductsMap.has(key) &&
+        changedProductsMap.get(key)!.quantity! > 1
+      ) {
+        changedProductsMap.set(key, {
+          product: item!.product,
+          quantity: item!.quantity - 1,
+        });
+      } else {
+        // 수량이 1개 미만이라면 삭제
+        changedProductsMap.delete(key);
+      }
+      setProductsMap(changedProductsMap);
+    },
+    [productsMap]
+  );
+
+  const increaseQuantityCallBack = useCallback(
+    (key: string) => {
+      const changedProductsMap = new Map<
+        string,
+        { product: components["schemas"]["ProductDto"]; quantity: number }
+      >(productsMap);
+
+      const item = changedProductsMap.get(key);
+
+      changedProductsMap.set(key, {
+        product: item!.product,
+        quantity: item!.quantity + 1,
+      });
+      setProductsMap(changedProductsMap);
+    },
+    [productsMap]
+  );
+
   useEffect(() => {
     console.log("changed2");
     let sum = 0;
@@ -67,6 +110,7 @@ export default function ClientPage({
       sum += item.product.productPrice! * item.quantity;
     });
     setAmount(sum);
+    console.log("productsMap in useEffect:", productsMap);
   }, [productsMap]);
 
   const makeOrder = async () => {
@@ -112,6 +156,7 @@ export default function ClientPage({
         <div className="h-[100%] ">
           <ProductSummary
             products={productsMap}
+            onIncrease={increaseQuantityCallBack}
             onDecrease={decreaseQuantityCallBack}
           />
           <div>

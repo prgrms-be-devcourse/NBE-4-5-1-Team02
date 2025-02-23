@@ -4,6 +4,7 @@ import { components } from "@/lib/backend/apiV1/schema";
 
 interface ProductSummaryProps {
   onDecrease: (key: string) => void;
+  onIncrease: (key: string) => void;
   products: Map<
     string,
     { product: components["schemas"]["ProductDto"]; quantity: number }
@@ -13,6 +14,7 @@ interface ProductSummaryProps {
 export default function ProductSummary({
   products,
   onDecrease,
+  onIncrease,
 }: ProductSummaryProps) {
   console.log("summary-products:", Array.from(products.entries()));
   return (
@@ -28,12 +30,21 @@ export default function ProductSummary({
           <div key={key}>
             <span>이름:{name}</span>
             <span>수량:{quantity}</span>
-            <input type="button" value="증가"></input>
+            <input
+              type="button"
+              value="증가"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log("increase clicked");
+                onIncrease(key);
+              }}
+            ></input>
             <input
               type="button"
               value="감소"
               onClick={(e) => {
                 e.preventDefault();
+                console.log("decrease clicked");
                 onDecrease(key);
               }}
             ></input>
