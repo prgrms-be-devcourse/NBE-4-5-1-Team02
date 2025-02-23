@@ -36,11 +36,15 @@ export default function ClientPage({
       string,
       { product: components["schemas"]["ProductDto"]; quantity: number }
     >
-  >(
-    new Map<string, productWithQuantity>(
-      JSON.parse(typeof window !== 'undefined' ? sessionStorage.getItem("selectedItems") || "[]" : "[]")
-    )
-  );
+  >(new Map());
+
+  useEffect(() => {
+    const savedItems = sessionStorage.getItem("selectedItems");
+    if (savedItems) {
+      setProductsMap(new Map(JSON.parse(savedItems)));
+    }
+  }, []);
+
   const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
   const router = useRouter();
 
@@ -108,20 +112,19 @@ export default function ClientPage({
     [productsMap]
   );
 
-  
   useEffect(() => {
-    console.log("changed2");
     let sum = 0;
-    // 선택한 products들을 순회하면서 개수를 세서 맵에 저장장
     productsMap.forEach((item, key) => {
       sum += item.product.productPrice! * item.quantity;
     });
     setAmount(sum);
-    console.log("productsMap in useEffect:", productsMap);
-    sessionStorage.setItem(
-      "selectedItems",
-      JSON.stringify(Array.from(productsMap.entries()))
-    );
+    
+    if (productsMap.size > 0) {
+      sessionStorage.setItem(
+        "selectedItems",
+        JSON.stringify(Array.from(productsMap.entries()))
+      );
+    }
   }, [productsMap]);
 
   const makeOrder = async () => {
@@ -152,9 +155,10 @@ export default function ClientPage({
   };
 
   return (
-    <div className="w-screen h-screen flex">
-      <div className="w-[75%] h-screen p-[4rem]">
-        <div className="flex flex-col h-[100%] ">
+    <div className="min-h-screen w-full flex flex-row">
+      {/* 왼쪽 상품 목록 섹션 */}
+      <div className="w-3/4 min-h-screen p-8">
+        <div className="flex flex-col h-full">
           <div className="p-6 flex justify-between border-b-4">
             <h2 className="text-3xl font-bold">상품 목록</h2>
             <SearchInput onSearch={searchDataCallBack}></SearchInput>
@@ -165,9 +169,10 @@ export default function ClientPage({
             productsMap={productsMap}
             setProductsMap={setProductsMap}
           ></ProductList>
-          <div className="w-full flex justify-end">
+          
+          <div className="mt-auto w-full flex justify-end">
             <Button
-              className="w-[20%] items-end"
+              className="w-32"
               onClick={(e) => {
                 e.preventDefault();
                 router.push("/orders");
@@ -178,8 +183,10 @@ export default function ClientPage({
           </div>
         </div>
       </div>
-      <div className="w-[35%] p-10 h-screen bg-[#DDDDDD]">
-        <div className="h-[100%] ">
+
+      {/* 오른쪽 주문 요약 섹션 */}
+      <div className="w-1/4 min-h-screen bg-[#DDDDDD] p-6 flex flex-col">
+        <div className="flex flex-col h-full">
           <ProductSummary
             products={productsMap}
             onIncrease={increaseQuantityCallBack}
@@ -189,30 +196,26 @@ export default function ClientPage({
             addressStatus={[address, setAddress]}
             zipCodeStatus={[zipcode, setZipcode]}
             emailStatus={[email, setEmail]}
-          ></UserDataInput>
-          <div className="h-[10%]">
-            <span className="text-3xl">
-              당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
-            </span>
-          </div>
-          <div className="h-[7.5%] flex flex-column justify-between w-full">
-            <div>
-              <span className="text-3xl font-bold">총 가격</span>
+          />
+          <div className="mt-auto">
+            <div className="mb-4">
+              <span className="text-lg">
+                당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
+              </span>
             </div>
-            <div>
-              <span className="text-3xl font-bold">{amount}</span>
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-xl font-bold">총 가격</span>
+              <span className="text-xl font-bold">{amount.toLocaleString()}원</span>
             </div>
-          </div>
-          <div className="h-[7.5%]">
             <Button
               type="button"
-              className="w-full h-full"
+              className="w-full py-4"
               onClick={(e) => {
                 e.preventDefault();
                 makeOrder();
               }}
             >
-              <span className="text-4xl font-bold">결제하기</span>
+              <span className="text-2xl font-bold">결제하기</span>
             </Button>
           </div>
         </div>
