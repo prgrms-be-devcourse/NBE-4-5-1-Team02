@@ -1,7 +1,5 @@
 // app/orders/[orderId]/update/page.tsx
 "use client";
-export const dynamic = "force-dynamic";
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
@@ -13,7 +11,7 @@ interface OrderData {
   deliveryStatus: string;
   orderDate: string;
   items: any[];
-  totalPrice?: number;
+  totalPrice: number;
 }
 
 export default function OrderUpdatePage() {
@@ -29,51 +27,70 @@ export default function OrderUpdatePage() {
     deliveryStatus: "",
     orderDate: "",
     items: [],
+    totalPrice: 0,
   });
-  const [loading, setLoading] = useState(true); // 로딩중
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrder = async () => {
-      // 주문 데이터 가져오기 - 비동기
       try {
-        // 테스트용 이메일 작성 -> 로그인 정보에서 받아오기
         const email = "email1@email.com";
         const res = await fetch(
           `http://localhost:8080/orders/${orderId}?email=${email}`
         );
         if (!res.ok) {
-          throw new Error("Failed to fetch order data");
+          throw new Error("해당 주문을 찾을 수 없습니다.");
         }
         const json = await res.json();
         const data = json.data;
         setOrder({
           orderId: data.orderUuid,
-          buyerEmail: data.buyerEmail,
-          address: data.address,
-          zipcode: data.zipcode,
+          buyerEmail: data.user.email,
+          address: data.deliveryAddress,
+          zipcode: String(data.zipcode),
           deliveryStatus: data.deliveryStatus,
-          orderDate: data.orderDate,
+          orderDate: data.createDate,
           items: data.items || [],
           totalPrice: data.totalPrice,
         });
       } catch (error: any) {
         console.error(error);
-        alert(error.message);
+        alert("해당 주문을 찾을 수 없습니다.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrder(); // GET 요청 : http://localhost:8080/orders/${orderId}?email=${email}
+    fetchOrder();
   }, [orderId]);
 
   if (loading) return <div>로딩 중...</div>;
 
   return (
-    <div>
-      <h1>주문 수정 페이지</h1>
-      <p>주문번호: {order.orderId}</p>
-      {/* 이후 UI 추가 예정 */}
+    <div className="p-4 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">주문 수정 페이지</h1>
+      <div className="mb-4">
+        <p>
+          <span className="font-medium">주문번호:</span> {order.orderId}
+        </p>
+        <p>
+          <span className="font-medium">구매자:</span> {order.buyerEmail}
+        </p>
+        <p>
+          <span className="font-medium">주문일자:</span> {order.orderDate}
+        </p>
+        <p>
+          <span className="font-medium">배송상태:</span> {order.deliveryStatus}
+        </p>
+        <p>
+          <span className="font-medium">배송주소:</span> {order.address}
+        </p>
+        <p>
+          <span className="font-medium">우편번호:</span> {order.zipcode}
+        </p>
+      </div>
+      {/* 이후 수정 입력 필드와 상품 추가/제거, 버튼 등을 추가할 예정 */}
     </div>
   );
 }
