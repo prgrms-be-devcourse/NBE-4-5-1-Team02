@@ -60,10 +60,11 @@ export default function ClientPage({
 
   const decreaseQuantityCallBack = useCallback(async (key: string) => {}, []);
   useEffect(() => {
+    console.log("changed2");
     let sum = 0;
     // 선택한 products들을 순회하면서 개수를 세서 맵에 저장장
     productsMap.forEach((item, key) => {
-      sum += item.product.productPrice!;
+      sum += item.product.productPrice! * item.quantity;
     });
     setAmount(sum);
   }, [productsMap]);
@@ -109,7 +110,10 @@ export default function ClientPage({
       </div>
       <div className="w-[35%] p-10 h-screen bg-[#DDDDDD]">
         <div className="h-[100%] ">
-          <ProductSummary products={productsMap} onDecrease={decreaseQuantityCallBack} />
+          <ProductSummary
+            products={productsMap}
+            onDecrease={decreaseQuantityCallBack}
+          />
           <div>
             <UserDataInput
               addressStatus={[address, setAddress]}
