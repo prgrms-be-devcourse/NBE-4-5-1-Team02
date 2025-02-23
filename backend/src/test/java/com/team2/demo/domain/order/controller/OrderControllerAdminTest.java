@@ -9,11 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -165,4 +167,18 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message").value("주문 내역이 없습니다."));
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
+
+    @Test
+    @DisplayName("관리자 주문 삭제 성공")
+    void deleteOrder() throws Exception {
+
+        String orderId = "order-11111-22222-33331";
+
+        ResultActions result = mvc.perform(delete("/admin/orders{orderId}",orderId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+
+
+    }
+
 }
