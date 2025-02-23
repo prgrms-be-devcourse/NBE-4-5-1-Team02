@@ -9,7 +9,7 @@ interface SearchInputProps {
 export default function SearchInput({ onSearch }: SearchInputProps) {
   const [keyword, setKeyword] = useState<string>("");
   return (
-    <>
+    <div>
       <input
         type="text"
         value={keyword}
@@ -26,6 +26,6 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
           onSearch(keyword);
         }}
       />
-    </>
+    </div>
   );
 }
