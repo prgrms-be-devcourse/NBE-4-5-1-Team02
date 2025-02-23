@@ -44,6 +44,7 @@ export default function OrderUpdatePage() {
     items: [],
     totalPrice: 0,
   });
+
   const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -92,7 +93,6 @@ export default function OrderUpdatePage() {
           name: p.productName,
           quantity: p.quantity || 1,
         }));
-        // 수량 확인
         const groupedItems = rawItems.reduce(
           (acc: { [key: string]: OrderItem }, item) => {
             if (acc[item.productId]) {
@@ -135,9 +135,71 @@ export default function OrderUpdatePage() {
 
   if (loading) return <div>로딩 중...</div>;
 
+  // 상품 추가
+  const handleAddProduct = (product: Product) => {
+    const existingItem = order.items.find(
+      (item) => item.productId === product.productUuid
+    );
+    if (existingItem) {
+      const updatedItems = order.items.map((item) =>
+        item.productId === product.productUuid
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      setOrder({ ...order, items: updatedItems });
+    } else {
+      const newItem: OrderItem = {
+        productId: product.productUuid,
+        name: product.productName,
+        quantity: 1,
+      };
+      setOrder({ ...order, items: [...order.items, newItem] });
+    }
+  };
+
+  // 상품 제거
+  const handleRemoveProduct = (productId: string) => {
+    const updatedItems = order.items.filter(
+      (item) => item.productId !== productId
+    );
+    setOrder({ ...order, items: updatedItems });
+  };
+
+  // 주문 수정 -> 결제하기
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8080/orders/${order.orderId}?email=${order.buyerEmail}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            address: order.address,
+            zipcode: order.zipcode,
+            items: order.items.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+            })),
+          }),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("주문 수정 실패");
+      }
+      alert("주문 수정이 완료되었습니다!");
+      router.push(`/orders/${order.orderId}`);
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
+  const handleBack = () => {
+    router.push(`/orders/${order.orderId}`);
+  };
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">주문 수정 페이지</h1>
+      <h1 className="text-2xl font-bold mb-4">상품 목록</h1>
       <div className="flex gap-8">
         {/* 전체 상품 리스트 */}
         <div className="flex-1 border p-4">
@@ -154,7 +216,7 @@ export default function OrderUpdatePage() {
                     {product.category} - {product.productPrice}원
                   </p>
                 </div>
-                <Button disabled>추가</Button>
+                <Button onClick={() => handleAddProduct(product)}>추가</Button>
               </div>
             ))
           ) : (
@@ -188,7 +250,13 @@ export default function OrderUpdatePage() {
                   <span>
                     {item.name} (수량: {item.quantity})
                   </span>
-                  <Button disabled>제거</Button>
+                  <Button
+                    onClick={() => handleRemoveProduct(item.productId)}
+                    variant="destructive"
+                    className="bg-black text-white px-3 py-1 rounded"
+                  >
+                    제거
+                  </Button>
                 </div>
               ))
             ) : (
@@ -212,6 +280,20 @@ export default function OrderUpdatePage() {
             />
           </div>
           <p className="mt-4 font-semibold">총 금액: {order.totalPrice}원</p>
+          <div className="mt-4 flex gap-4">
+            <Button
+              onClick={handleSubmit}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              결제하기
+            </Button>
+            <Button
+              onClick={handleBack}
+              className="bg-gray-300 text-black px-4 py-2 rounded"
+            >
+              돌아가기
+            </Button>
+          </div>
         </div>
       </div>
     </div>
