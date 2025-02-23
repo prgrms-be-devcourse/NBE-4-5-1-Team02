@@ -175,7 +175,7 @@ export default function ProductList({
               <TableRow key={item.id}>
                 <TableCell className="w-fit p-0">
                   <Image
-                    src={item.imageUrl!}
+                    src={'/image.png'}
                     alt={item.name!}
                     width={50}
                     height={50}

@@ -38,7 +38,7 @@ export default function ClientPage({
     >
   >(
     new Map<string, productWithQuantity>(
-      JSON.parse(sessionStorage.getItem("selectedItems") || "[]")
+      JSON.parse(typeof window !== 'undefined' ? sessionStorage.getItem("selectedItems") || "[]" : "[]")
     )
   );
   const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
