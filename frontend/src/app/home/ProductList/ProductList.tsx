@@ -21,6 +21,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from 'next/navigation';
 
 type TableProductData = {
   id?: string;
@@ -65,26 +66,33 @@ export default function ProductList({
   >;
 }) {
   const [pageNums, setPageNums] = useState<number[]>([]);
+  const searchParams = useSearchParams();
+
+  const createPageUrl = (pageNum: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', pageNum.toString());
+    return `/?${params.toString()}`;
+  };
 
   useEffect(() => {
-    let startPage = products.totalPages! - 5;
-    let cnt = 0;
+    const totalPages = products.totalPages || 0;
+    const currentPage = products.page || 0;
     const pages = [];
-    while (cnt < 5) {
-      if (startPage >= products.totalPages!) {
-        break;
-      }
-      if (startPage < 0) {
-        startPage++;
-        continue;
-      } else {
-        pages.push(startPage);
-        startPage++;
-        cnt++;
-      }
+    const maxPages = 5;
+    
+    let startPage = Math.max(0, Math.min(currentPage - Math.floor(maxPages / 2), totalPages - maxPages));
+    let endPage = Math.min(startPage + maxPages, totalPages);
+    
+    if (endPage - startPage < maxPages) {
+      startPage = Math.max(0, endPage - maxPages);
     }
+    
+    for (let i = startPage; i < endPage; i++) {
+      pages.push(i);
+    }
+    
     setPageNums(pages);
-  }, []);
+  }, [products.totalPages, products.page]);
 
   const addProduct = (item: TableProductData) => {
     // 값을 바꿀 맵 선언
@@ -222,13 +230,12 @@ export default function ProductList({
       <div className="mt-4">
         <Pagination>
           <PaginationContent>
-            {products.page! > 0 ? (
-              <PaginationItem>
-                <PaginationPrevious
-                  href={`?page=${String(Number(products.page!) - 1)}`}
-                />
-              </PaginationItem>
-            ) : null}
+            <PaginationItem>
+              <PaginationPrevious
+                href={createPageUrl(Number(products.page!) - 1)}
+                disabled={products.page === 0}
+              />
+            </PaginationItem>
             {products.page === 0 ? null : (
               <PaginationItem>
                 <PaginationEllipsis />
@@ -239,7 +246,7 @@ export default function ProductList({
                 <PaginationItem key={idx}>
                   <PaginationLink
                     isActive={value === products.page}
-                    href={`?page=${String(value)}`}
+                    href={createPageUrl(value)}
                   >
                     {value + 1}
                   </PaginationLink>
@@ -251,13 +258,12 @@ export default function ProductList({
                 <PaginationEllipsis />
               </PaginationItem>
             )}
-            {products.page! < products.totalPages! - 1 ? (
-              <PaginationItem>
-                <PaginationNext
-                  href={`?page=${String(products.page! + 1)}`}
-                ></PaginationNext>
-              </PaginationItem>
-            ) : null}
+            <PaginationItem>
+              <PaginationNext
+                href={createPageUrl(Number(products.page!) + 1)}
+                disabled={products.page === products.totalPages! - 1}
+              />
+            </PaginationItem>
           </PaginationContent>
         </Pagination>
       </div>

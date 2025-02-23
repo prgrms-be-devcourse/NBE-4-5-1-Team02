@@ -19,8 +19,10 @@ type productWithQuantity = {
 
 export default function ClientPage({
   productList,
+  pageSize,
 }: {
   productList: components["schemas"]["PaginationDataProductDto"];
+  pageSize: number;
 }) {
   const [keywordType, setKeywordType] = useState("title");
   const [products, setProducts] = useState<PaginationDataProductDto>(
@@ -154,13 +156,42 @@ export default function ClientPage({
     alert("주문 생성 성공");
   };
 
+  useEffect(() => {
+    // 컴포넌트 마운트 시 sessionStorage에 페이지 크기 저장
+    sessionStorage.setItem('productListPageSize', pageSize.toString());
+  }, [pageSize]);
+
+  const handlePageSizeChange = (newSize: number) => {
+    const currentParams = new URLSearchParams(window.location.search);
+    currentParams.set('size', newSize.toString());
+    currentParams.set('page', '0');
+    window.location.href = `/?${currentParams.toString()}`;
+  };
+
   return (
     <div className="min-h-screen w-full flex flex-row">
       {/* 왼쪽 상품 목록 섹션 */}
       <div className="w-3/4 min-h-screen p-8">
         <div className="flex flex-col h-full">
           <div className="p-6 flex justify-between border-b-4">
-            <h2 className="text-3xl font-bold">상품 목록</h2>
+            <div className="flex items-center gap-4">
+              <h2 className="text-3xl font-bold">상품 목록</h2>
+              <div className="flex items-center">
+                <label htmlFor="pageSize" className="mr-2">페이지당 항목 수:</label>
+                <select
+                  id="pageSize"
+                  value={pageSize}
+                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                  className="border rounded p-1"
+                >
+                  <option value="1">1개</option>
+                  <option value="5">5개</option>
+                  <option value="10">10개</option>
+                  <option value="15">15개</option>
+                  <option value="20">20개</option>
+                </select>
+              </div>
+            </div>
             <SearchInput onSearch={searchDataCallBack}></SearchInput>
           </div>
 
