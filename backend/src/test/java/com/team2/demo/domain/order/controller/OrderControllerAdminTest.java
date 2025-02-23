@@ -181,7 +181,7 @@ class OrderControllerAdminTest {
                 {
                 "address": "Update Address",
                 "zipcode": "88888",
-                "deliveryStatus": "DELIVERED",
+                "deliveryStatus": "SHIPPED",
                 "items": []
                 }s
                 """;
@@ -193,7 +193,7 @@ class OrderControllerAdminTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("success."))
                 .andExpect(jsonPath("$.data.address").value("Update Address"))
-                .andExpect(jsonPath("$.data.deliveryStatus").value("PENDING"))
+                .andExpect(jsonPath("$.data.deliveryStatus").value("SHIPPED"))
                 .andDo(print());
 
 
