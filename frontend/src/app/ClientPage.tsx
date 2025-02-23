@@ -1,11 +1,11 @@
 "use client";
 import React, { useCallback, useMemo, useState } from "react";
 import ProductSummary from "./home/ProductSummary/ProductSummary";
-import ProductList from "./home/ProductList/ProductList";
 import { components, paths } from "@/lib/backend/apiV1/schema";
 import createClient from "openapi-fetch";
-import SearchInput from "./home/ProductList/SearchInput";
 import UserDataInput from "./home/UserDataInput";
+import SearchInput from "./home/ProductList/SearchInput";
+import ProductList from "./home/ProductList/ProductList";
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -33,7 +33,9 @@ export default function ClientPage({
   const [email, setEmail] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [zipcode, setZipcode] = useState<string>("");
-
+  const [productsMap, setProductsMap] = useState<
+  Map<string, { productName: string; quantity: number }>
+>(new Map<string, { productName: string; quantity: number }>());
   const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
 
   const searchDataCallBack = useCallback(async (keyword: string) => {
@@ -55,18 +57,64 @@ export default function ClientPage({
     setProducts(responseBody);
   }, []);
 
+  useEffect(() => {
+    const productWithQuantity = new Map<string, number>();
+    let sum = 0;
+    // 선택한 products들을 순회하면서 개수를 세서 맵에 저장장
+    selectedProducts.data?.forEach((item) => {
+      sum += item.productPrice!;
+      if (productWithQuantity.has(item.productUuid!)) {
+        productWithQuantity.set(
+          item.productUuid!,
+          productWithQuantity.get(item.productUuid!)! + 1
+        );
+      } else {
+        productWithQuantity.set(item.productUuid!, 1);
+      }
+    });
+    setProductsMap(productWithQuantity);
+    setAmount(sum);
+  }, [selectedProducts.data]);
+
   const makeOrder = async () => {
-    
-    client.POST("/orders", {
+    const productWithQuantity = new Map<string, number>();
+
+    // 선택한 products들을 순회하면서 개수를 세서 맵에 저장장
+    selectedProducts.data?.forEach((item) => {
+      if (productWithQuantity.has(item.productUuid!)) {
+        productWithQuantity.set(
+          item.productUuid!,
+          productWithQuantity.get(item.productUuid!)! + 1
+        );
+      } else {
+        productWithQuantity.set(item.productUuid!, 1);
+      }
+    });
+
+    const productsData: { productId: string; quantity: number }[] = [];
+    productWithQuantity.forEach((value, key) => {
+      productsData.push({
+        productId: key,
+        quantity: value,
+      });
+    });
+
+    const response = await client.POST("/orders", {
       body: {
         address: address,
         buyer: {
           email: email,
         },
         zipcode: Number(zipcode),
-        items: []
+        items: productsData,
       },
     });
+
+    if (response.error) {
+      alert("결제 실패");
+      return;
+    }
+    alert("주문 생성 성공");
   };
 
   return (
@@ -83,7 +131,7 @@ export default function ClientPage({
       </div>
       <div className="w-[35%] p-10 h-screen bg-[#DDDDDD]">
         <div className="h-[100%] ">
-          <ProductSummary products={selectedProducts} />
+          <ProductSummary products={productsMap} />
           <div>
             <UserDataInput
               addressStatus={[address, setAddress]}
