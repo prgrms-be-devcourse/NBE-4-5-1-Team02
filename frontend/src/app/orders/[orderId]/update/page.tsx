@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
 
 interface OrderData {
   orderId: string;
@@ -48,7 +49,7 @@ export default function OrderUpdatePage() {
           orderId: data.orderUuid,
           buyerEmail: data.user.email,
           address: data.deliveryAddress,
-          zipcode: String(data.zipcode),
+          zipcode: String(data.zipCode),
           deliveryStatus: data.deliveryStatus,
           orderDate: data.createDate,
           items: data.items || [],
@@ -83,14 +84,26 @@ export default function OrderUpdatePage() {
         <p>
           <span className="font-medium">배송상태:</span> {order.deliveryStatus}
         </p>
-        <p>
-          <span className="font-medium">배송주소:</span> {order.address}
-        </p>
-        <p>
-          <span className="font-medium">우편번호:</span> {order.zipcode}
-        </p>
       </div>
-      {/* 이후 수정 입력 필드와 상품 추가/제거, 버튼 등을 추가할 예정 */}
+      {/* 배송주소 수정 */}
+      <div className="mt-4">
+        <h2 className="text-lg font-semibold mb-1">배송 주소</h2>
+        <Input
+          value={order.address}
+          onChange={(e) => setOrder({ ...order, address: e.target.value })}
+          placeholder="예) 서울시 어쩌구"
+        />
+      </div>
+
+      {/* 우편번호 수정 */}
+      <div className="mt-4">
+        <label className="block font-semibold mb-1">우편번호</label>
+        <Input
+          value={order.zipcode}
+          onChange={(e) => setOrder({ ...order, zipcode: e.target.value })}
+          placeholder="우편번호 입력"
+        />
+      </div>
     </div>
   );
 }
