@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ProductSummary from "./home/ProductSummary/ProductSummary";
 import { components, paths } from "@/lib/backend/apiV1/schema";
 import createClient from "openapi-fetch";
@@ -163,13 +163,11 @@ export default function ClientPage({
             onIncrease={increaseQuantityCallBack}
             onDecrease={decreaseQuantityCallBack}
           />
-          <div>
             <UserDataInput
               addressStatus={[address, setAddress]}
               zipCodeStatus={[zipcode, setZipcode]}
               emailStatus={[email, setEmail]}
             ></UserDataInput>
-          </div>
           <div>
             <span>당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.</span>
             <span>총 가격</span>
