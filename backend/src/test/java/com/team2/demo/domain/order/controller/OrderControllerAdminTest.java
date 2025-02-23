@@ -4,6 +4,7 @@ import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.controller.ProductController;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -187,6 +189,7 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message").value("sucess"))
                 .andExpect(jsonPath("$.code").value(200));
 
+        assertThrows(EntityNotFoundException.class, () -> orderRepository.deleteById(orderId));
 
 
     }
