@@ -7,6 +7,7 @@ import com.team2.demo.global.response.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -29,7 +30,7 @@ public class ProductController {
     public RsData<PaginationData<ProductDto>> getProductList(
             @RequestParam(name="keyword-type", defaultValue = "title") String keywordType,
             @RequestParam(name="keyword", defaultValue = "") String keyword,
-            @PageableDefault(page = 0, size = 10) Pageable pageable) {
+            @ParameterObject @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
         Page<ProductDto> products = productService.getProductList(keywordType, keyword, pageable);
         return RsData.success(
@@ -47,7 +48,7 @@ public class ProductController {
     @GetMapping(path={"/admin/orders/{orderId}/products"})
     public RsData<PaginationData<ProductDto>> getProductsInOrderAdmin(
             @PathVariable(name = "orderId") String orderId,
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            @ParameterObject @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
         Page<ProductDto> items = productService.getProductsInOrder(orderId, pageable);
 
@@ -66,7 +67,7 @@ public class ProductController {
     public RsData<PaginationData<ProductDto>> getProductsInOrder(
             @PathVariable(name = "orderId") String orderId,
             @RequestParam(name="email") String email,
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            @ParameterObject @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
         Page<ProductDto> items = productService.getProductsInOrder(orderId, email,pageable);
 
