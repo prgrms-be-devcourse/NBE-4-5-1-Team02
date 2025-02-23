@@ -10,6 +10,11 @@ import ProductList from "./home/ProductList/ProductList";
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
 
+type productWithQuantity = {
+  product: components["schemas"]["ProductDto"];
+  quantity: number;
+};
+
 export default function ClientPage({
   productList,
 }: {
@@ -30,10 +35,9 @@ export default function ClientPage({
       { product: components["schemas"]["ProductDto"]; quantity: number }
     >
   >(
-    new Map<
-      string,
-      { product: components["schemas"]["ProductDto"]; quantity: number }
-    >()
+    new Map<string, productWithQuantity>(
+      JSON.parse(sessionStorage.getItem("selectedItems") || "[]")
+    )
   );
 
   const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
@@ -111,6 +115,7 @@ export default function ClientPage({
     });
     setAmount(sum);
     console.log("productsMap in useEffect:", productsMap);
+    sessionStorage.setItem("selectedItems", JSON.stringify(Array.from(productsMap.entries())));
   }, [productsMap]);
 
   const makeOrder = async () => {
@@ -163,13 +168,17 @@ export default function ClientPage({
             onIncrease={increaseQuantityCallBack}
             onDecrease={decreaseQuantityCallBack}
           />
-            <UserDataInput
-              addressStatus={[address, setAddress]}
-              zipCodeStatus={[zipcode, setZipcode]}
-              emailStatus={[email, setEmail]}
-            ></UserDataInput>
+          <UserDataInput
+            addressStatus={[address, setAddress]}
+            zipCodeStatus={[zipcode, setZipcode]}
+            emailStatus={[email, setEmail]}
+          ></UserDataInput>
+          <div className="h-[10%]">
+            <span className="text-3xl">
+              당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
+            </span>
+          </div>
           <div>
-            <span>당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.</span>
             <span>총 가격</span>
             <span>{amount}</span>
           </div>
