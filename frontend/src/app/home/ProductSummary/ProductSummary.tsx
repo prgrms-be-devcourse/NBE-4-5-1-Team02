@@ -32,7 +32,7 @@ export default function ProductSummary({
           const name = item.product.productName;
           const quantity = item.quantity;
           return (
-            <div key={key} className="grid grid-cols-10 my-2">
+            <div key={key} className="grid grid-cols-10 gap-1 my-2">
               <span className="text-l font-bold mx-2 col-span-7">{name}</span>
               <Button className="px-2 py-0 h-full w-full" disabled={true}>
                 {quantity}
@@ -46,7 +46,7 @@ export default function ProductSummary({
                   onIncrease(key);
                 }}
               >
-                증가
+                +
               </Button>
               <Button
                 className="h-full w-full py-0 px-1"
@@ -57,7 +57,7 @@ export default function ProductSummary({
                   onDecrease(key);
                 }}
               >
-                감소
+                -
               </Button>
             </div>
           );

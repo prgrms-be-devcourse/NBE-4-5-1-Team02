@@ -94,6 +94,7 @@ export default function ProductList({
     setPageNums(pages);
   }, [products.totalPages, products.page]);
 
+  // 상품 추가
   const addProduct = (item: TableProductData) => {
     // 값을 바꿀 맵 선언
     const changedProductMap = new Map<
