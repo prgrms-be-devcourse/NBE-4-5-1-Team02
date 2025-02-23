@@ -143,9 +143,9 @@ export default function ClientPage({
   return (
     <div className="w-screen h-screen flex">
       <div className="w-[75%] h-screen p-[4rem]">
-        <div className=" flex-grow h-[100%] bg-blue-300">
-          <div className="p-4 flex justify-between">
-            <h2 className="text-3xl ">상품 목록</h2>
+        <div className="flex flex-col h-[100%] ">
+          <div className="p-6 flex justify-between border-b-4">
+            <h2 className="text-3xl font-bold">상품 목록</h2>
             <SearchInput onSearch={searchDataCallBack}></SearchInput>
           </div>
 
