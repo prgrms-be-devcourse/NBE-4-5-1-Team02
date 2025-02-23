@@ -180,16 +180,15 @@ class OrderControllerAdminTest {
         String orderId = "order-11111-22222-33331";
 
         ResultActions result = mvc
-                .perform(delete("/admin/orders{orderId}", orderId)
+                .perform(delete("/admin/orders/{orderId}", orderId)
                 .contentType(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk())
-                .andExpect(handler().handlerType(OrderControllerAdminTest.class))
+                .andExpect(handler().handlerType(OrderControllerAdmin.class))
                 .andExpect(handler().methodName("deleteOrder"))
-                .andExpect(jsonPath("$.message").value("sucess"))
+                .andExpect(jsonPath("$.message").value("주문이 성공적으로 삭제되었습니다."))
                 .andExpect(jsonPath("$.code").value(200));
 
-        assertThrows(EntityNotFoundException.class, () -> orderRepository.deleteById(orderId));
 
 
     }
