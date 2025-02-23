@@ -42,7 +42,13 @@ export default function ProductList({
                 onClick={(e) => {
                   e.preventDefault();
                   // 값을 바꿀 맵 선언
-                  const changedProductMap = productsMap;
+                  const changedProductMap = new Map<
+                    string,
+                    {
+                      product: components["schemas"]["ProductDto"];
+                      quantity: number;
+                    }
+                  >(productsMap);
                   // 만약 상품이 이 맵맵에 존재한다면
                   if (changedProductMap.has(item.productUuid!)) {
                     // 상품 수량을 1 늘린다
@@ -59,8 +65,8 @@ export default function ProductList({
                       quantity: 1,
                     });
                   }
-
                   setProductsMap(changedProductMap);
+                  console.log("changed");
                 }}
               />
             </div>
