@@ -11,12 +11,37 @@ INSERT INtO `ORDERS` VALUES('order-11111-22222-33334', 'user-11111-22222-33332',
 INSERT INtO `ORDERS` VALUES('order-11111-22222-33335', 'user-11111-22222-33333', now(), now(), 30000, 'addr5', 123123, 'DELIVERED');
 
 
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33331', 'product1','coffeeBean',1000, '커피콩1', 'image_url1');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33332', 'product2','coffeeBean',5000, '커피콩2', 'image_url2');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33333', 'product3','coffeeBean',1000, '커피콩3', 'image_url3');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33334', 'product4','coffeeBean',5000, '커피콩4', 'image_url4');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33335', 'product5','coffeeBean',1000, '커피콩5', 'image_url5');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33331', 'product1','coffeeBean',1000, '커피콩1', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33332', 'product2','coffeeBean',5000, '커피콩2', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33333', 'product3','coffeeBean',1000, '커피콩3', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33334', 'product4','coffeeBean',5000, '커피콩4', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33335', 'product5','coffeeBean',1000, '커피콩5', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33336', 'product6','coffeeBean',1000, '커피콩6', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33337', 'product7','coffeeBean',5000, '커피콩7', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33338', 'product8','coffeeBean',1000, '커피콩8', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33339', 'product9','coffeeBean',5000, '커피콩9', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33310', 'product10','coffeeBean',1000, '커피콩10', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33311', 'product11','coffeeBean',1000, '커피콩11', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33312', 'product12','coffeeBean',5000, '커피콩12', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33313', 'product13','coffeeBean',1000, '커피콩13', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33314', 'product14','coffeeBean',5000, '커피콩14', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33315', 'product15','coffeeBean',1000, '커피콩15', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33316', 'product16','coffeeBean',1000, '커피콩16', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33317', 'product17','coffeeBean',5000, '커피콩17', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33318', 'product18','coffeeBean',1000, '커피콩18', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33319', 'product19','coffeeBean',5000, '커피콩19', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33320', 'product20','coffeeBean',1000, '커피콩20', '/image.png');
 
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33321', 'product10','coffeeBean',1000, '커피콩10', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33322', 'product11','coffeeBean',1000, '커피콩11', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33323', 'product12','coffeeBean',5000, '커피콩12', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33324', 'product13','coffeeBean',1000, '커피콩13', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33325', 'product14','coffeeBean',5000, '커피콩14', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33326', 'product15','coffeeBean',1000, '커피콩15', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33327', 'product16','coffeeBean',1000, '커피콩16', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33328', 'product17','coffeeBean',5000, '커피콩17', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33329', 'product18','coffeeBean',1000, '커피콩18', '/image.png');
+INSERT INTO `PRODUCT` VALUES('product-11111-22222-33330', 'product19','coffeeBean',5000, '커피콩19', '/image.png');
 -- 1번 상품 5개와 2번 상품 1개로 주문 1 구성.
 
 INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33331', 'order-11111-22222-33331');
