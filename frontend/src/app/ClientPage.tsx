@@ -7,6 +7,7 @@ import UserDataInput from "./home/UserDataInput";
 import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -40,8 +41,8 @@ export default function ClientPage({
       JSON.parse(sessionStorage.getItem("selectedItems") || "[]")
     )
   );
-
   const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
+  const router = useRouter();
 
   const searchDataCallBack = useCallback(async (keyword: string) => {
     const response = await client.GET("/products", {
@@ -107,6 +108,7 @@ export default function ClientPage({
     [productsMap]
   );
 
+  
   useEffect(() => {
     console.log("changed2");
     let sum = 0;
@@ -163,6 +165,17 @@ export default function ClientPage({
             productsMap={productsMap}
             setProductsMap={setProductsMap}
           ></ProductList>
+          <div className="w-full flex justify-end">
+            <Button
+              className="w-[20%] items-end"
+              onClick={(e) => {
+                e.preventDefault();
+                router.push("/orders");
+              }}
+            >
+              주문 목록
+            </Button>
+          </div>
         </div>
       </div>
       <div className="w-[35%] p-10 h-screen bg-[#DDDDDD]">
