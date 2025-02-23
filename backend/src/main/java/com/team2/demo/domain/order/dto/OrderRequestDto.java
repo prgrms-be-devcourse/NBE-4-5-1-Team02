@@ -3,6 +3,7 @@ package com.team2.demo.domain.order.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.product.dto.ProductListDto;
+import com.team2.demo.domain.user.entity.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
