@@ -12,7 +12,7 @@ export default function UserDataInput({
   zipCodeStatus: [string, React.Dispatch<React.SetStateAction<string>>];
 }) {
   return (
-    <div className="h-[40%]">
+    <div className="h-[35%] my-3">
       <label htmlFor="email">
         <div className="w-[100%] py-3">
           <span className="text-2xl font-semibold">email</span>
