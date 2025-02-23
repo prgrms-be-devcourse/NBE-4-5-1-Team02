@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,6 +46,7 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.data.data").exists())
                 .andExpect(jsonPath("$.data.data[0].productUuid").value("product-11111-22222-33331"));
     }
+
     @Test
     @DisplayName("존재하지 않는 주문 선택시 에러")
     void getOrderInfoTest2() throws Exception {
@@ -57,8 +60,10 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message")
                         .value("id가 %s인 Order는 없습니다.".formatted("order-notExist")));
     }
+
     @Autowired
     OrderRepository orderRepository;
+
     private void checkOrder(ResultActions resultActions, OrderDto orderDto) throws Exception {
         resultActions
                 .andExpect(jsonPath("$.data").exists())
@@ -165,4 +170,35 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message").value("주문 내역이 없습니다."));
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
+
+    @Test //관리자 주문 수정 성공
+    @DisplayName("관리자 주문 수정 성공")
+    void updateOrder() throws Exception {
+
+        // Uuid 존재 데이터 수정
+        String orderUuid = "order-11111-22222-33331";
+        String requestJson = """
+                {
+                "totalAmount": 99999,
+                "deliveryAddress": Update Address",
+                "zipCode": "88888",
+                "deliveryStatus": "Update DELIVERED",
+                }
+                """;
+
+        ResultActions result = mvc.perform(put("/admin/orders/" + orderUuid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson));
+
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("success."))
+                .andExpect(jsonPath("$.data.totalAmount").value(99999))
+                .andExpect(jsonPath("$.data.deliveryAddress").value("Update Address"))
+                .andExpect(jsonPath("$.data.zipCode").value("88888"))
+                .andExpect(jsonPath("$.data.deliveryStatus").value("Update DELIVERED"))
+                .andDo(print());
+
+
+    }
+
 }
