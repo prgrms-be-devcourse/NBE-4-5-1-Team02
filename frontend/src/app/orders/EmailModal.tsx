@@ -14,6 +14,14 @@ export default function EmailModal({ isOpen, onSubmit }: EmailModalProps) { // E
     e.preventDefault(); // 페이지 리로드 방지지
     const formData = new FormData(e.currentTarget); // FormData 객체에서 폼 데이터를 추출 :: 해당 폼 내의 모든 입력 필드의 데이터를 자동으로 수집집
     const email = formData.get('email') as string; // 폼 데이터에서 email 필드의 값을 수집집 :: 타입 단언 (as string) = 문자열임을 컴파일러에게 보장한다는 의미미
+
+    // 이메일 형식 검증
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+        alert('잘못된 이메일 형식입니다. 다시 입력해주세요.');
+        return; // 잘못된 형식일 경우 제출하지 않음
+    }
+
     onSubmit(email); // 추출된 이메일을 onSubmit 함수에 전달
   };
 

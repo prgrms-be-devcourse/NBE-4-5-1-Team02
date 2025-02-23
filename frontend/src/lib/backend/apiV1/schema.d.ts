@@ -354,6 +354,16 @@ export interface components {
             /** Format: int32 */
             code?: number;
         };
+        OrderResponseCancelDto: {
+            orderId?: string;
+            message?: string;
+        };
+        RsDataOrderResponseCancelDto: {
+            message?: string;
+            data?: components["schemas"]["OrderResponseCancelDto"];
+            /** Format: int32 */
+            code?: number;
+        };
         RsDataVoid: {
             message?: string;
             data?: Record<string, never>;
@@ -440,7 +450,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["RsDataVoid"];
+                    "application/json": components["schemas"]["RsDataOrderResponseCancelDto"];
                 };
             };
         };

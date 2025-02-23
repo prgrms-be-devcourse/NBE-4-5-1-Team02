@@ -24,40 +24,56 @@ export default function Page() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("Modal open state changed:", isModalOpen);
+  }, [isModalOpen]);
+
   const fetchOrders = async (emailToFetch: string) => {
     try {
       const response = await fetch(
-        `/api/orders?email=${emailToFetch}&page=0&size=10`, // /api를 경로에 포함시키면, 이 URL이 일반적인 페이지(예: HTML 렌더링)를 반환하는 것이 아니라 데이터(JSON 등)를 반환하는 API 엔드포인트임을 쉽게 구분 가능
+        `/api/orders?email=${emailToFetch}&page=0&size=10`,
         {
           headers: {
-            'Content-Type': 'application/json', // 요청 헤더에 컨텐츠 타입 지정 (안전성 증가)
+            'Content-Type': 'application/json',
           }
         }
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`API 오류: ${errorData.message || '주문 목록을 불러오는데 실패했습니다.'}`);
+        throw new Error(errorData.message || '주문 목록을 불러오는데 실패했습니다.');
       }
 
       const data = await response.json();
       setRsData(data);
+      return true; // 성공 시 true 반환
     } catch (error) {
       console.error('Fetch Error:', error);
       alert('데이터를 불러오는데 실패했습니다.');
+      return false; // 실패 시 false 반환
     }
   };
 
   const handleEmailSubmit = async (submittedEmail: string) => {
-    /* // localStorage에 이메일 저장
-    localStorage.setItem('userEmail', submittedEmail); */
+    // 이메일 형식 검증
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(submittedEmail)) {
+      alert('잘못된 이메일 형식입니다. 다시 입력해주세요.');
+      return; // 모달 유지
+    }
 
-    // SessionStorage에 이메일 저장
-    sessionStorage.setItem('userEmail', submittedEmail);
-
-    setEmail(submittedEmail);
-    await fetchOrders(submittedEmail);
-    setIsModalOpen(false);
+    try {
+      const success = await fetchOrders(submittedEmail);
+      if (success) {
+        sessionStorage.setItem('userEmail', submittedEmail);
+        setEmail(submittedEmail);
+        setIsModalOpen(false); // API 호출이 성공한 경우에만 모달 닫기
+      }
+    } catch (error) {
+      console.error('Fetch Error:', error);
+      alert('데이터를 불러오지 못했습니다.');
+      // 실패 시 모달 유지
+    }
   };
 
   return (
