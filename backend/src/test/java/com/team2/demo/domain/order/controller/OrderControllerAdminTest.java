@@ -179,10 +179,9 @@ class OrderControllerAdminTest {
         String orderUuid = "order-11111-22222-33331";
         String requestJson = """
                 {
-                "totalAmount": 99999,
                 "deliveryAddress": "Update Address",
                 "zipCode": "88888",
-                "deliveryStatus": "Update DELIVERED",
+                "deliveryStatus": "Update DELIVERED"
                 }
                 """;
 
@@ -192,7 +191,6 @@ class OrderControllerAdminTest {
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("success."))
-                .andExpect(jsonPath("$.data.totalAmount").value(99999))
                 .andExpect(jsonPath("$.data.deliveryAddress").value("Update Address"))
                 .andExpect(jsonPath("$.data.zipCode").value("88888"))
                 .andExpect(jsonPath("$.data.deliveryStatus").value("Update DELIVERED"))
