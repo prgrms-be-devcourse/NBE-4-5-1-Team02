@@ -1,6 +1,6 @@
 import createClient from "openapi-fetch";
 import ClientPage from "./ClientPage";
-import { paths } from "@/lib/backend/apiV1/schema";
+import { components, paths } from "@/lib/backend/apiV1/schema";
 
 export default async function Home({
   searchParams,
@@ -38,5 +38,11 @@ export default async function Home({
   }
   const responseBody = response.data!.data!;
 
-  return <ClientPage productList={responseBody}></ClientPage>;
+  
+
+  return (
+    <ClientPage
+      productList={responseBody}
+    ></ClientPage>
+  );
 }
