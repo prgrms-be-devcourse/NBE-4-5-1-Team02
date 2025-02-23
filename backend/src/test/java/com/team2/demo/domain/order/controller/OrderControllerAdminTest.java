@@ -180,7 +180,7 @@ class OrderControllerAdminTest {
         String requestJson = """
                 {
                 "totalAmount": 99999,
-                "deliveryAddress": Update Address",
+                "deliveryAddress": "Update Address",
                 "zipCode": "88888",
                 "deliveryStatus": "Update DELIVERED",
                 }
