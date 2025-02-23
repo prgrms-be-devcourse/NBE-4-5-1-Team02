@@ -11,8 +11,11 @@ export default function Page() {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 (초기값 false)
 
   useEffect(() => {
-    // 컴포넌트 마운트 시 localStorage에서 이메일 확인
-    const savedEmail = localStorage.getItem('userEmail');
+    /* // 컴포넌트 마운트 시 localStorage에서 이메일 확인
+    const savedEmail = localStorage.getItem('userEmail'); */
+
+    // 컴포넌트 마운트 시 SessionStorage에서 이메일 확인
+    const savedEmail = sessionStorage.getItem('userEmail');
     if (savedEmail) {
       setEmail(savedEmail);
       fetchOrders(savedEmail);
@@ -46,8 +49,12 @@ export default function Page() {
   };
 
   const handleEmailSubmit = async (submittedEmail: string) => {
-    // localStorage에 이메일 저장
-    localStorage.setItem('userEmail', submittedEmail);
+    /* // localStorage에 이메일 저장
+    localStorage.setItem('userEmail', submittedEmail); */
+
+    // SessionStorage에 이메일 저장
+    sessionStorage.setItem('userEmail', submittedEmail);
+
     setEmail(submittedEmail);
     await fetchOrders(submittedEmail);
     setIsModalOpen(false);
@@ -60,3 +67,26 @@ export default function Page() {
     </>
   );
 }
+
+/* 
+  [localStorage 란]
+  - 브라우저에 데이터를 저장하는 방법
+  - 브라우저 쿠키와 비슷한 역할
+  - 쿠키와 달리 서버에 전송되지 않음
+  - 브라우저 내에서만 데이터를 저장
+  - 데이터 타입 제한 없음
+  - 어디에서든 접근 및 사용 가능
+
+  [localStorage 사용법법]
+  // 데이터 저장
+  localStorage.setItem('key', 'value');
+
+  // 데이터 조회
+  const value = localStorage.getItem('key');
+
+  // 특정 데이터 삭제
+  localStorage.removeItem('key');
+
+  // 모든 데이터 삭제
+  localStorage.clear();
+*/
