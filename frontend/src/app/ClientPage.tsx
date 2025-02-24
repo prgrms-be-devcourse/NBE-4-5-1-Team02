@@ -8,6 +8,9 @@ import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -216,40 +219,39 @@ export default function ClientPage({
       </div>
 
       {/* 오른쪽 주문 요약 섹션 */}
-      <div className="w-1/4 min-h-screen bg-[#DDDDDD] p-6 flex flex-col">
-        <div className="flex flex-col h-full">
-          <ProductSummary
-            products={productsMap}
-            onIncrease={increaseQuantityCallBack}
-            onDecrease={decreaseQuantityCallBack}
-          />
-          <UserDataInput
-            addressStatus={[address, setAddress]}
-            zipCodeStatus={[zipcode, setZipcode]}
-            emailStatus={[email, setEmail]}
-          />
-          <div className="mt-auto">
-            <div className="mb-4">
-              <span className="text-lg">
-                당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
-              </span>
-            </div>
-            <div className="flex justify-between items-center mb-4">
+      <div className="w-1/4 min-h-screen bg-card p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>주문 요약</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[400px]">
+              <ProductSummary
+                products={productsMap}
+                onIncrease={increaseQuantityCallBack}
+                onDecrease={decreaseQuantityCallBack}
+              />
+            </ScrollArea>
+            <Separator className="my-4" />
+            <UserDataInput
+              addressStatus={[address, setAddress]}
+              zipCodeStatus={[zipcode, setZipcode]}
+              emailStatus={[email, setEmail]}
+            />
+          </CardContent>
+          <CardFooter className="flex flex-col gap-4">
+            <p className="text-sm text-muted-foreground">
+              당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
+            </p>
+            <div className="flex justify-between w-full">
               <span className="text-xl font-bold">총 가격</span>
               <span className="text-xl font-bold">{amount.toLocaleString()}원</span>
             </div>
-            <Button
-              type="button"
-              className="w-full py-4"
-              onClick={(e) => {
-                e.preventDefault();
-                makeOrder();
-              }}
-            >
-              <span className="text-2xl font-bold">결제하기</span>
+            <Button className="w-full" size="lg" onClick={makeOrder}>
+              주문하기
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
