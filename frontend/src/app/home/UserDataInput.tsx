@@ -14,12 +14,12 @@ export default function UserDataInput({
   return (
     <div className="h-[35%] my-3">
       <label htmlFor="email">
-        <div className="w-[100%] py-2">
+        <div className="w-[100%] py-1">
           <span className="text-lg font-semibold">email</span>
         </div>
       </label>
       <Input
-        className="bg-white h-[2.5rem]"
+        className="bg-white h-[2rem] mb-3"
         id="email"
         value={emailStatus[0]}
         onChange={(e) => {
@@ -28,13 +28,13 @@ export default function UserDataInput({
         }}
       ></Input>
       <label htmlFor="address">
-        <div className="w-[100%] py-2">
+        <div className="w-[100%] py-1">
           <span className="text-lg font-semibold">주소</span>
         </div>
       </label>
       <Input
         id="address"
-        className="bg-white h-[2.5rem]"
+        className="bg-white h-[2rem] mb-3"
         value={addressStatus[0]}
         onChange={(e) => {
           e.preventDefault();
@@ -42,13 +42,13 @@ export default function UserDataInput({
         }}
       ></Input>
       <label htmlFor="zipcode">
-        <div className="w-[100%] py-2">
+        <div className="w-[100%] py-1">
           <span className="text-lg font-semibold">우편번호</span>
         </div>
       </label>
       <Input
         id="zipcode"
-        className="bg-white h-[3rem]"
+        className="bg-white h-[2rem]"
         value={zipCodeStatus[0]}
         onChange={(e) => {
           e.preventDefault();
