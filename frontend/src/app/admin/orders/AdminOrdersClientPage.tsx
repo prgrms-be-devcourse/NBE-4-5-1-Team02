@@ -4,14 +4,45 @@ import { useState } from "react";
 import { components } from "@/lib/backend/apiV1/schema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import DeleteConfirmModal from "@/components/DeleteConfirmModal";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export default function AdminOrdersClientPage({
   rsData,
@@ -37,7 +68,7 @@ export default function AdminOrdersClientPage({
   };
 
   const handleDeleteClick = (e: React.MouseEvent, orderId: string) => {
-    e.stopPropagation(); // 행 클릭 이벤트 전파 방지
+    e.stopPropagation();
     setSelectedOrderId(orderId);
     setIsDeleteModalOpen(true);
   };
@@ -57,124 +88,144 @@ export default function AdminOrdersClientPage({
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">관리자 주문 목록</h1>
-          <div className="flex items-center">
-            <label htmlFor="pageSize" className="mr-2">페이지당 항목 수:</label>
-            <Select
-              value={pageSize.toString()}
-              onValueChange={(value) => onPageSizeChange(Number(value))}
-            >
-              <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="선택" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5개</SelectItem>
-                <SelectItem value="10">10개</SelectItem>
-                <SelectItem value="15">15개</SelectItem>
-                <SelectItem value="20">20개</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <Link 
-          href="/"
-          className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
-        >
-          메인으로 돌아가기
-        </Link>
-      </div>
-      
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-6 py-3 text-left">주문번호</th>
-              <th className="px-6 py-3 text-left">결제일</th>
-              <th className="px-6 py-3 text-left">배송상태</th>
-              <th className="px-6 py-3 text-left">이메일</th>
-              <th className="px-6 py-3 text-left">주소</th>
-              <th className="px-6 py-3 text-right">총 주문금액</th>
-              <th className="px-6 py-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderListResponse?.content?.length ? (
-              orderListResponse.content.map((order) => (
-                <tr
-                  key={order.orderId}
-                  className="border-b hover:bg-gray-50 cursor-pointer group"
-                  onClick={() => router.push(`/admin/orders/${order.orderId}`)}
-                >
-                  <td className="px-6 py-4">{order.orderId}</td>
-                  <td className="px-6 py-4">{order.orderDate}</td>
-                  <td className="px-6 py-4">{order.deliveryStatus}</td>
-                  <td className="px-6 py-4">{order.buyerEmail}</td>
-                  <td className="px-6 py-4">{order.address}</td>
-                  <td className="px-6 py-4 text-right">{order.totalPrice?.toLocaleString()}원</td>
-                  <td className="px-6 py-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={(e) => handleDeleteClick(e, order.orderId)}
-                      disabled={isDeleting}
-                      className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50"
-                    >
-                      삭제
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="px-6 py-4 text-center">
-                  주문 내역이 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-    <div className="flex justify-center mt-4 gap-2">
-        {totalPages > 0 && (
-          <div className="flex items-center gap-2 mt-4 justify-center">
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage <= 1}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              이전
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i}
-                onClick={() => handlePageChange(i + 1)}
-                className={`px-3 py-1 rounded ${
-                  currentPage === i + 1 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 hover:bg-gray-300'
-                }`}
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>관리자 주문 목록</CardTitle>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm">페이지당 항목 수:</span>
+              <Select
+                value={pageSize.toString()}
+                onValueChange={(value) => onPageSizeChange(Number(value))}
               >
-                {i + 1}
-              </button>
-            ))}
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage >= totalPages}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              다음
-            </button>
+                <SelectTrigger className="w-[100px]">
+                  <SelectValue placeholder="선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1개</SelectItem>
+                  <SelectItem value="5">5개</SelectItem>
+                  <SelectItem value="10">10개</SelectItem>
+                  <SelectItem value="15">15개</SelectItem>
+                  <SelectItem value="20">20개</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <Button variant="outline" asChild>
+              <Link href="/">메인으로 돌아가기</Link>
+            </Button>
           </div>
-        )}
-      </div>
+        </CardHeader>
+        <CardContent>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>주문번호</TableHead>
+                  <TableHead>결제일</TableHead>
+                  <TableHead>배송상태</TableHead>
+                  <TableHead>이메일</TableHead>
+                  <TableHead>주소</TableHead>
+                  <TableHead className="text-right">총 주문금액</TableHead>
+                  <TableHead className="text-center">작업</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {orderListResponse?.content?.length ? (
+                  orderListResponse.content.map((order) => (
+                    <TableRow
+                      key={order.orderId}
+                      className="cursor-pointer hover:bg-muted/50"
+                      onClick={() => router.push(`/admin/orders/${order.orderId}`)}
+                    >
+                      <TableCell>{order.orderId}</TableCell>
+                      <TableCell>{order.orderDate}</TableCell>
+                      <TableCell>{order.deliveryStatus}</TableCell>
+                      <TableCell>{order.buyerEmail}</TableCell>
+                      <TableCell>{order.address}</TableCell>
+                      <TableCell className="text-right">
+                        {order.totalPrice?.toLocaleString()}원
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={(e) => handleDeleteClick(e, order.orderId)}
+                          disabled={isDeleting}
+                        >
+                          삭제
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center">
+                      주문 내역이 없습니다.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-      <DeleteConfirmModal
-        isOpen={isDeleteModalOpen}
-        orderId={selectedOrderId}
-        onConfirm={handleDeleteConfirm}
-        onCancel={() => setIsDeleteModalOpen(false)}
-      />
+          {totalPages > 0 && (
+            <Pagination className="mt-4">
+              <PaginationContent>
+                {currentPage > 1 && (
+                  <PaginationItem>
+                    <PaginationPrevious
+                      onClick={() => handlePageChange(currentPage - 1)}
+                    />
+                  </PaginationItem>
+                )}
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      onClick={() => handlePageChange(i + 1)}
+                      isActive={currentPage === i + 1}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                {currentPage < totalPages && (
+                  <PaginationItem>
+                    <PaginationNext
+                      onClick={() => handlePageChange(currentPage + 1)}
+                    />
+                  </PaginationItem>
+                )}
+              </PaginationContent>
+            </Pagination>
+          )}
+        </CardContent>
+      </Card>
+
+      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>주문 삭제 확인</DialogTitle>
+            <DialogDescription>
+              주문번호 {selectedOrderId}를 삭제하시겠습니까?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              취소
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+            >
+              삭제
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

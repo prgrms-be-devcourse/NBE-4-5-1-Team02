@@ -171,11 +171,11 @@ export default function ProductList({
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
         {data.map((item) => (
           <Card key={item.id} className="flex flex-col">
-            <CardHeader className="p-4">
-              <div className="w-full h-32 relative">
+            <CardHeader className="p-3">
+              <div className="w-full h-24 relative">
                 <Image
                   src={'/image.png'}
                   alt={item.name!}
@@ -184,18 +184,19 @@ export default function ProductList({
                 />
               </div>
             </CardHeader>
-            <CardContent className="p-4 pt-2">
-              <CardTitle className="text-lg mb-1">{item.name}</CardTitle>
-              <CardDescription className="text-sm h-8 overflow-hidden">
+            <CardContent className="p-3 pt-1">
+              <CardTitle className="text-base mb-1">{item.name}</CardTitle>
+              <CardDescription className="text-xs h-6 overflow-hidden">
                 {item.description}
               </CardDescription>
-              <p className="text-base font-semibold mt-2">
+              <p className="text-sm font-semibold mt-2">
                 {item.price?.toLocaleString()}원
               </p>
             </CardContent>
-            <CardFooter className="flex gap-2 justify-end p-4 pt-0">
+            <CardFooter className="flex gap-1 justify-end p-3 pt-0">
               <Button
                 size="sm"
+                className="h-7 text-xs"
                 onClick={(e) => {
                   e.preventDefault();
                   addProduct(item);
@@ -205,6 +206,7 @@ export default function ProductList({
               </Button>
               <Button
                 size="sm"
+                className="h-7 text-xs"
                 variant="destructive"
                 onClick={(e) => {
                   e.preventDefault();
