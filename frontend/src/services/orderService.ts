@@ -4,6 +4,18 @@ export interface OrderItem {
   productId: string;
   name: string;
   quantity: number;
+  price: number;
+}
+
+export interface Order {
+  orderId: string;
+  buyerEmail: string;
+  address: string;
+  zipcode: string;
+  deliveryStatus: string;
+  orderDate: string;
+  items: OrderItem[];
+  totalPrice: number;
 }
 
 export async function fetchOrderData(orderId: string) {
@@ -34,10 +46,12 @@ export async function fetchOrderProductsData(
   );
   if (!res.ok) throw new Error("주문 상품 목록을 불러오지 못했습니다.");
   const json = await res.json();
+
   const rawItems = json.data.data.map((p: any) => ({
     productId: p.productUuid,
     name: p.productName,
     quantity: p.quantity || 1,
+    price: p.productPrice,
   }));
   const groupedItems = rawItems.reduce(
     (acc: Record<string, OrderItem>, item: OrderItem) => {

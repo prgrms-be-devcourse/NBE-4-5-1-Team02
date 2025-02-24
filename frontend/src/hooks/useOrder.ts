@@ -6,24 +6,9 @@ import {
   fetchOrderProductsData,
   fetchAllProducts,
   updateOrderData,
+  OrderItem,
+  Order,
 } from "@/services/orderService";
-
-export interface OrderItem {
-  productId: string;
-  name: string;
-  quantity: number;
-}
-
-export interface Order {
-  orderId: string;
-  buyerEmail: string;
-  address: string;
-  zipcode: string;
-  deliveryStatus: string;
-  orderDate: string;
-  items: OrderItem[];
-  totalPrice: number;
-}
 
 export default function useOrder(orderId: string) {
   const [order, setOrder] = useState<Order>({
@@ -44,9 +29,18 @@ export default function useOrder(orderId: string) {
     const fetchData = async () => {
       try {
         const orderData = await fetchOrderData(orderId);
-        setOrder({ ...orderData, items: [] });
         const orderProducts = await fetchOrderProductsData(orderId);
-        setOrder((prev) => ({ ...prev, items: orderProducts }));
+
+        const totalPrice = orderProducts.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+        setOrder({
+          ...orderData,
+          items: orderProducts,
+          totalPrice,
+        });
+
         const products = await fetchAllProducts();
         setAvailableProducts(products);
       } catch (error: any) {
@@ -59,26 +53,37 @@ export default function useOrder(orderId: string) {
     fetchData();
   }, [orderId]);
 
+  const updateTotalPrice = (updatedItems: OrderItem[]) => {
+    const newTotalPrice = updatedItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    setOrder((prev) => ({
+      ...prev,
+      items: updatedItems,
+      totalPrice: newTotalPrice,
+    }));
+  };
+
   const addProduct = (product: any) => {
     const existingItem = order.items.find(
       (item) => item.productId === product.productUuid
     );
     if (existingItem) {
-      setOrder({
-        ...order,
-        items: order.items.map((item) =>
-          item.productId === product.productUuid
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        ),
-      });
+      const updatedItems = order.items.map((item) =>
+        item.productId === product.productUuid
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      updateTotalPrice(updatedItems);
     } else {
       const newItem = {
         productId: product.productUuid,
         name: product.productName,
         quantity: 1,
+        price: product.productPrice,
       };
-      setOrder({ ...order, items: [...order.items, newItem] });
+      updateTotalPrice([...order.items, newItem]);
     }
   };
 
@@ -86,7 +91,7 @@ export default function useOrder(orderId: string) {
     const updatedItems = order.items.filter(
       (item) => item.productId !== productId
     );
-    setOrder({ ...order, items: updatedItems });
+    updateTotalPrice(updatedItems);
   };
 
   const submitOrder = async () => {

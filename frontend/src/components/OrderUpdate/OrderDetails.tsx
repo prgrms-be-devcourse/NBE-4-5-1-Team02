@@ -2,23 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-export interface OrderItem {
-  productId: string;
-  name: string;
-  quantity: number;
-}
-
-export interface Order {
-  orderId: string;
-  buyerEmail: string;
-  address: string;
-  zipcode: string;
-  deliveryStatus: string;
-  orderDate: string;
-  items: OrderItem[];
-  totalPrice: number;
-}
+import { Order, OrderItem } from "@/services/orderService";
 
 interface OrderDetailsProps {
   order: Order;
