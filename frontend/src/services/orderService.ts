@@ -1,0 +1,91 @@
+// /services/orderService.ts
+
+export interface OrderItem {
+  productId: string;
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+export interface Order {
+  orderId: string;
+  buyerEmail: string;
+  address: string;
+  zipcode: string;
+  deliveryStatus: string;
+  orderDate: string;
+  items: OrderItem[];
+  totalAmount: number;
+}
+
+function getUserEmail() {
+  return sessionStorage.getItem("userEmail") || "";
+}
+
+export async function fetchOrderData(orderId: string) {
+  const email = getUserEmail();
+  const res = await fetch(
+    `http://localhost:8080/orders/${orderId}?email=${email}`
+  );
+  if (!res.ok) throw new Error("주문 정보를 불러오지 못했습니다.");
+  const json = await res.json();
+  const data = json.data;
+  return {
+    orderId: data.orderUuid,
+    buyerEmail: data.user.email,
+    address: data.deliveryAddress,
+    zipcode: String(data.zipCode),
+    deliveryStatus: data.deliveryStatus,
+    orderDate: data.createDate,
+    totalAmount: data.totalAmount,
+  };
+}
+export async function fetchOrderProductsData(orderId: string) {
+  const email = getUserEmail();
+  const res = await fetch(
+    `http://localhost:8080/orders/${orderId}/products?email=${email}`
+  );
+  if (!res.ok) throw new Error("주문 상품 목록을 불러오지 못했습니다.");
+  const json = await res.json();
+  const rawItems = json.data.data.map((p: any) => ({
+    productId: p.productUuid,
+    name: p.productName,
+    quantity: p.quantity || 1,
+    price: p.productPrice,
+  }));
+  return rawItems;
+}
+
+export async function fetchAllProducts() {
+  const res = await fetch(
+    `http://localhost:8080/products?keyword-type=title&keyword=`
+  );
+  if (!res.ok) throw new Error("전체 제품 목록을 불러오지 못했습니다.");
+  const json = await res.json();
+  return json.data.data;
+}
+
+export async function updateOrderData(order: any) {
+  const email = getUserEmail();
+  const res = await fetch(
+    `http://localhost:8080/orders/${order.orderId}?email=${email}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address: order.address,
+        zipcode: parseInt(order.zipcode, 10),
+        items: order.items.map((item: any) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+        buyer: {
+          email: email,
+        },
+        deliveryStatus: order.deliveryStatus,
+      }),
+    }
+  );
+  if (!res.ok) throw new Error("주문 수정 실패");
+  return await res.json();
+}
