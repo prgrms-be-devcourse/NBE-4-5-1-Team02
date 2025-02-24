@@ -4,16 +4,20 @@ import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.controller.ProductController;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,6 +48,7 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.data.data").exists())
                 .andExpect(jsonPath("$.data.data[0].productUuid").value("product-11111-22222-33331"));
     }
+
     @Test
     @DisplayName("존재하지 않는 주문 선택시 에러")
     void getOrderInfoTest2() throws Exception {
@@ -57,8 +62,10 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message")
                         .value("id가 %s인 Order는 없습니다.".formatted("order-notExist")));
     }
+
     @Autowired
     OrderRepository orderRepository;
+
     private void checkOrder(ResultActions resultActions, OrderDto orderDto) throws Exception {
         resultActions
                 .andExpect(jsonPath("$.data").exists())
@@ -165,4 +172,25 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.message").value("주문 내역이 없습니다."));
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
+
+    @Test
+    @DisplayName("관리자 주문 삭제 성공")
+    void deleteOrder() throws Exception {
+
+        String orderId = "order-11111-22222-33331";
+
+        ResultActions result = mvc
+                .perform(delete("/admin/orders/{orderId}", orderId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isOk())
+                .andExpect(handler().handlerType(OrderControllerAdmin.class))
+                .andExpect(handler().methodName("deleteOrder"))
+                .andExpect(jsonPath("$.message").value("주문이 성공적으로 삭제되었습니다."))
+                .andExpect(jsonPath("$.code").value(200));
+
+
+
+    }
+
 }
