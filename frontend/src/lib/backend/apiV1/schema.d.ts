@@ -243,7 +243,7 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Buyer: {
-            email?: string;
+            email: string;
         };
         OrderRequestDto: {
             address: string;
