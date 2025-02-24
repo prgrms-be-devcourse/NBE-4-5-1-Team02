@@ -5,7 +5,6 @@ import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.service.AdminOrderService;
 import com.team2.demo.domain.order.service.OrderService;
-import com.team2.demo.domain.product.service.ProductService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "AdminOrders", description = "관리자 주문 API")
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value = "/admin/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderControllerAdmin {
 
     private final OrderService orderService;
     private final AdminOrderService adminOrderService;
-
 
     /*
         관리자 주문 목록 조회
