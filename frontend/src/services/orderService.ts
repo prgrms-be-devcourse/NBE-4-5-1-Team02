@@ -92,6 +92,7 @@ export async function updateOrderData(order: any) {
         buyer: {
           email: order.buyerEmail,
         },
+        deliveryStatus: order.deliveryStatus,
       }),
     }
   );
