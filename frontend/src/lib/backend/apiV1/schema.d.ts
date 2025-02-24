@@ -211,6 +211,8 @@ export interface components {
             zipcode: number;
             items: components["schemas"]["ProductListDto"][];
             buyer: components["schemas"]["Buyer"];
+            /** @enum {string} */
+            deliveryStatus: "PENDING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
         };
         ProductListDto: {
             productId?: string;
