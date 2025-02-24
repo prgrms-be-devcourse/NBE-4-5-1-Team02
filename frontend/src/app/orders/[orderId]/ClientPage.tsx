@@ -156,7 +156,7 @@ export default function ClientPage({
               className="text-xl"
               onClick={(e) => {
                 e.preventDefault();
-                router.push(`/${order?.orderUuid}/update`);
+                router.push(`/orders/${order?.orderUuid}/update`);
               }}
             >
               주문 수정
