@@ -3,7 +3,7 @@ spring:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:file:./db;MODE=MySQL;INIT=RUNSCRIPT FROM 'classpath:schema.sql' \; RUNSCRIPT FROM 'classpath:data.sql'
+    url: jdbc:h2:file:./db;MODE=MySQL;INIT=RUNSCRIPT FROM 'classpath:schema.sql' \; RUNSCRIPT FROM 'classpath:data2.sql'
     driverClassName: org.h2.Driver
     username: sa
     password:
@@ -11,6 +11,8 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties: # Additional native properties to set on the JPA provider.
       hibernate:
         #show-sql: true                  # System.out 으로 출력
