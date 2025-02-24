@@ -8,6 +8,13 @@ import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -178,18 +185,21 @@ export default function ClientPage({
               <h2 className="text-3xl font-bold">상품 목록</h2>
               <div className="flex items-center">
                 <label htmlFor="pageSize" className="mr-2">페이지당 항목 수:</label>
-                <select
-                  id="pageSize"
-                  value={pageSize}
-                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                  className="border rounded p-1"
+                <Select
+                  value={pageSize.toString()}
+                  onValueChange={(value) => handlePageSizeChange(Number(value))}
                 >
-                  <option value="1">1개</option>
-                  <option value="5">5개</option>
-                  <option value="10">10개</option>
-                  <option value="15">15개</option>
-                  <option value="20">20개</option>
-                </select>
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue placeholder="선택" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1개</SelectItem>
+                    <SelectItem value="5">5개</SelectItem>
+                    <SelectItem value="10">10개</SelectItem>
+                    <SelectItem value="15">15개</SelectItem>
+                    <SelectItem value="20">20개</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             <SearchInput onSearch={searchDataCallBack}></SearchInput>

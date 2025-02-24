@@ -5,6 +5,13 @@ import { components } from "@/lib/backend/apiV1/schema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DeleteConfirmModal from "@/components/DeleteConfirmModal";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function AdminOrdersClientPage({
   rsData,
@@ -55,17 +62,20 @@ export default function AdminOrdersClientPage({
           <h1 className="text-2xl font-bold">관리자 주문 목록</h1>
           <div className="flex items-center">
             <label htmlFor="pageSize" className="mr-2">페이지당 항목 수:</label>
-            <select
-              id="pageSize"
-              value={pageSize}
-              onChange={(e) => onPageSizeChange(Number(e.target.value))}
-              className="border rounded p-1"
+            <Select
+              value={pageSize.toString()}
+              onValueChange={(value) => onPageSizeChange(Number(value))}
             >
-              <option value="5">5개</option>
-              <option value="10">10개</option>
-              <option value="15">15개</option>
-              <option value="20">20개</option>
-            </select>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="선택" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5개</SelectItem>
+                <SelectItem value="10">10개</SelectItem>
+                <SelectItem value="15">15개</SelectItem>
+                <SelectItem value="20">20개</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <Link 
