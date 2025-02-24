@@ -15,11 +15,15 @@ export interface Order {
   deliveryStatus: string;
   orderDate: string;
   items: OrderItem[];
-  totalPrice: number;
+  totalAmount: number;
+}
+
+function getUserEmail() {
+  return sessionStorage.getItem("userEmail") || "";
 }
 
 export async function fetchOrderData(orderId: string) {
-  const email = "email1@email.com";
+  const email = getUserEmail();
   const res = await fetch(
     `http://localhost:8080/orders/${orderId}?email=${email}`
   );
@@ -33,38 +37,23 @@ export async function fetchOrderData(orderId: string) {
     zipcode: String(data.zipCode),
     deliveryStatus: data.deliveryStatus,
     orderDate: data.createDate,
-    totalPrice: data.totalPrice,
+    totalAmount: data.totalAmount,
   };
 }
-
-export async function fetchOrderProductsData(
-  orderId: string
-): Promise<OrderItem[]> {
-  const email = "email1@email.com";
+export async function fetchOrderProductsData(orderId: string) {
+  const email = getUserEmail();
   const res = await fetch(
     `http://localhost:8080/orders/${orderId}/products?email=${email}`
   );
   if (!res.ok) throw new Error("주문 상품 목록을 불러오지 못했습니다.");
   const json = await res.json();
-
   const rawItems = json.data.data.map((p: any) => ({
     productId: p.productUuid,
     name: p.productName,
     quantity: p.quantity || 1,
     price: p.productPrice,
   }));
-  const groupedItems = rawItems.reduce(
-    (acc: Record<string, OrderItem>, item: OrderItem) => {
-      if (acc[item.productId]) {
-        acc[item.productId].quantity += item.quantity;
-      } else {
-        acc[item.productId] = { ...item };
-      }
-      return acc;
-    },
-    {}
-  );
-  return Object.values(groupedItems);
+  return rawItems;
 }
 
 export async function fetchAllProducts() {
@@ -77,8 +66,9 @@ export async function fetchAllProducts() {
 }
 
 export async function updateOrderData(order: any) {
+  const email = getUserEmail();
   const res = await fetch(
-    `http://localhost:8080/orders/${order.orderId}?email=${order.buyerEmail}`,
+    `http://localhost:8080/orders/${order.orderId}?email=${email}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -90,7 +80,7 @@ export async function updateOrderData(order: any) {
           quantity: item.quantity,
         })),
         buyer: {
-          email: order.buyerEmail,
+          email: email,
         },
         deliveryStatus: order.deliveryStatus,
       }),
