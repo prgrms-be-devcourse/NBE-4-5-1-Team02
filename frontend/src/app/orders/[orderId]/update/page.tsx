@@ -5,7 +5,7 @@ import React from "react";
 import { useParams } from "next/navigation";
 import AvailableProducts from "@/components/OrderUpdate/AvailableProducts";
 import OrderDetails from "@/components/OrderUpdate/OrderDetails";
-import useOrder from "@/hooks/useOrder";
+import useOrder from "@/hooks/useOrders";
 
 export default function OrderUpdatePage() {
   const params = useParams();
