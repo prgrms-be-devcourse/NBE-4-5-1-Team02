@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { components } from "@/lib/backend/apiV1/schema";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ProductSummaryProps {
   onDecrease: (key: string) => void;
@@ -12,56 +13,75 @@ interface ProductSummaryProps {
   >;
 }
 
+/*
+```
+text-xl  = 1.25rem = 20px
+text-2xl = 1.5rem  = 24px
+```
+
+주요 Tailwind 텍스트 크기 클래스 전체 스케일
+- `text-xs`  : 0.75rem (12px)
+- `text-sm`  : 0.875rem (14px)
+- `text-base`: 1rem (16px)
+- `text-lg`  : 1.125rem (18px)
+- `text-xl`  : 1.25rem (20px)
+- `text-2xl` : 1.5rem (24px)
+- `text-3xl` : 1.875rem (30px)
+- `text-4xl` : 2.25rem (36px)
+- `text-5xl` : 3rem (48px)
+*/
+
 export default function ProductSummary({
   products,
   onDecrease,
   onIncrease,
 }: ProductSummaryProps) {
+  console.log("products:", products);
   return (
-    <div className="h-[35%] flex flex-col mb-2">
-      <div className="w-[100%] h-fit pb-5 border-b-2 border-black">
-        <h3 className="text-3xl font-bold">Summary</h3>
+    <div className="flex flex-col w-full">
+      <div className="w-full pb-4 border-b-2 border-black sticky top-0 bg-card z-10">
+        <h3 className="text-2xl font-bold">Summary</h3>
       </div>
-      <div
-        className="h-full mt-3 overflow-auto border-2"
-        style={{ scrollbarGutter: "stable" }}
-      >
-        {Array.from(products.entries()).map((entry, index) => {
-          const key = entry[0];
-          const item = entry[1];
-          const name = item.product.productName;
-          const quantity = item.quantity;
-          return (
-            <div key={key} className="grid grid-cols-10 gap-1 my-2">
-              <span className="text-l font-bold mx-2 col-span-7">{name}</span>
-              <Button className="px-2 py-0 h-full w-full" disabled={true}>
-                {quantity}
-              </Button>
-              <Button
-                className="h-full w-full px-1 py-0"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log("increase clicked");
-                  onIncrease(key);
-                }}
+      <div className="flex flex-col gap-6 mt-4">
+        <ScrollArea>
+          {Array.from(products).map(([key, item]) => {
+            return (
+              <div
+                key={key}
+                className="flex items-center justify-between gap-2 mb-4"
               >
-                +
-              </Button>
-              <Button
-                className="h-full w-full py-0 px-1"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  console.log("decrease clicked");
-                  onDecrease(key);
-                }}
-              >
-                -
-              </Button>
-            </div>
-          );
-        })}
+                <span className="text-lg font-medium flex-grow">
+                  {item.product.productName}
+                </span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onIncrease(key);
+                    }}
+                  >
+                    +
+                  </Button>
+                  <span className="w-8 text-center">{item.quantity}</span>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onDecrease(key);
+                    }}
+                  >
+                    -
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </ScrollArea>
       </div>
     </div>
   );
