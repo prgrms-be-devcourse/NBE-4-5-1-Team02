@@ -224,19 +224,21 @@ export default function ClientPage({
       </div>
 
       {/* 오른쪽 주문 요약 섹션 */}
-      <div className="w-1/4 min-h-screen bg-card p-6">
-        <Card>
+      <div className="w-1/4 min-h-screen bg-card p-6 overflow-hidden">
+        <Card className="h-full flex flex-col">
           <CardHeader>
             <CardTitle>주문 요약</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[400px]">
-              <ProductSummary
-                products={productsMap}
-                onIncrease={increaseQuantityCallBack}
-                onDecrease={decreaseQuantityCallBack}
-              />
-            </ScrollArea>
+          <CardContent className="flex-1 overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-[calc(100vh-300px)]">
+                <ProductSummary
+                  products={productsMap}
+                  onIncrease={increaseQuantityCallBack}
+                  onDecrease={decreaseQuantityCallBack}
+                />
+              </ScrollArea>
+            </div>
             <Separator className="my-4" />
             <UserDataInput
               addressStatus={[address, setAddress]}
