@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -173,6 +174,33 @@ class OrderControllerAdminTest {
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
 
+
+    @Test //관리자 주문 수정 성공
+    @DisplayName("관리자 주문 수정 성공")
+    void updateOrder() throws Exception {
+
+        // Uuid 존재 데이터 수정
+        String orderUuid = "order-11111-22222-33331";
+        String requestJson = """
+                {
+                "address": "Update Address",
+                "zipcode": "88888",
+                "deliveryStatus": "SHIPPED",
+                "items": []
+                }s
+                """;
+
+        ResultActions result = mvc.perform(put("/admin/orders/" + orderUuid)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestJson));
+
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("success."))
+                .andExpect(jsonPath("$.data.address").value("Update Address"))
+                .andExpect(jsonPath("$.data.deliveryStatus").value("SHIPPED"))
+                .andDo(print());
+    }
+
     @Test
     @DisplayName("관리자 주문 삭제 성공")
     void deleteOrder() throws Exception {
@@ -188,9 +216,6 @@ class OrderControllerAdminTest {
                 .andExpect(handler().methodName("deleteOrder"))
                 .andExpect(jsonPath("$.message").value("주문이 성공적으로 삭제되었습니다."))
                 .andExpect(jsonPath("$.code").value(200));
-
-
-
     }
 
 }

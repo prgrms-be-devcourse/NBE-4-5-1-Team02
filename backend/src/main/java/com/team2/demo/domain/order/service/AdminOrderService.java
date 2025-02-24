@@ -43,7 +43,7 @@ public class AdminOrderService {
         ).toList();
 
         //주문 정보 업데이트
-        order.updateOrder(productWithAmounts, request.getAddress(), request.getZipcode(), order.getDeliveryStatus() );
+        order.updateOrder(productWithAmounts, request.getAddress(), request.getZipcode(), request.getDeliveryStatus() );
         return new OrderDto(order);
     }
 
