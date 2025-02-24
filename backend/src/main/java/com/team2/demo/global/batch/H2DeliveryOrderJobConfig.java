@@ -29,9 +29,8 @@ import java.util.ArrayList;
 @EnableBatchProcessing
 @EnableScheduling
 @RequiredArgsConstructor
-@Profile("prod")
 @Slf4j
-public class DeliveryOrderJobConfig {
+public class H2DeliveryOrderJobConfig {
 
     private final DataSource dataSource;
     private final OrderRepository orderRepository;
@@ -63,7 +62,13 @@ public class DeliveryOrderJobConfig {
         JdbcCursorItemReader<Order> itemReader = new JdbcCursorItemReader<>();
         itemReader.setDataSource(dataSource);
         itemReader.setFetchSize(100);
-        itemReader.setSql("select * from caffee.ORDERS where MODIFIED_DATE BETWEEN DATE_SUB(CONCAT(CURDATE(), ' 14:00:00'), INTERVAL 1 DAY) AND CONCAT(CURDATE(), ' 14:00:00');");
+        itemReader.setSql("""
+                SELECT *
+                FROM caffee.ORDERS
+                WHERE MODIFIED_DATE BETWEEN 
+                  DATEADD('DAY', -1, PARSEDATETIME(CONCAT(CURDATE(), ' 14:00:00'), 'yyyy-MM-dd HH:mm:ss'))
+                  AND PARSEDATETIME(CONCAT(CURDATE(), ' 14:00:00'), 'yyyy-MM-dd HH:mm:ss');
+                """);
         itemReader.setRowMapper((rs, rowNum) -> new Order(
                 rs.getString("ORDER_UUID"),
                 User.builder().id(rs.getString("USER_UUID")).build(),
