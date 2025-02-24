@@ -298,6 +298,51 @@
     "code": 200
   }
   ```
+  
+### 1.3.2 주문 내 모든 상품 조회 (사용자)
+- **URL:** `//orders/{orderId}/products/all`
+- **Method:** `GET`
+- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **Parameters**
+  - **QueryParameter**
+    - `email`: 이메일 형식, 필수
+  - **PathParameter**
+    - `orderId` : 주문번호
+- **Response 예시**
+<details>
+<summary>success</summary>
+
+```json
+{
+  "message": "Success.",
+  "data": [
+    {
+      "product": {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "/image.png"
+      },
+      "amount": 5
+    },
+    {
+      "product": {
+        "productUuid": "product-11111-22222-33332",
+        "productName": "product2",
+        "category": "coffeeBean",
+        "productPrice": 5000,
+        "productDescription": "커피콩2",
+        "imageUrl": "/image.png"
+      },
+      "amount": 1
+    }
+  ],
+  "code": 200
+}
+```
+</details>
 
 ---
 
@@ -722,6 +767,49 @@
   </details> 
 
 ---
+
+### 2.6 주문에 포함된 모든 상품과 수량 조회 (관리자)
+- **URL:** `/admin/orders/{orderId}/products/all`
+- **Method:** `GET`
+- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **Parameters**
+  - **PathParameter**
+    - `orderId` : 주문번호
+- **Response 예시**
+<details>
+<summary>success</summary>
+
+```json
+{
+  "message": "Success.",
+  "data": [
+    {
+      "product": {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "/image.png"
+      },
+      "amount": 5
+    },
+    {
+      "product": {
+        "productUuid": "product-11111-22222-33332",
+        "productName": "product2",
+        "category": "coffeeBean",
+        "productPrice": 5000,
+        "productDescription": "커피콩2",
+        "imageUrl": "/image.png"
+      },
+      "amount": 1
+    }
+  ],
+  "code": 200
+}
+```
+</details>
 
 ### 1. 유저 API
 
