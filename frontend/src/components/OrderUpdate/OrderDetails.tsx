@@ -72,7 +72,7 @@ export default function OrderDetails({
           placeholder="우편번호 입력"
         />
       </div>
-      <p className="mt-4 font-semibold">총 금액: {order.totalPrice}원</p>
+      <p className="mt-4 font-semibold">총 금액: {order.totalAmount}원</p>
       <div className="mt-4 flex gap-4">
         <Button
           onClick={onSubmit}

@@ -93,7 +93,12 @@ public class Order {
         this.deliveryStatus = deliveryStatus;
         this.modifiedDate = LocalDateTime.now();
         this.products.clear();
-        this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
+       // this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
+        for (ProductWithAmount pwa : updatedProducts) {
+            for (int i = 0; i < pwa.amount(); i++) {
+                this.products.add(pwa.product());
+            }
+        }
     }
 
     private static int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
