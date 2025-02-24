@@ -4,6 +4,7 @@ import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.order.service.OrderService;
 import com.team2.demo.domain.product.controller.ProductController;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -171,6 +174,7 @@ class OrderControllerAdminTest {
 //                .andExpect(jsonPath("$.data.content.length()").value(0)); // 주문이 없으면 0이어야 하지만, 주문이 있을 경우 실패
     }
 
+
     @Test //관리자 주문 수정 성공
     @DisplayName("관리자 주문 수정 성공")
     void updateOrder() throws Exception {
@@ -195,8 +199,23 @@ class OrderControllerAdminTest {
                 .andExpect(jsonPath("$.data.address").value("Update Address"))
                 .andExpect(jsonPath("$.data.deliveryStatus").value("SHIPPED"))
                 .andDo(print());
+    }
 
+    @Test
+    @DisplayName("관리자 주문 삭제 성공")
+    void deleteOrder() throws Exception {
 
+        String orderId = "order-11111-22222-33331";
+
+        ResultActions result = mvc
+                .perform(delete("/admin/orders/{orderId}", orderId)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isOk())
+                .andExpect(handler().handlerType(OrderControllerAdmin.class))
+                .andExpect(handler().methodName("deleteOrder"))
+                .andExpect(jsonPath("$.message").value("주문이 성공적으로 삭제되었습니다."))
+                .andExpect(jsonPath("$.code").value(200));
     }
 
 }
