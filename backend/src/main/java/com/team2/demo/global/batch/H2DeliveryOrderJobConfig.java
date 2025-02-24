@@ -29,6 +29,7 @@ import java.util.ArrayList;
 @EnableBatchProcessing
 @EnableScheduling
 @RequiredArgsConstructor
+@Profile("dev")
 @Slf4j
 public class H2DeliveryOrderJobConfig {
 
@@ -67,7 +68,8 @@ public class H2DeliveryOrderJobConfig {
                 FROM caffee.ORDERS
                 WHERE MODIFIED_DATE BETWEEN 
                   DATEADD('DAY', -1, PARSEDATETIME(CONCAT(CURDATE(), ' 14:00:00'), 'yyyy-MM-dd HH:mm:ss'))
-                  AND PARSEDATETIME(CONCAT(CURDATE(), ' 14:00:00'), 'yyyy-MM-dd HH:mm:ss');
+                  AND PARSEDATETIME(CONCAT(CURDATE(), ' 14:00:00'), 'yyyy-MM-dd HH:mm:ss')
+                AND DELIVERY_STATUS = 'PENDING';
                 """);
         itemReader.setRowMapper((rs, rowNum) -> new Order(
                 rs.getString("ORDER_UUID"),

@@ -63,7 +63,7 @@ public class DeliveryOrderJobConfig {
         JdbcCursorItemReader<Order> itemReader = new JdbcCursorItemReader<>();
         itemReader.setDataSource(dataSource);
         itemReader.setFetchSize(100);
-        itemReader.setSql("select * from caffee.ORDERS where MODIFIED_DATE BETWEEN DATE_SUB(CONCAT(CURDATE(), ' 14:00:00'), INTERVAL 1 DAY) AND CONCAT(CURDATE(), ' 14:00:00');");
+        itemReader.setSql("select * from caffee.ORDERS where MODIFIED_DATE BETWEEN DATE_SUB(CONCAT(CURDATE(), ' 14:00:00'), INTERVAL 1 DAY) AND CONCAT(CURDATE(), ' 14:00:00') AND DELIVERY_STATUS='PENDING';");
         itemReader.setRowMapper((rs, rowNum) -> new Order(
                 rs.getString("ORDER_UUID"),
                 User.builder().id(rs.getString("USER_UUID")).build(),
