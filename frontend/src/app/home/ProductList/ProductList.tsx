@@ -21,7 +21,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 type TableProductData = {
   id?: string;
@@ -70,7 +70,7 @@ export default function ProductList({
 
   const createPageUrl = (pageNum: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('page', pageNum.toString());
+    params.set("page", pageNum.toString());
     return `/?${params.toString()}`;
   };
 
@@ -79,18 +79,21 @@ export default function ProductList({
     const currentPage = products.page || 0;
     const pages = [];
     const maxPages = 5;
-    
-    let startPage = Math.max(0, Math.min(currentPage - Math.floor(maxPages / 2), totalPages - maxPages));
+
+    let startPage = Math.max(
+      0,
+      Math.min(currentPage - Math.floor(maxPages / 2), totalPages - maxPages)
+    );
     let endPage = Math.min(startPage + maxPages, totalPages);
-    
+
     if (endPage - startPage < maxPages) {
       startPage = Math.max(0, endPage - maxPages);
     }
-    
+
     for (let i = startPage; i < endPage; i++) {
       pages.push(i);
     }
-    
+
     setPageNums(pages);
   }, [products.totalPages, products.page]);
 
@@ -182,7 +185,7 @@ export default function ProductList({
               <TableRow key={item.id}>
                 <TableCell className="p-2">
                   <Image
-                    src={'/image.png'}
+                    src={"/image.png"}
                     alt={item.name!}
                     width={50}
                     height={50}
@@ -191,12 +194,18 @@ export default function ProductList({
                 </TableCell>
                 <TableCell>
                   <div className="space-y-1">
-                    <span className="text-lg font-medium block">{item.name}</span>
-                    <span className="text-sm text-gray-600">{item.description}</span>
+                    <span className="text-lg font-medium block">
+                      {item.name}
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      {item.description}
+                    </span>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className="text-lg">{item.price?.toLocaleString()}원</span>
+                  <span className="text-lg">
+                    {item.price?.toLocaleString()}원
+                  </span>
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
@@ -231,12 +240,13 @@ export default function ProductList({
       <div className="mt-4">
         <Pagination>
           <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href={createPageUrl(Number(products.page!) - 1)}
-                disabled={products.page === 0}
-              />
-            </PaginationItem>
+            {products.page! > 0 ? (
+              <PaginationItem>
+                <PaginationPrevious
+                  href={createPageUrl(Number(products.page!) - 1)}
+                />
+              </PaginationItem>
+            ) : null}
             {products.page === 0 ? null : (
               <PaginationItem>
                 <PaginationEllipsis />
