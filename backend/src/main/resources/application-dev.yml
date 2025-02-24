@@ -11,6 +11,8 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties: # Additional native properties to set on the JPA provider.
       hibernate:
         #show-sql: true                  # System.out 으로 출력
