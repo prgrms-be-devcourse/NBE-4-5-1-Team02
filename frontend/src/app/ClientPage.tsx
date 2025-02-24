@@ -8,6 +8,18 @@ import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import OrderConfirmModal from "@/components/OrderConfirmModal";
 
 export type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -36,6 +48,8 @@ export default function ClientPage({
   const [productsMap, setProductsMap] = useState<
     Map<string, productWithQuantity>
   >(new Map());
+
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   useEffect(() => {
     const savedItems = sessionStorage.getItem("selectedItems");
@@ -125,30 +139,51 @@ export default function ClientPage({
   }, [productsMap]);
 
   const makeOrder = async () => {
-    const productsData: { productId: string; quantity: number }[] = [];
-    productsMap.forEach((value, key) => {
-      productsData.push({
-        productId: key,
-        quantity: value.quantity,
+    try {
+      // 입력값 검증
+      if (!email || !address || !zipcode) {
+        alert("이메일, 주소, 우편번호를 모두 입력해주세요.");
+        return;
+      }
+
+      if (productsMap.size === 0) {
+        alert("상품을 선택해주세요.");
+        return;
+      }
+
+      const productsData: { productId: string; quantity: number }[] = [];
+      productsMap.forEach((value, key) => {
+        productsData.push({
+          productId: key,
+          quantity: value.quantity,
+        });
       });
-    });
 
-    const response = await client.POST("/orders", {
-      body: {
-        address: address,
-        buyer: {
-          email: email,
+      const response = await client.POST("/orders", {
+        body: {
+          address: address,
+          buyer: {
+            email: email,
+          },
+          zipcode: Number(zipcode),
+          items: productsData,
         },
-        zipcode: Number(zipcode),
-        items: productsData,
-      },
-    });
+      });
 
-    if (response.error) {
-      alert("결제 실패");
-      return;
+      if (response.error) {
+        console.error("주문 생성 실패:", response.error);
+        alert("주문 생성에 실패했습니다. 다시 시도해주세요.");
+        return;
+      }
+
+      alert("주문이 성공적으로 생성되었습니다.");
+      // 주문 성공 후 장바구니 비우기
+      setProductsMap(new Map());
+      
+    } catch (error) {
+      console.error("주문 처리 중 오류 발생:", error);
+      alert("주문 처리 중 오류가 발생했습니다.");
     }
-    alert("주문 생성 성공");
   };
 
   useEffect(() => {
@@ -163,44 +198,39 @@ export default function ClientPage({
     window.location.href = `/?${currentParams.toString()}`;
   };
 
+  const handleOrderClick = () => {
+    setIsOrderModalOpen(true);
+  };
+
+  const handleOrderConfirm = async () => {
+    setIsOrderModalOpen(false);
+    await makeOrder(); // 기존의 makeOrder 함수 호출
+  };
+
   return (
     <div className="min-h-screen w-full flex flex-row">
       {/* 왼쪽 상품 목록 섹션 */}
       <div className="w-3/4 min-h-screen p-8">
         <div className="flex flex-col h-full">
-          <div className="p-6 flex justify-between border-b-4">
-            <div className="flex items-center gap-4">
-              <h2 className="text-3xl font-bold">상품 목록</h2>
-              <div className="flex items-center">
-                <label htmlFor="pageSize" className="mr-2">
-                  페이지당 항목 수:
-                </label>
-                <select
-                  id="pageSize"
-                  value={pageSize}
-                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                  className="border rounded p-1"
-                >
-                  <option value="1">1개</option>
-                  <option value="5">5개</option>
-                  <option value="10">10개</option>
-                  <option value="15">15개</option>
-                  <option value="20">20개</option>
-                </select>
-              </div>
+          <div className="p-6 flex items-center gap-4 border-b-4">
+            <h2 className="text-2xl font-bold whitespace-nowrap">상품 목록</h2>
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <Label htmlFor="pageSize">페이지당 항목 수</Label>
+              <Select value={pageSize.toString()} onValueChange={(value) => handlePageSizeChange(Number(value))}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="항목 수 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1개</SelectItem>
+                  <SelectItem value="5">5개</SelectItem>
+                  <SelectItem value="10">10개</SelectItem>
+                  <SelectItem value="15">15개</SelectItem>
+                  <SelectItem value="20">20개</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <SearchInput onSearch={searchDataCallBack}></SearchInput>
-          </div>
-
-          <ProductList
-            products={products}
-            productsMap={productsMap}
-            setProductsMap={setProductsMap}
-          ></ProductList>
-
-          <div className="mt-auto w-full flex justify-end">
             <Button
-              className="w-32"
+              className="whitespace-nowrap"
               onClick={(e) => {
                 e.preventDefault();
                 router.push("/orders");
@@ -208,48 +238,64 @@ export default function ClientPage({
             >
               주문 목록
             </Button>
+            <div className="flex-grow flex justify-end">
+              <SearchInput onSearch={searchDataCallBack} />
+            </div>
           </div>
+
+          <ProductList
+            products={products}
+            productsMap={productsMap}
+            setProductsMap={setProductsMap}
+          ></ProductList>
         </div>
       </div>
 
       {/* 오른쪽 주문 요약 섹션 */}
-      <div className="w-1/4 min-h-screen bg-[#DDDDDD] p-6 flex flex-col">
-        <div className="flex flex-col h-full">
-          <ProductSummary
-            products={productsMap}
-            onIncrease={increaseQuantityCallBack}
-            onDecrease={decreaseQuantityCallBack}
-          />
-          <UserDataInput
-            addressStatus={[address, setAddress]}
-            zipCodeStatus={[zipcode, setZipcode]}
-            emailStatus={[email, setEmail]}
-          />
-          <div className="mt-auto">
-            <div className="mb-4">
-              <span className="text-lg">
-                당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
-              </span>
+      <div className="w-1/4 min-h-screen bg-card p-6 overflow-hidden">
+        <Card className="h-full flex flex-col">
+          <CardHeader>
+            <CardTitle>주문 요약</CardTitle>
+          </CardHeader>
+          <CardContent className="flex-1 overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-hidden">
+              <ScrollArea className="h-[calc(100vh-300px)]">
+                <ProductSummary
+                  products={productsMap}
+                  onIncrease={increaseQuantityCallBack}
+                  onDecrease={decreaseQuantityCallBack}
+                />
+              </ScrollArea>
             </div>
-            <div className="flex justify-between items-center mb-4">
+            <Separator className="my-4" />
+            <UserDataInput
+              addressStatus={[address, setAddress]}
+              zipCodeStatus={[zipcode, setZipcode]}
+              emailStatus={[email, setEmail]}
+            />
+          </CardContent>
+          <CardFooter className="flex flex-col gap-4">
+            <p className="text-sm text-muted-foreground">
+              당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.
+            </p>
+            <div className="flex justify-between w-full">
               <span className="text-xl font-bold">총 가격</span>
               <span className="text-xl font-bold">
                 {amount.toLocaleString()}원
               </span>
             </div>
-            <Button
-              type="button"
-              className="w-full py-4"
-              onClick={(e) => {
-                e.preventDefault();
-                makeOrder();
-              }}
-            >
-              <span className="text-2xl font-bold">결제하기</span>
+            <Button className="w-full" size="lg" onClick={handleOrderClick}>
+              주문하기
             </Button>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
+      <OrderConfirmModal
+        isOpen={isOrderModalOpen}
+        onConfirm={handleOrderConfirm}
+        onCancel={() => setIsOrderModalOpen(false)}
+        totalAmount={amount}
+      />
     </div>
   );
 }

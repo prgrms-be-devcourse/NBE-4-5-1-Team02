@@ -1,5 +1,9 @@
 "use client";
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
 interface EmailModalProps {
   isOpen: boolean;
   onSubmit: (email: string) => void; // 이메일을 전달하는 콜백 함수수
@@ -26,25 +30,24 @@ export default function EmailModal({ isOpen, onSubmit }: EmailModalProps) { // E
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold mb-4">이메일 입력</h2>
-        <form onSubmit={handleSubmit}>
-          <input
+    <Dialog open={isOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>이메일 입력</DialogTitle>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
             type="email"
             name="email"
             placeholder="이메일을 입력하세요"
             required
-            className="w-full p-2 border border-gray-300 rounded mb-4"
+            className="w-full"
           />
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-          >
+          <Button type="submit" className="w-full">
             확인
-          </button>
+          </Button>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 } 

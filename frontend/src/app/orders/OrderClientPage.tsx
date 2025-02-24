@@ -2,6 +2,25 @@
 
 import { components } from "@/lib/backend/apiV1/schema";
 import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function OrdersClientPage({
   rsData,
@@ -13,84 +32,85 @@ export default function OrdersClientPage({
   const totalPages = orderListResponse?.totalPages || 0;
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">주문 목록</h1>
-        <Link 
-          href="/"
-          className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
-        >
-          메인으로 돌아가기
-        </Link>
-      </div>
-      
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-6 py-3 text-left">주문번호</th>
-              <th className="px-6 py-3 text-left">결제일</th>
-              <th className="px-6 py-3 text-left">배송상태</th>
-              <th className="px-6 py-3 text-left">주소</th>
-              <th className="px-6 py-3 text-left">이메일</th>
-              <th className="px-6 py-3 text-right">총 주문금액</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderListResponse?.content?.length ? (
-              orderListResponse.content.map((order) => (
-                <tr key={order.orderId} className="border-b">
-                  <td className="px-6 py-4">{order.orderId}</td>
-                  <td className="px-6 py-4">{order.orderDate}</td>
-                  <td className="px-6 py-4">{order.deliveryStatus}</td>
-                  <td className="px-6 py-4">{order.address}</td>
-                  <td className="px-6 py-4">{order.buyerEmail}</td>
-                  <td className="px-6 py-4 text-right">{order.totalPrice?.toLocaleString()}원</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={6} className="px-6 py-4 text-center">
-                  주문 내역이 없습니다.
-                </td>
-              </tr>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="w-full max-w-7xl px-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>주문 목록</CardTitle>
+            <Button variant="outline" asChild>
+              <Link href="/">메인으로 돌아가기</Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>주문번호</TableHead>
+                    <TableHead>결제일</TableHead>
+                    <TableHead>배송상태</TableHead>
+                    <TableHead>주소</TableHead>
+                    <TableHead>이메일</TableHead>
+                    <TableHead className="text-right">총 주문금액</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {orderListResponse?.content?.length ? (
+                    orderListResponse.content.map((order) => (
+                      <TableRow key={order.orderId}>
+                        <TableCell>{order.orderId}</TableCell>
+                        <TableCell>{order.orderDate}</TableCell>
+                        <TableCell>{order.deliveryStatus}</TableCell>
+                        <TableCell>{order.address}</TableCell>
+                        <TableCell>{order.buyerEmail}</TableCell>
+                        <TableCell className="text-right">
+                          {order.totalPrice?.toLocaleString()}원
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center">
+                        주문 내역이 없습니다.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
+            {totalPages > 0 && (
+              <Pagination className="mt-4">
+                <PaginationContent>
+                  {currentPage > 0 && (
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href={`?page=${currentPage - 1}`}
+                      />
+                    </PaginationItem>
+                  )}
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <PaginationItem key={i}>
+                      <PaginationLink
+                        href={`?page=${i}`}
+                        isActive={currentPage === i}
+                      >
+                        {i + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  {currentPage < totalPages - 1 && (
+                    <PaginationItem>
+                      <PaginationNext
+                        href={`?page=${currentPage + 1}`}
+                      />
+                    </PaginationItem>
+                  )}
+                </PaginationContent>
+              </Pagination>
             )}
-          </tbody>
-        </table>
-      </div>
-      
-      <div className="flex justify-center mt-4 gap-2">
-        {totalPages > 0 && (
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => window.location.href = `?page=${currentPage - 1}`}
-              disabled={currentPage <= 0}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              이전
-            </button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <a
-                key={i}
-                href={`?page=${i}`}
-                className={`px-3 py-1 rounded ${
-                  currentPage === i 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-              >
-                {i + 1}
-              </a>
-            ))}
-            <button
-              onClick={() => window.location.href = `?page=${currentPage + 1}`}
-              disabled={currentPage >= totalPages - 1}
-              className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              다음
-            </button>
-          </div>
-        )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

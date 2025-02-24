@@ -1,16 +1,16 @@
 "use client";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { components } from "@/lib/backend/apiV1/schema";
+import Image from "next/image";
+import { ProductWithAmountList } from "./ClientPage";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/hooks/useCarosels";
-import { components } from "@/lib/backend/apiV1/schema";
-import Image from "next/image";
-import { ProductWithAmountList } from "./ClientPage";
+} from "@/components/ui/carousel";
 
 export default function SingleItemCarousel({
   imageList,
@@ -19,21 +19,9 @@ export default function SingleItemCarousel({
 }) {
   return (
     <Carousel className="w-3/4">
-      <CarouselContent>
+      <CarouselContent className="">
         {imageList.map((data, idx) => (
-          <CarouselItem
-            key={idx}
-            className="
-                w-full
-                h-fit
-                flex 
-                items-center 
-                justify-center 
-                bg-white 
-                m-2 
-                overflow-hidden
-              "
-          >
+          <CarouselItem key={idx}>
             <Card className="flex flex-col justify-center items-center ">
               <CardContent className="">
                 <Image

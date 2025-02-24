@@ -104,14 +104,6 @@ public class Order {
         return totalPrice;
     }
 
-    public void addItems(List<Pair<Product, Integer>> productsInOrder) {
-        productsInOrder.forEach(pair -> {
-            for (int i = 0; i < pair.getSecond(); i++) {
-                products.add(pair.getFirst());
-            }
-        });
-    }
-
     public enum DeliveryStatus {
         PENDING, SHIPPED, DELIVERED, CANCELLED
     }
@@ -132,6 +124,14 @@ public class Order {
     public void updateProducts(List<Product> newProducts) {
         this.products.clear();
         this.products.addAll(newProducts);
+    }
+
+    public void addItems(List<Pair<Product, Integer>> productsInOrder) {
+        productsInOrder.forEach(pair -> {
+            for (int i = 0; i < pair.getSecond(); i++) {
+                products.add(pair.getFirst());
+            }
+        });
     }
 
 }
