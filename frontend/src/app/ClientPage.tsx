@@ -11,6 +11,14 @@ import { useRouter } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -179,19 +187,19 @@ export default function ClientPage({
           <div className="p-6 flex items-center gap-4 border-b-4">
             <h2 className="text-2xl font-bold whitespace-nowrap">상품 목록</h2>
             <div className="flex items-center gap-2 whitespace-nowrap">
-              <label htmlFor="pageSize">페이지당 항목 수:</label>
-              <select
-                id="pageSize"
-                value={pageSize}
-                onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                className="border rounded p-1"
-              >
-                <option value="1">1개</option>
-                <option value="5">5개</option>
-                <option value="10">10개</option>
-                <option value="15">15개</option>
-                <option value="20">20개</option>
-              </select>
+              <Label htmlFor="pageSize">페이지당 항목 수</Label>
+              <Select value={pageSize.toString()} onValueChange={(value) => handlePageSizeChange(Number(value))}>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="항목 수 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1개</SelectItem>
+                  <SelectItem value="5">5개</SelectItem>
+                  <SelectItem value="10">10개</SelectItem>
+                  <SelectItem value="15">15개</SelectItem>
+                  <SelectItem value="20">20개</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button
               className="whitespace-nowrap"
