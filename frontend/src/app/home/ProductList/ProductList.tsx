@@ -232,9 +232,9 @@ export default function ProductList({
         <Pagination>
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious
-                href={createPageUrl(Number(products.page!) - 1)}
-                disabled={products.page === 0}
+              <PaginationPrevious 
+                href={`/?page=${products.page! - 1}`}
+                aria-disabled={products.page === 0} 
               />
             </PaginationItem>
             {products.page === 0 ? null : (
@@ -245,9 +245,9 @@ export default function ProductList({
             {pageNums.map((value, idx) => {
               return (
                 <PaginationItem key={idx}>
-                  <PaginationLink
-                    isActive={value === products.page}
+                  <PaginationLink 
                     href={createPageUrl(value)}
+                    isActive={value === products.page}
                   >
                     {value + 1}
                   </PaginationLink>
@@ -260,9 +260,9 @@ export default function ProductList({
               </PaginationItem>
             )}
             <PaginationItem>
-              <PaginationNext
-                href={createPageUrl(Number(products.page!) + 1)}
-                disabled={products.page === products.totalPages! - 1}
+              <PaginationNext 
+                href={`/?page=${Number(products.page!) + 1}`}
+                aria-disabled={products.page === products.totalPages! - 1} 
               />
             </PaginationItem>
           </PaginationContent>
