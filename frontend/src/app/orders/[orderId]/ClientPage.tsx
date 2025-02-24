@@ -9,6 +9,7 @@ import { productWithQuantity } from "@/app/ClientPage";
 import UserData from "./UserData";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { Card, CardContent } from "@/components/ui/card";
 
 const client = createClient<paths>({ baseUrl: "http://localhost:8080" });
 
@@ -131,59 +132,49 @@ export default function ClientPage({
   const router = useRouter();
 
   return (
-    <div className="min-h-screen w-full flex flex-row">
-      {/* 왼쪽 상품 목록 섹션 */}
-      <div className="w-3/4 min-h-screen p-8 flex justify-center items-center">
-        <div className="flex justify-center">
-          <SingleItemCarousel imageList={products!} />
-        </div>
+    <div className="min-h-screen w-full flex flex-col md:flex-row">
+      <div className="w-full md:w-3/4 p-6 flex items-center justify-center bg-background">
+        <SingleItemCarousel imageList={products!} />
       </div>
+      
+      <div className="w-full md:w-1/4 min-h-screen bg-muted/10 p-6 flex flex-col space-y-6">
+        <UserData order={order} />
+        
+        <Card>
+          <CardContent className="pt-6">
+            <ProductSummary
+              products={productsMap}
+              onIncrease={() => {}}
+              onDecrease={() => {}}
+            />
+          </CardContent>
+        </Card>
 
-      {/* 오른쪽 주문 요약 섹션 */}
-      <div className="w-1/4 min-h-screen bg-[#DDDDDD] p-6 flex flex-col">
-        <div className="h-2/5">
-          <UserData order={order}></UserData>
-        </div>
-        <ProductSummary
-          products={productsMap}
-          onIncrease={() => {}}
-          onDecrease={() => {}}
-        />
-
-        <div className="flex flex-col">
-          <Button className="py-5 m-3">
-            <span
-              className="text-xl"
-              onClick={(e) => {
-                e.preventDefault();
-                router.push(`/orders/${order?.orderUuid}/update`);
-              }}
-            >
-              주문 수정
-            </span>
+        <div className="flex flex-col space-y-3">
+          <Button 
+            size="lg"
+            className="w-full"
+            onClick={() => router.push(`/orders/${order?.orderUuid}/update`)}
+          >
+            주문 수정
           </Button>
-          <div className="flex justify-between h-1/5">
-            <Button className="py-5 m-3 w-1/2">
-              <span
-                className="text-xl"
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/");
-                }}
-              >
-                메인 화면으로
-              </span>
+          
+          <div className="flex space-x-3">
+            <Button 
+              variant="outline" 
+              size="lg"
+              className="flex-1"
+              onClick={() => router.push("/")}
+            >
+              메인 화면
             </Button>
-            <Button className="py-5 m-3 w-1/2">
-              <span
-                className="text-xl"
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.back();
-                }}
-              >
-                리스트 화면으로
-              </span>
+            <Button 
+              variant="outline"
+              size="lg"
+              className="flex-1"
+              onClick={() => router.back()}
+            >
+              목록으로
             </Button>
           </div>
         </div>

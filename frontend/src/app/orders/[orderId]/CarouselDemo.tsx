@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Badge } from "@/components/ui/badge";
 
 export default function SingleItemCarousel({
   imageList,
@@ -18,32 +19,33 @@ export default function SingleItemCarousel({
   imageList: ProductWithAmountList;
 }) {
   return (
-    <Carousel className="w-3/4">
-      <CarouselContent className="">
+    <Carousel className="w-full max-w-xl mx-auto">
+      <CarouselContent>
         {imageList.map((data, idx) => (
           <CarouselItem key={idx}>
-            <Card className="flex flex-col justify-center items-center ">
-              <CardContent className="">
-                <Image
-                  src={`/${data.product?.productName?.replace(/\s+/g, '')}.png`}
-                  alt={data.product?.productName || 'Product Image'}
-                  width={500}
-                  height={500}
-                />
+            <Card className="border-none shadow-none">
+              <CardContent className="flex flex-col items-center p-4">
+                <div className="relative w-[80%] aspect-square">
+                  <Image
+                    src={`/${data.product?.productName?.replace(/\s+/g, '')}.png`}
+                    alt={data.product?.productName || 'Product Image'}
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+                <CardTitle className="mt-3">
+                  <Badge variant="secondary" className="text-lg">
+                    {data.product?.productName}
+                  </Badge>
+                </CardTitle>
               </CardContent>
-              <CardTitle className="mb-7">
-                <span className="text-2xl font-semibold">
-                  {data.product?.productName}
-                </span>
-              </CardTitle>
             </Card>
           </CarouselItem>
         ))}
       </CarouselContent>
-
-      {/* 화살표(이전/다음) - 원하는 스타일/위치로 조정 */}
-      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white w-10 h-10 flex items-center justify-center rounded-full" />
-      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white w-10 h-10 flex items-center justify-center rounded-full" />
+      <CarouselPrevious />
+      <CarouselNext />
     </Carousel>
   );
 }
