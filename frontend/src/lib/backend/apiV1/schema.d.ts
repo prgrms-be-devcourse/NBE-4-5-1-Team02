@@ -98,6 +98,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/batch/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["runJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/products": {
         parameters: {
             query?: never;
@@ -624,6 +640,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RsDataOrderInfoDto"];
+                };
+            };
+        };
+    };
+    runJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
                 };
             };
         };

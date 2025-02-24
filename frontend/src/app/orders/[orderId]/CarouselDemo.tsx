@@ -25,7 +25,7 @@ export default function SingleItemCarousel({
             <Card className="flex flex-col justify-center items-center ">
               <CardContent className="">
                 <Image
-                  src={`/${data.product!.imageUrl!}`}
+                  src={`/${data.product?.productName?.replace(/\s+/g, '')}.png`}
                   alt={data.product?.productName || 'Product Image'}
                   width={500}
                   height={500}
