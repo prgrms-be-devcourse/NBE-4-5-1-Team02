@@ -22,6 +22,14 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from 'next/navigation';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 type TableProductData = {
   id?: string;
@@ -161,72 +169,49 @@ export default function ProductList({
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-24">
-                <span className="text-lg font-semibold">이미지</span>
-              </TableHead>
-              <TableHead className="w-2/3">
-                <span className="text-lg font-semibold">상품 이름 및 설명</span>
-              </TableHead>
-              <TableHead className="w-32">
-                <span className="text-lg font-semibold">가격</span>
-              </TableHead>
-              <TableHead className="w-40"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell className="p-2">
-                  <Image
-                    src={'/image.png'}
-                    alt={item.name!}
-                    width={50}
-                    height={50}
-                    className="rounded object-cover"
-                  />
-                </TableCell>
-                <TableCell>
-                  <div className="space-y-1">
-                    <span className="text-lg font-medium block">{item.name}</span>
-                    <span className="text-sm text-gray-600">{item.description}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <span className="text-lg">{item.price?.toLocaleString()}원</span>
-                </TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addProduct(item);
-                      }}
-                    >
-                      추가
-                    </Button>
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="destructive"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteProduct(item);
-                      }}
-                    >
-                      삭제
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {data.map((item) => (
+          <Card key={item.id} className="flex flex-col">
+            <CardHeader>
+              <div className="w-full h-48 relative">
+                <Image
+                  src={'/image.png'}
+                  alt={item.name!}
+                  fill
+                  className="rounded-t object-cover"
+                />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <CardTitle className="text-xl mb-2">{item.name}</CardTitle>
+              <CardDescription>{item.description}</CardDescription>
+              <p className="text-lg font-semibold mt-2">
+                {item.price?.toLocaleString()}원
+              </p>
+            </CardContent>
+            <CardFooter className="flex gap-2 justify-end">
+              <Button
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  addProduct(item);
+                }}
+              >
+                추가
+              </Button>
+              <Button
+                size="sm"
+                variant="destructive"
+                onClick={(e) => {
+                  e.preventDefault();
+                  deleteProduct(item);
+                }}
+              >
+                삭제
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
       <div className="mt-4">
         <Pagination>
