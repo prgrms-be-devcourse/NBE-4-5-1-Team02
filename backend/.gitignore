@@ -42,3 +42,5 @@ src/main/resources/application.yml
 src/main/resources/application-dev.yml
 db_dev.mv.db
 db_dev.trace.db
+/src/main/resources/application-prod.yml
+/src/main/resources/data2.sql
