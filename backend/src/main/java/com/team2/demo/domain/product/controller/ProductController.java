@@ -1,6 +1,8 @@
 package com.team2.demo.domain.product.controller;
 
+import com.team2.demo.domain.order.dto.ProductWithAmount;
 import com.team2.demo.domain.product.dto.ProductDto;
+import com.team2.demo.domain.product.entity.Product;
 import com.team2.demo.domain.product.service.ProductService;
 import com.team2.demo.global.response.PaginationData;
 import com.team2.demo.global.response.RsData;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @Tag(name = "Products", description = "상품 API")
@@ -44,13 +48,13 @@ public class ProductController {
         );
     }
 
-    @Operation(summary = "주문 내 상품 단건 조회 (관리자)", description = "자신이 작성한 주문 내에 포함된 상품들을 페이지네이션 해 조회한다.")
+    @Operation(summary = "주문 내 상품 페이지네이션 조회 (관리자)", description = "자신이 작성한 주문 내에 포함된 상품들을 페이지네이션 해 조회한다.")
     @GetMapping(path={"/admin/orders/{orderId}/products"})
-    public RsData<PaginationData<ProductDto>> getProductsInOrderAdmin(
+    public RsData<PaginationData<ProductDto>> getPaginatedProductsInOrderAdmin(
             @PathVariable(name = "orderId") String orderId,
             @ParameterObject @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
-        Page<ProductDto> items = productService.getProductsInOrder(orderId, pageable);
+        Page<ProductDto> items = productService.getPaginatedProductsInOrderAdmin(orderId, pageable);
 
         PaginationData<ProductDto> products = PaginationData.<ProductDto>builder()
                 .data(items.getContent())
@@ -62,14 +66,24 @@ public class ProductController {
         return RsData.success("Success.", products);
     }
 
-    @Operation(summary = "주문 내 상품 단건 조회 (사용자)", description = "주문 내에 포함된 상품들을 페이지네이션 해 조회한다.")
+    @Operation(summary = "주문 내 상품 조회 (관리자)", description = "자신이 작성한 주문 내에 포함된 모든 상품의 정보와 수량을 조회한다.")
+    @GetMapping(path={"/admin/orders/{orderId}/products/all"})
+    public RsData<List<ProductWithAmount>> getProductsInOrderAdmin(
+            @PathVariable(name = "orderId") String orderId
+    ){
+        List<ProductWithAmount> items = productService.getProductsInOrderAdmin(orderId);
+
+        return RsData.success("Success.", items);
+    }
+
+    @Operation(summary = "주문 내 상품 페이지네이션 조회 (사용자)", description = "주문 내에 포함된 상품들을 페이지네이션 해 조회한다.")
     @GetMapping(path="/orders/{orderId}/products")
-    public RsData<PaginationData<ProductDto>> getProductsInOrder(
+    public RsData<PaginationData<ProductDto>> getPaginatedProductsInOrder(
             @PathVariable(name = "orderId") String orderId,
             @RequestParam(name="email") String email,
             @ParameterObject @PageableDefault(page = 0, size = 10) Pageable pageable
     ){
-        Page<ProductDto> items = productService.getProductsInOrder(orderId, email,pageable);
+        Page<ProductDto> items = productService.getPaginatedProductsInOrder(orderId, email,pageable);
 
         PaginationData<ProductDto> products = PaginationData.<ProductDto>builder()
                 .data(items.getContent())
@@ -79,5 +93,16 @@ public class ProductController {
                 .build();
 
         return RsData.success("Success.", products);
+    }
+
+    @Operation(summary = "주문 내 상품 조회 (사용자)", description = "주문 내에 포함된 모든 상품들과 수량을 조회한다.")
+    @GetMapping(path="/orders/{orderId}/products/all")
+    public RsData<List<ProductWithAmount>> getProductsInOrder(
+            @PathVariable(name = "orderId") String orderId,
+            @RequestParam(name="email") String email
+    ){
+        List<ProductWithAmount> items = productService.getProductsInOrder(orderId, email);
+
+        return RsData.success("Success.", items);
     }
 }
