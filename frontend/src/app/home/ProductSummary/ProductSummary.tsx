@@ -11,6 +11,7 @@ interface ProductSummaryProps {
     string,
     { product: components["schemas"]["ProductDto"]; quantity: number }
   >;
+  readOnly?: boolean;
 }
 
 /*
@@ -33,6 +34,7 @@ text-2xl = 1.5rem  = 24px
 
 export default function ProductSummary({
   products,
+  readOnly = false,
   onDecrease,
   onIncrease,
 }: ProductSummaryProps) {
@@ -54,29 +56,36 @@ export default function ProductSummary({
                   {item.product.productName}
                 </span>
                 <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onIncrease(key);
-                    }}
-                  >
-                    +
-                  </Button>
-                  <span className="w-8 text-center">{item.quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      onDecrease(key);
-                    }}
-                  >
-                    -
-                  </Button>
+                  {!readOnly && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onIncrease(key);
+                        }}
+                      >
+                        +
+                      </Button>
+                      <span className="w-8 text-center">{item.quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onDecrease(key);
+                        }}
+                      >
+                        -
+                      </Button>
+                    </>
+                  )}
+                  {readOnly && (
+                    <span className="text-lg font-medium">{item.quantity}개</span>
+                  )}
                 </div>
               </div>
             );

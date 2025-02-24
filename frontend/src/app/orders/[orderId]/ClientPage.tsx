@@ -144,6 +144,7 @@ export default function ClientPage({
           <CardContent className="pt-6">
             <ProductSummary
               products={productsMap}
+              readOnly={true}
               onIncrease={() => {}}
               onDecrease={() => {}}
             />
