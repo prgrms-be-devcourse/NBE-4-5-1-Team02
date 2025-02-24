@@ -20,6 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useSearchParams } from 'next/navigation';
 import {
@@ -80,7 +81,7 @@ export default function ProductList({
 
   const createPageUrl = (pageNum: number) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('page', pageNum.toString());
+    params.set("page", pageNum.toString());
     return `/?${params.toString()}`;
   };
 
@@ -89,18 +90,21 @@ export default function ProductList({
     const currentPage = products.page || 0;
     const pages = [];
     const maxPages = 5;
-    
-    let startPage = Math.max(0, Math.min(currentPage - Math.floor(maxPages / 2), totalPages - maxPages));
+
+    let startPage = Math.max(
+      0,
+      Math.min(currentPage - Math.floor(maxPages / 2), totalPages - maxPages)
+    );
     let endPage = Math.min(startPage + maxPages, totalPages);
-    
+
     if (endPage - startPage < maxPages) {
       startPage = Math.max(0, endPage - maxPages);
     }
-    
+
     for (let i = startPage; i < endPage; i++) {
       pages.push(i);
     }
-    
+
     setPageNums(pages);
   }, [products.totalPages, products.page]);
 

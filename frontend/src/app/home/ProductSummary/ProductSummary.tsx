@@ -36,6 +36,7 @@ export default function ProductSummary({
   onDecrease,
   onIncrease,
 }: ProductSummaryProps) {
+  console.log("products:", products);
   return (
     <div className="flex flex-col w-full">
       <div className="w-full pb-4 border-b-2 border-black sticky top-0 bg-card z-10">

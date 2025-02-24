@@ -126,8 +126,28 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 주문 내 상품 단건 조회 (사용자)
+         * 주문 내 상품 페이지네이션 조회 (사용자)
          * @description 주문 내에 포함된 상품들을 페이지네이션 해 조회한다.
+         */
+        get: operations["getPaginatedProductsInOrder"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/orders/{orderId}/products/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 주문 내 상품 조회 (사용자)
+         * @description 주문 내에 포함된 모든 상품들과 수량을 조회한다.
          */
         get: operations["getProductsInOrder"];
         put?: never;
@@ -186,8 +206,28 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 주문 내 상품 단건 조회 (관리자)
+         * 주문 내 상품 페이지네이션 조회 (관리자)
          * @description 자신이 작성한 주문 내에 포함된 상품들을 페이지네이션 해 조회한다.
+         */
+        get: operations["getPaginatedProductsInOrderAdmin"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/orders/{orderId}/products/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 주문 내 상품 조회 (관리자)
+         * @description 자신이 작성한 주문 내에 포함된 모든 상품의 정보와 수량을 조회한다.
          */
         get: operations["getProductsInOrderAdmin"];
         put?: never;
@@ -353,6 +393,17 @@ export interface components {
         RsDataOrderInfoWithoutItemDto: {
             message?: string;
             data?: components["schemas"]["OrderInfoWithoutItemDto"];
+            /** Format: int32 */
+            code?: number;
+        };
+        ProductWithAmount: {
+            product?: components["schemas"]["Product"];
+            /** Format: int32 */
+            amount?: number;
+        };
+        RsDataListProductWithAmount: {
+            message?: string;
+            data?: components["schemas"]["ProductWithAmount"][];
             /** Format: int32 */
             code?: number;
         };
@@ -601,7 +652,7 @@ export interface operations {
             };
         };
     };
-    getProductsInOrder: {
+    getPaginatedProductsInOrder: {
         parameters: {
             query: {
                 email: string;
@@ -622,6 +673,30 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["RsDataPaginationDataProductDto"];
+                };
+            };
+        };
+    };
+    getProductsInOrder: {
+        parameters: {
+            query: {
+                email: string;
+            };
+            header?: never;
+            path: {
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RsDataListProductWithAmount"];
                 };
             };
         };
@@ -672,7 +747,7 @@ export interface operations {
             };
         };
     };
-    getProductsInOrderAdmin: {
+    getPaginatedProductsInOrderAdmin: {
         parameters: {
             query: {
                 pageable: components["schemas"]["Pageable"];
@@ -692,6 +767,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["RsDataPaginationDataProductDto"];
+                };
+            };
+        };
+    };
+    getProductsInOrderAdmin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                orderId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RsDataListProductWithAmount"];
                 };
             };
         };
