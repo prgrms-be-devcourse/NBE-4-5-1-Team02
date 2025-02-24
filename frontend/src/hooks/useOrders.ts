@@ -19,7 +19,7 @@ export default function useOrder(orderId: string) {
     deliveryStatus: "",
     orderDate: "",
     items: [],
-    totalPrice: 0,
+    totalAmount: 0,
   });
   const [availableProducts, setAvailableProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,14 +31,15 @@ export default function useOrder(orderId: string) {
         const orderData = await fetchOrderData(orderId);
         const orderProducts = await fetchOrderProductsData(orderId);
 
-        const totalPrice = orderProducts.reduce(
-          (sum, item) => sum + item.price * item.quantity,
+        const totalAmount = orderProducts.reduce(
+          (sum: number, item: OrderItem) => sum + item.price * item.quantity,
           0
         );
+
         setOrder({
           ...orderData,
           items: orderProducts,
-          totalPrice,
+          totalAmount,
         });
 
         const products = await fetchAllProducts();
@@ -54,14 +55,14 @@ export default function useOrder(orderId: string) {
   }, [orderId]);
 
   const updateTotalPrice = (updatedItems: OrderItem[]) => {
-    const newTotalPrice = updatedItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
+    const newTotalAmount = updatedItems.reduce(
+      (sum: number, item: OrderItem) => sum + item.price * item.quantity,
       0
     );
     setOrder((prev) => ({
       ...prev,
       items: updatedItems,
-      totalPrice: newTotalPrice,
+      totalAmount: newTotalAmount,
     }));
   };
 
