@@ -36,6 +36,9 @@ public class OrderRequestDto {
     @Valid
     private Buyer buyer;
 
+    @NotNull(message = "배송 상태를 입력해야 합니다.")
+    private Order.DeliveryStatus deliveryStatus;
+
     // 엔티티 -> DTO 변환
     public static OrderRequestDto of(Order order) {
 

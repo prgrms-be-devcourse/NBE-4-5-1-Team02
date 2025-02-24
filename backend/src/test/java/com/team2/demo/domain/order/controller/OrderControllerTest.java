@@ -16,10 +16,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -179,7 +178,12 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
+                .andExpect(handler().methodName("payment"))
+                .andExpect(handler().handlerType(OrderController.class))
+                .andExpect(jsonPath("$.data.products").isArray())
+                .andExpect(jsonPath("$.data.totalAmount").value(3000))
                 .andDo(print());
+
     }
 
     @Test
@@ -209,7 +213,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("주문 생성 - 제품 id 찾지 못함.")
+    @DisplayName("주문 생성 - email 형식 다름.")
     void paymentTest3() throws Exception{
         //초기 데이터
         String jsonRequest = """
@@ -231,6 +235,132 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 수정")
+    public void updateOrder() throws Exception {
+        String orderId = "order-11111-22222-33331";
+        String email = "email1@email.com";
+        String requestJson = String.format("""
+            {
+                "address": "updated addr",
+                "zipcode": 456456,
+                "items": [
+                    {"productId": "product-11111-22222-33331", "quantity": 3},
+                    {"productId": "product-11111-22222-33332", "quantity": 2}
+                ],
+                "buyer": {
+                    "email": "%s"
+                }
+            }
+            """, email);
+
+        mvc.perform(put("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("ok"))
+                .andExpect(jsonPath("$.data.orderId").value(orderId))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 수정 - 배송 중, 배송 완료 수정 불가")
+    public void updateOrder2() throws Exception {
+        String orderId = "order-11111-22222-33333";
+        String email = "email2@email.com";
+        String requestJson = String.format("""
+            {
+                "address": "updated addr for shipped order",
+                "zipcode": 789789,
+                "items": [
+                    {"productId": "product-11111-22222-33331", "quantity": 1}
+                ],
+                "buyer": {
+                    "email": "%s"
+                }
+            }
+            """, email);
+
+        mvc.perform(put("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("배송 중이거나 배송 완료된 주문은 수정할 수 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 수정 - 주문 상품 모두 삭제로 주문 취소")
+    public void updateOrder3() throws Exception {
+        String orderId = "order-11111-22222-33332";
+        String email = "email1@email.com";
+        String requestJson = String.format("""
+            {
+                "address": "updated addr for empty items",
+                "zipcode": 999999,
+                "items": [],
+                "buyer": {
+                    "email": "%s"
+                }
+            }
+            """, email);
+
+        mvc.perform(put("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("주문에 상품이 하나도 없어 주문이 취소되었습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 취소")
+    public void cancelOrder() throws Exception {
+        String orderId = "order-11111-22222-33331";
+        String email = "email1@email.com";
+
+        mvc.perform(delete("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.message").value("주문이 성공적으로 취소되었습니다."))
+                .andExpect(jsonPath("$.data.orderId").value(orderId))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 취소 - 다른 사람의 주문 취소 불가")
+    public void cancelOrder2() throws Exception {
+        String orderId = "order-11111-22222-33331";
+        String email = "email2@email.com";
+
+        mvc.perform(delete("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(403))
+                .andExpect(jsonPath("$.message").value("주문 취소 권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("주문 취소 - 배송 중, 배송 완료 취소 불가")
+    public void cancelOrder3() throws Exception {
+        String orderId = "order-11111-22222-33333";
+        String email = "email2@email.com";
+
+        mvc.perform(delete("/orders/" + orderId)
+                        .param("email", email)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("배송 중이거나 배송 완료된 주문은 취소할 수 없습니다."))
                 .andDo(print());
     }
 }
