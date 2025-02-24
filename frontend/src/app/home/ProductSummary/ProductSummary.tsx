@@ -17,6 +17,7 @@ export default function ProductSummary({
   onDecrease,
   onIncrease,
 }: ProductSummaryProps) {
+  console.log("products:", products);
   return (
     <div className="h-[35%] flex flex-col mb-2">
       <div className="w-[100%] h-fit pb-5 border-b-2 border-black">

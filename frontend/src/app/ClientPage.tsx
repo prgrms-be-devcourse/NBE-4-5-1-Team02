@@ -9,10 +9,10 @@ import ProductList from "./home/ProductList/ProductList";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-type PaginationDataProductDto =
+export type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
 
-type productWithQuantity = {
+export type productWithQuantity = {
   product: components["schemas"]["ProductDto"];
   quantity: number;
 };
@@ -34,10 +34,7 @@ export default function ClientPage({
   const [address, setAddress] = useState<string>("");
   const [zipcode, setZipcode] = useState<string>("");
   const [productsMap, setProductsMap] = useState<
-    Map<
-      string,
-      { product: components["schemas"]["ProductDto"]; quantity: number }
-    >
+    Map<string, productWithQuantity>
   >(new Map());
 
   useEffect(() => {
@@ -71,10 +68,9 @@ export default function ClientPage({
 
   const decreaseQuantityCallBack = useCallback(
     (key: string) => {
-      const changedProductsMap = new Map<
-        string,
-        { product: components["schemas"]["ProductDto"]; quantity: number }
-      >(productsMap);
+      const changedProductsMap = new Map<string, productWithQuantity>(
+        productsMap
+      );
 
       const item = changedProductsMap.get(key);
 
@@ -98,10 +94,9 @@ export default function ClientPage({
 
   const increaseQuantityCallBack = useCallback(
     (key: string) => {
-      const changedProductsMap = new Map<
-        string,
-        { product: components["schemas"]["ProductDto"]; quantity: number }
-      >(productsMap);
+      const changedProductsMap = new Map<string, productWithQuantity>(
+        productsMap
+      );
 
       const item = changedProductsMap.get(key);
 
@@ -120,7 +115,7 @@ export default function ClientPage({
       sum += item.product.productPrice! * item.quantity;
     });
     setAmount(sum);
-    
+
     if (productsMap.size > 0) {
       sessionStorage.setItem(
         "selectedItems",
@@ -158,13 +153,13 @@ export default function ClientPage({
 
   useEffect(() => {
     // 컴포넌트 마운트 시 sessionStorage에 페이지 크기 저장
-    sessionStorage.setItem('productListPageSize', pageSize.toString());
+    sessionStorage.setItem("productListPageSize", pageSize.toString());
   }, [pageSize]);
 
   const handlePageSizeChange = (newSize: number) => {
     const currentParams = new URLSearchParams(window.location.search);
-    currentParams.set('size', newSize.toString());
-    currentParams.set('page', '0');
+    currentParams.set("size", newSize.toString());
+    currentParams.set("page", "0");
     window.location.href = `/?${currentParams.toString()}`;
   };
 
@@ -177,7 +172,9 @@ export default function ClientPage({
             <div className="flex items-center gap-4">
               <h2 className="text-3xl font-bold">상품 목록</h2>
               <div className="flex items-center">
-                <label htmlFor="pageSize" className="mr-2">페이지당 항목 수:</label>
+                <label htmlFor="pageSize" className="mr-2">
+                  페이지당 항목 수:
+                </label>
                 <select
                   id="pageSize"
                   value={pageSize}
@@ -200,7 +197,7 @@ export default function ClientPage({
             productsMap={productsMap}
             setProductsMap={setProductsMap}
           ></ProductList>
-          
+
           <div className="mt-auto w-full flex justify-end">
             <Button
               className="w-32"
@@ -236,7 +233,9 @@ export default function ClientPage({
             </div>
             <div className="flex justify-between items-center mb-4">
               <span className="text-xl font-bold">총 가격</span>
-              <span className="text-xl font-bold">{amount.toLocaleString()}원</span>
+              <span className="text-xl font-bold">
+                {amount.toLocaleString()}원
+              </span>
             </div>
             <Button
               type="button"
