@@ -20,7 +20,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { useSearchParams } from 'next/navigation';
 import {
   Card,
@@ -30,6 +30,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import Link from "next/link";
+import { formatDate } from "@/utils/utility";
 
 type TableProductData = {
   id?: string;
@@ -218,13 +220,14 @@ export default function ProductList({
       <div className="mt-4">
         <Pagination>
           <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious 
-                href={`/?page=${products.page! - 1}`}
-                aria-disabled={products.page === 0} 
-              />
-            </PaginationItem>
-            {products.page === 0 ? null : (
+            {products.page !== 0 && (
+              <PaginationItem>
+                <PaginationPrevious 
+                  href={`/?page=${products.page! - 1}`}
+                />
+              </PaginationItem>
+            )}
+            {products.page! > 1 && (
               <PaginationItem>
                 <PaginationEllipsis />
               </PaginationItem>
@@ -241,17 +244,18 @@ export default function ProductList({
                 </PaginationItem>
               );
             })}
-            {products.page === products.totalPages! - 1 ? null : (
+            {products.page! < products.totalPages! - 2 && (
               <PaginationItem>
                 <PaginationEllipsis />
               </PaginationItem>
             )}
-            <PaginationItem>
-              <PaginationNext 
-                href={`/?page=${Number(products.page!) + 1}`}
-                aria-disabled={products.page === products.totalPages! - 1} 
-              />
-            </PaginationItem>
+            {products.page !== products.totalPages! - 1 && (
+              <PaginationItem>
+                <PaginationNext 
+                  href={`/?page=${Number(products.page!) + 1}`}
+                />
+              </PaginationItem>
+            )}
           </PaginationContent>
         </Pagination>
       </div>
