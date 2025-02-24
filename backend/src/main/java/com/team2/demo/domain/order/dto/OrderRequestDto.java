@@ -33,7 +33,6 @@ public class OrderRequestDto {
     private List<ProductListDto> items;
 
     @NotNull(message = "이메일 입력은 필수입니다.")
-    @Valid
     private Buyer buyer;
 
     @NotNull(message = "배송 상태를 입력해야 합니다.")
@@ -51,7 +50,6 @@ public class OrderRequestDto {
 
     @Getter
     public class Buyer{
-        @Email
         private String email;
     }
 }

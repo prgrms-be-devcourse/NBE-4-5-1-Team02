@@ -42,5 +42,3 @@ src/main/resources/application.yml
 src/main/resources/application-dev.yml
 db_dev.mv.db
 db_dev.trace.db
-/apiV1.json
-/src/main/resources/application-dev.yml
