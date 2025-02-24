@@ -133,7 +133,6 @@ export default function ProductList({
     setProductsMap(changedProductMap);
   };
   const deleteProduct = (item: TableProductData) => {
-    // 값을 바꿀 맵 선언
     const changedProductMap = new Map<
       string,
       {
@@ -141,20 +140,12 @@ export default function ProductList({
         quantity: number;
       }
     >(productsMap);
-    // 만약 상품이 존재하고 수량이 1보다 크면
+
+    // 상품이 존재하면 완전히 삭제
     if (changedProductMap.has(item.id!)) {
-      if (changedProductMap.get(item.id!)!.quantity! > 1) {
-        // 상품 수량을 1 줄인다
-        changedProductMap.set(item.id!, {
-          product: toProductDto(item),
-          quantity: changedProductMap.get(item.id!)!.quantity - 1,
-        });
-        // 상품이 존재하고 수량이 1개라면
-      } else if (changedProductMap.get(item.id!)?.quantity == 1) {
-        // 상품을 맵에서 제거한다.
-        changedProductMap.delete(item.id!);
-      }
+      changedProductMap.delete(item.id!);
     }
+    
     setProductsMap(changedProductMap);
   };
 

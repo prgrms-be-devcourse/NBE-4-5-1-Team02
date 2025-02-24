@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import OrderConfirmModal from "@/components/OrderConfirmModal";
 
 type PaginationDataProductDto =
   components["schemas"]["PaginationDataProductDto"];
@@ -50,6 +51,8 @@ export default function ClientPage({
       { product: components["schemas"]["ProductDto"]; quantity: number }
     >
   >(new Map());
+
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   useEffect(() => {
     const savedItems = sessionStorage.getItem("selectedItems");
@@ -141,30 +144,51 @@ export default function ClientPage({
   }, [productsMap]);
 
   const makeOrder = async () => {
-    const productsData: { productId: string; quantity: number }[] = [];
-    productsMap.forEach((value, key) => {
-      productsData.push({
-        productId: key,
-        quantity: value.quantity,
+    try {
+      // 입력값 검증
+      if (!email || !address || !zipcode) {
+        alert("이메일, 주소, 우편번호를 모두 입력해주세요.");
+        return;
+      }
+
+      if (productsMap.size === 0) {
+        alert("상품을 선택해주세요.");
+        return;
+      }
+
+      const productsData: { productId: string; quantity: number }[] = [];
+      productsMap.forEach((value, key) => {
+        productsData.push({
+          productId: key,
+          quantity: value.quantity,
+        });
       });
-    });
 
-    const response = await client.POST("/orders", {
-      body: {
-        address: address,
-        buyer: {
-          email: email,
+      const response = await client.POST("/orders", {
+        body: {
+          address: address,
+          buyer: {
+            email: email,
+          },
+          zipcode: Number(zipcode),
+          items: productsData,
         },
-        zipcode: Number(zipcode),
-        items: productsData,
-      },
-    });
+      });
 
-    if (response.error) {
-      alert("결제 실패");
-      return;
+      if (response.error) {
+        console.error("주문 생성 실패:", response.error);
+        alert("주문 생성에 실패했습니다. 다시 시도해주세요.");
+        return;
+      }
+
+      alert("주문이 성공적으로 생성되었습니다.");
+      // 주문 성공 후 장바구니 비우기
+      setProductsMap(new Map());
+      
+    } catch (error) {
+      console.error("주문 처리 중 오류 발생:", error);
+      alert("주문 처리 중 오류가 발생했습니다.");
     }
-    alert("주문 생성 성공");
   };
 
   useEffect(() => {
@@ -177,6 +201,15 @@ export default function ClientPage({
     currentParams.set('size', newSize.toString());
     currentParams.set('page', '0');
     window.location.href = `/?${currentParams.toString()}`;
+  };
+
+  const handleOrderClick = () => {
+    setIsOrderModalOpen(true);
+  };
+
+  const handleOrderConfirm = async () => {
+    setIsOrderModalOpen(false);
+    await makeOrder(); // 기존의 makeOrder 함수 호출
   };
 
   return (
@@ -254,12 +287,18 @@ export default function ClientPage({
               <span className="text-xl font-bold">총 가격</span>
               <span className="text-xl font-bold">{amount.toLocaleString()}원</span>
             </div>
-            <Button className="w-full" size="lg" onClick={makeOrder}>
+            <Button className="w-full" size="lg" onClick={handleOrderClick}>
               주문하기
             </Button>
           </CardFooter>
         </Card>
       </div>
+      <OrderConfirmModal
+        isOpen={isOrderModalOpen}
+        onConfirm={handleOrderConfirm}
+        onCancel={() => setIsOrderModalOpen(false)}
+        totalAmount={amount}
+      />
     </div>
   );
 }
