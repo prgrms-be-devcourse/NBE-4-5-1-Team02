@@ -176,37 +176,25 @@ export default function ClientPage({
       {/* 왼쪽 상품 목록 섹션 */}
       <div className="w-3/4 min-h-screen p-8">
         <div className="flex flex-col h-full">
-          <div className="p-6 flex justify-between border-b-4">
-            <div className="flex items-center gap-4">
-              <h2 className="text-3xl font-bold">상품 목록</h2>
-              <div className="flex items-center">
-                <label htmlFor="pageSize" className="mr-2">페이지당 항목 수:</label>
-                <select
-                  id="pageSize"
-                  value={pageSize}
-                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                  className="border rounded p-1"
-                >
-                  <option value="1">1개</option>
-                  <option value="5">5개</option>
-                  <option value="10">10개</option>
-                  <option value="15">15개</option>
-                  <option value="20">20개</option>
-                </select>
-              </div>
+          <div className="p-6 flex items-center gap-4 border-b-4">
+            <h2 className="text-2xl font-bold whitespace-nowrap">상품 목록</h2>
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <label htmlFor="pageSize">페이지당 항목 수:</label>
+              <select
+                id="pageSize"
+                value={pageSize}
+                onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                className="border rounded p-1"
+              >
+                <option value="1">1개</option>
+                <option value="5">5개</option>
+                <option value="10">10개</option>
+                <option value="15">15개</option>
+                <option value="20">20개</option>
+              </select>
             </div>
-            <SearchInput onSearch={searchDataCallBack}></SearchInput>
-          </div>
-
-          <ProductList
-            products={products}
-            productsMap={productsMap}
-            setProductsMap={setProductsMap}
-          ></ProductList>
-          
-          <div className="mt-auto w-full flex justify-end">
             <Button
-              className="w-32"
+              className="whitespace-nowrap"
               onClick={(e) => {
                 e.preventDefault();
                 router.push("/orders");
@@ -214,7 +202,16 @@ export default function ClientPage({
             >
               주문 목록
             </Button>
+            <div className="flex-grow flex justify-end">
+              <SearchInput onSearch={searchDataCallBack} />
+            </div>
           </div>
+
+          <ProductList
+            products={products}
+            productsMap={productsMap}
+            setProductsMap={setProductsMap}
+          ></ProductList>
         </div>
       </div>
 
