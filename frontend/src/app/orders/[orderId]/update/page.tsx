@@ -175,11 +175,14 @@ export default function OrderUpdatePage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             address: order.address,
-            zipcode: order.zipcode,
+            zipcode: parseInt(order.zipcode, 10),
             items: order.items.map((item) => ({
               productId: item.productId,
               quantity: item.quantity,
             })),
+            buyer: {
+              email: order.buyerEmail,
+            },
           }),
         }
       );
