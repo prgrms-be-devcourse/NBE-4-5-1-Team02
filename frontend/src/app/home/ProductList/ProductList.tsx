@@ -172,7 +172,7 @@ export default function ProductList({
             <CardHeader className="p-3">
               <div className="w-full h-24 relative">
                 <Image
-                  src={'/image.png'}
+                  src={`/${item.name.replace(/\s+/g, '')}.png`}
                   alt={item.name!}
                   fill
                   className="rounded-t object-cover"
