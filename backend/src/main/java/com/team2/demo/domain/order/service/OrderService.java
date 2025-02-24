@@ -115,6 +115,9 @@ public class OrderService {
         System.out.println("결제 진행 서비스 시작");
 
         User user = userService.findByEmail(body.getBuyer().getEmail());
+        if(user == null){
+            user=userService.addUser(new UserDto(body.getBuyer()));
+        }
 
         int totalAmount = 0;
 
