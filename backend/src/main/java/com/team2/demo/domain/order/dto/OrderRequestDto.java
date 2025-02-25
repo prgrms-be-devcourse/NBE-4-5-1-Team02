@@ -1,6 +1,7 @@
 package com.team2.demo.domain.order.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.product.dto.ProductListDto;
 import com.team2.demo.domain.user.dto.Buyer;
@@ -33,7 +34,10 @@ public class OrderRequestDto {
     private Buyer buyer;
 
     @NotNull(message = "배송 상태를 입력해야 합니다.")
+    @JsonProperty("deliveryStatus")
     private Order.DeliveryStatus deliveryStatus;
+
+
 
     // 엔티티 -> DTO 변환
     public static OrderRequestDto of(Order order) {

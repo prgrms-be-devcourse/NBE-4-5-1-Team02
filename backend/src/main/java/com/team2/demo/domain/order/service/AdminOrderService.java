@@ -28,12 +28,15 @@ public class AdminOrderService {
         Order order = orderRepository.findById(orderId).
                 orElseThrow(() -> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderId));
 
+
+        int totalAmount = order.getTotalAmount();
+
         Map<Product, Integer> productAmounts = new HashMap<>();
 
-        for(Product product : order.getProducts()){
-            if( productAmounts.containsKey(product)) {
+        for (Product product : order.getProducts()) {
+            if (productAmounts.containsKey(product)) {
                 productAmounts.put(product, productAmounts.get(product) + 1);
-            }else{
+            } else {
                 productAmounts.put(product, 1);
             }
         }
@@ -42,15 +45,18 @@ public class AdminOrderService {
                 entry -> new ProductWithAmount(entry.getKey(), entry.getValue())
         ).toList();
 
+
         //주문 정보 업데이트
-        order.updateOrder(productWithAmounts, request.getAddress(), request.getZipcode(), request.getDeliveryStatus() );
+        int updatedTotalAmount = order.calculateTotalPrice(productWithAmounts);
+
+        order.updateOrder(productWithAmounts, request.getAddress(), request.getZipcode(), request.getDeliveryStatus());
         return new OrderDto(order);
     }
 
     // 주문 삭제 기능
-    public void deleteOrder(String orderUuid){
+    public void deleteOrder(String orderUuid) {
         Order order = orderRepository.findByOrderUuid(orderUuid)
-                .orElseThrow(()-> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderUuid));
+                .orElseThrow(() -> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderUuid));
 
         orderRepository.delete(order);
     }

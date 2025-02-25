@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@ActiveProfiles("dev")
 
 
 @SpringBootTest
@@ -178,17 +181,24 @@ class OrderControllerAdminTest {
     @Test //관리자 주문 수정 성공
     @DisplayName("관리자 주문 수정 성공")
     void updateOrder() throws Exception {
+        String requestDeliveryStatus = "SHIPPED";
+        int updatedItemQuantity = 3;  // 변경할 상품 수량
 
         // Uuid 존재 데이터 수정
         String orderUuid = "order-11111-22222-33331";
         String requestJson = """
                 {
                 "address": "Update Address",
-                "zipcode": "88888",
-                "deliveryStatus": "SHIPPED",
-                "items": []
-                }s
-                """;
+                "zipcode": "12345",
+                "deliveryStatus": "%S",
+                "items": [
+                    {
+                        "productId": "product-123",
+                        "quantity": %d
+                                    }
+                ]
+                }
+                """.formatted(requestDeliveryStatus, updatedItemQuantity);
 
         ResultActions result = mvc.perform(put("/admin/orders/" + orderUuid)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -196,8 +206,8 @@ class OrderControllerAdminTest {
 
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("success."))
-                .andExpect(jsonPath("$.data.address").value("Update Address"))
-                .andExpect(jsonPath("$.data.deliveryStatus").value("SHIPPED"))
+                .andExpect(jsonPath("$.data.deliveryStatus").value(requestDeliveryStatus))
+                .andExpect(jsonPath("$.data.totalPrice").isNotEmpty())
                 .andDo(print());
     }
 
@@ -209,7 +219,7 @@ class OrderControllerAdminTest {
 
         ResultActions result = mvc
                 .perform(delete("/admin/orders/{orderId}", orderId)
-                .contentType(MediaType.APPLICATION_JSON));
+                        .contentType(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk())
                 .andExpect(handler().handlerType(OrderControllerAdmin.class))

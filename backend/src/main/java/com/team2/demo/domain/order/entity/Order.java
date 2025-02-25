@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-@Entity(name="ORDERS")
+@Entity(name = "ORDERS")
 @Table(name = "ORDERS")
 @Getter
 @Builder
@@ -61,9 +61,9 @@ public class Order {
     @Column(name = "DELIVERY_STATUS")
     private DeliveryStatus deliveryStatus;
 
-    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus  deliveryStatus) {
+    public Order(User user, String deliveryAddress, Integer zipCode, DeliveryStatus deliveryStatus) {
 
-        this.buyer= user;
+        this.buyer = user;
         this.deliveryAddress = deliveryAddress;
         this.zipCode = zipCode;
         this.deliveryStatus = deliveryStatus;
@@ -87,13 +87,14 @@ public class Order {
 
     public void updateOrder(List<ProductWithAmount> updatedProducts, String address, Integer zipCode, DeliveryStatus deliveryStatus) {
         int totalPrice = calculateTotalPrice(updatedProducts);
+
         this.totalAmount = totalPrice;
-        this.deliveryAddress= address;
+        this.deliveryAddress = address;
         this.zipCode = zipCode;
         this.deliveryStatus = deliveryStatus;
         this.modifiedDate = LocalDateTime.now();
         this.products.clear();
-       // this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
+
         for (ProductWithAmount pwa : updatedProducts) {
             for (int i = 0; i < pwa.amount(); i++) {
                 this.products.add(pwa.product());
@@ -101,12 +102,15 @@ public class Order {
         }
     }
 
-    private static int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
+    public int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
         int totalPrice = 0;
-        for(ProductWithAmount item : updatedProducts){
-            totalPrice += item.product().getProductPrice()*item.amount();
+        for (ProductWithAmount item : updatedProducts) {
+            totalPrice += item.product().getProductPrice() * item.amount();
         }
         return totalPrice;
+    }
+
+    public void updateOrder(List<ProductWithAmount> productWithAmounts, String address, Integer zipcode, DeliveryStatus deliveryStatus, String email) {
     }
 
     public enum DeliveryStatus {
@@ -114,8 +118,7 @@ public class Order {
     }
 
     public void updateDeliveryInfo(String deliveryAddress, Integer zipCode) {
-        this.deliveryAddress = deliveryAddress;
-        this.zipCode = zipCode;
+
     }
 
     public void updateDeliveryStatus(DeliveryStatus deliveryStatus) {
