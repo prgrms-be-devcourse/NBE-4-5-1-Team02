@@ -71,52 +71,56 @@ INSERT INTO `MEMBER` VALUES('u7', 'george@example.com', now(), now());
 
 -- ORDERS 테이블
 -- u1의 주문 (5건)
-INSERT INTO `ORDERS` VALUES('o1', 'u1', now(), now(), 15000, 'Seoul, Gangnam-gu', 101010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o2', 'u1', now(), now(), 22000, 'Seoul, Jongno-gu', 101011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o3', 'u1', now(), now(), 18000, 'Seoul, Mapo-gu', 101012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o4', 'u1', now(), now(), 30000, 'Seoul, Yongsan-gu', 101013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o5', 'u1', now(), now(), 25000, 'Seoul, Seocho-gu', 101014, 'CANCELLED');
+INSERT INTO `ORDERS` VALUES('o1', 'u1', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 1200 + 1300, 'Seoul, Gangnam-gu', 101010, 'PENDING');  -- 총액: 2500
+INSERT INTO `ORDERS` VALUES('o2', 'u1', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 1250 + 1400, 'Seoul, Jongno-gu', 101011, 'PENDING');  -- 총액: 2650
+INSERT INTO `ORDERS` VALUES('o3', 'u1', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 1350 + 800, 'Seoul, Mapo-gu', 101012, 'SHIPPED');   -- 총액: 2150
+INSERT INTO `ORDERS` VALUES('o4', 'u1', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 900 + 850, 'Seoul, Yongsan-gu', 101013, 'DELIVERED'); -- 총액: 1750
+INSERT INTO `ORDERS` VALUES('o5', 'u1', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 950 + 800, 'Seoul, Seocho-gu', 101014, 'CANCELLED'); -- 총액: 1750
+
 
 -- u2의 주문 (4건)
-INSERT INTO `ORDERS` VALUES('o6', 'u2', now(), now(), 17000, 'Busan, Haeundae', 202010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o7', 'u2', now(), now(), 19000, 'Busan, Suyeong-gu', 202011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o8', 'u2', now(), now(), 21000, 'Busan, Dongnae-gu', 202012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o9', 'u2', now(), now(), 16000, 'Busan, Nam-gu', 202013, 'DELIVERED');
+INSERT INTO `ORDERS` VALUES('o6', 'u2', now(), now(), 1500 + 1600, 'Busan, Haeundae', 202010, 'PENDING');   -- 총액: 3100
+INSERT INTO `ORDERS` VALUES('o7', 'u2', now(), now(), 1700 + 1550, 'Busan, Suyeong-gu', 202011, 'PENDING');   -- 총액: 3250
+INSERT INTO `ORDERS` VALUES('o8', 'u2', now(), now(), 1650 + 2000, 'Busan, Dongnae-gu', 202012, 'SHIPPED');    -- 총액: 3650
+INSERT INTO `ORDERS` VALUES('o9', 'u2', now(), now(), 2200 + 2100, 'Busan, Nam-gu', 202013, 'DELIVERED');    -- 총액: 4300
+
 
 -- u3의 주문 (6건)
-INSERT INTO `ORDERS` VALUES('o10', 'u3', now(), now(), 28000, 'Incheon, Bupyeong', 303010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o11', 'u3', now(), now(), 26000, 'Incheon, Namdong', 303011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o12', 'u3', now(), now(), 32000, 'Incheon, Yeonsu', 303012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o13', 'u3', now(), now(), 35000, 'Incheon, Jung', 303013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o14', 'u3', now(), now(), 30000, 'Incheon, Dong', 303014, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o15', 'u3', now(), now(), 27000, 'Incheon, Bupyeong', 303015, 'PENDING');
+INSERT INTO `ORDERS` VALUES('o10', 'u3', now(), now(), 2300 + 2400, 'Incheon, Bupyeong', 303010, 'PENDING');  -- 총액: 4700
+INSERT INTO `ORDERS` VALUES('o11', 'u3', now(), now(), 3000 + 3200, 'Incheon, Namdong', 303011, 'PENDING');   -- 총액: 6200
+INSERT INTO `ORDERS` VALUES('o12', 'u3', now(), now(), 3100 + 3300, 'Incheon, Yeonsu', 303012, 'SHIPPED');    -- 총액: 6400
+INSERT INTO `ORDERS` VALUES('o13', 'u3', now(), now(), 3400 + 1200, 'Incheon, Jung', 303013, 'DELIVERED');   -- 총액: 4600
+INSERT INTO `ORDERS` VALUES('o14', 'u3', now(), now(), 1300 + 1250, 'Incheon, Dong', 303014, 'PENDING');      -- 총액: 2550
+INSERT INTO `ORDERS` VALUES('o15', 'u3', now(), now(), 1400 + 1350, 'Incheon, Bupyeong', 303015, 'PENDING');   -- 총액: 2750
+
 
 -- u4의 주문 (4건)
-INSERT INTO `ORDERS` VALUES('o16', 'u4', now(), now(), 24000, 'Daegu, Suseong-gu', 404010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o17', 'u4', now(), now(), 26000, 'Daegu, Nam-gu', 404011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o18', 'u4', now(), now(), 23000, 'Daegu, Dalseo-gu', 404012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o19', 'u4', now(), now(), 25000, 'Daegu, Jung-gu', 404013, 'DELIVERED');
+INSERT INTO `ORDERS` VALUES('o16', 'u4', now(), now(), 800 + 900, 'Daegu, Suseong-gu', 404010, 'PENDING');    -- 총액: 1700
+INSERT INTO `ORDERS` VALUES('o17', 'u4', now(), now(), 850 + 950, 'Daegu, Nam-gu', 404011, 'PENDING');       -- 총액: 1800
+INSERT INTO `ORDERS` VALUES('o18', 'u4', now(), now(), 800 + 1500, 'Daegu, Dalseo-gu', 404012, 'SHIPPED');    -- 총액: 2300
+INSERT INTO `ORDERS` VALUES('o19', 'u4', now(), now(), 1600 + 1700, 'Daegu, Jung-gu', 404013, 'DELIVERED');  -- 총액: 3300
 
 -- u5의 주문 (5건)
-INSERT INTO `ORDERS` VALUES('o20', 'u5', now(), now(), 31000, 'Daejeon, Yuseong-gu', 505010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o21', 'u5', now(), now(), 29000, 'Daejeon, Seo-gu', 505011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o22', 'u5', now(), now(), 33000, 'Daejeon, Jung-gu', 505012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o23', 'u5', now(), now(), 30000, 'Daejeon, Dong-gu', 505013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o24', 'u5', now(), now(), 32000, 'Daejeon, Daedeok-gu', 505014, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o20', 'u5', now(), now(), 1550 + 1650, 'Daejeon, Yuseong-gu', 505010, 'PENDING');  -- 총액: 3200
+INSERT INTO `ORDERS` VALUES('o21', 'u5', now(), now(), 2000 + 2200, 'Daejeon, Seo-gu', 505011, 'PENDING');     -- 총액: 4200
+INSERT INTO `ORDERS` VALUES('o22', 'u5', now(), now(), 2100 + 2300, 'Daejeon, Jung-gu', 505012, 'SHIPPED');     -- 총액: 4400
+INSERT INTO `ORDERS` VALUES('o23', 'u5', now(), now(), 2400 + 3000, 'Daejeon, Dong-gu', 505013, 'DELIVERED');   -- 총액: 5400
+INSERT INTO `ORDERS` VALUES('o24', 'u5', now(), now(), 3200 + 3100, 'Daejeon, Daedeok-gu', 505014, 'PENDING');   -- 총액: 6300
 
 -- u6의 주문 (4건)
-INSERT INTO `ORDERS` VALUES('o25', 'u6', now(), now(), 20000, 'Gwangju, Buk-gu', 606010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o26', 'u6', now(), now(), 22000, 'Gwangju, Dong-gu', 606011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o27', 'u6', now(), now(), 24000, 'Gwangju, Nam-gu', 606012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o28', 'u6', now(), now(), 21000, 'Gwangju, Seo-gu', 606013, 'DELIVERED');
+INSERT INTO `ORDERS` VALUES('o25', 'u6', now(), now(), 3300 + 3400, 'Gwangju, Buk-gu', 606010, 'PENDING');   -- 총액: 6700
+INSERT INTO `ORDERS` VALUES('o26', 'u6', now(), now(), 1200 + 1300, 'Gwangju, Dong-gu', 606011, 'PENDING');    -- 총액: 2500
+INSERT INTO `ORDERS` VALUES('o27', 'u6', now(), now(), 1250 + 1400, 'Gwangju, Nam-gu', 606012, 'SHIPPED');     -- 총액: 2650
+INSERT INTO `ORDERS` VALUES('o28', 'u6', now(), now(), 1350 + 800, 'Gwangju, Seo-gu', 606013, 'DELIVERED');    -- 총액: 2150
+
 
 -- u7의 주문 (6건)
-INSERT INTO `ORDERS` VALUES('o29', 'u7', now(), now(), 35000, 'Ulsan, Nam-gu', 707010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o30', 'u7', now(), now(), 33000, 'Ulsan, Dong-gu', 707011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o31', 'u7', now(), now(), 36000, 'Ulsan, Jung-gu', 707012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o32', 'u7', now(), now(), 37000, 'Ulsan, Buk-gu', 707013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o33', 'u7', now(), now(), 34000, 'Ulsan, Nam-gu', 707014, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o34', 'u7', now(), now(), 38000, 'Ulsan, Dong-gu', 707015, 'PENDING');
+INSERT INTO `ORDERS` VALUES('o29', 'u7', now(), now(), 900 + 850, 'Ulsan, Nam-gu', 707010, 'PENDING');     -- 총액: 1750
+INSERT INTO `ORDERS` VALUES('o30', 'u7', now(), now(), 950 + 800, 'Ulsan, Dong-gu', 707011, 'PENDING');     -- 총액: 1750
+INSERT INTO `ORDERS` VALUES('o31', 'u7', now(), now(), 1500 + 1600, 'Ulsan, Jung-gu', 707012, 'SHIPPED');    -- 총액: 3100
+INSERT INTO `ORDERS` VALUES('o32', 'u7', now(), now(), 1700 + 1550, 'Ulsan, Buk-gu', 707013, 'DELIVERED');  -- 총액: 3250
+INSERT INTO `ORDERS` VALUES('o33', 'u7', now(), now(), 1650 + 2000, 'Ulsan, Nam-gu', 707014, 'PENDING');    -- 총액: 3650
+INSERT INTO `ORDERS` VALUES('o34', 'u7', now(), now(), 2200 + 2100, 'Ulsan, Dong-gu', 707015, 'PENDING');    -- 총액: 4300
 
 -- PRODUCT 테이블 (25개 상품)
 -- coffeeBean 카테고리
