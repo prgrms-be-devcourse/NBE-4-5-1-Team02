@@ -3,7 +3,6 @@ package com.team2.demo.domain.order.controller;
 import com.team2.demo.domain.order.dto.*;
 import com.team2.demo.domain.order.entity.Order;
 import com.team2.demo.domain.order.service.OrderService;
-import com.team2.demo.domain.user.entity.User;
 import com.team2.demo.domain.user.service.UserService;
 import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
@@ -11,15 +10,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 
 @Tag(name = "Orders", description = "주문 API")
@@ -81,8 +79,8 @@ public class OrderController {
                     주문에 포함된 모든 상품을 페이지네이션된 결과로 보여주는 API를 추가로 호출해야 완전한 주문 상세 결과를 얻을 수 있다.
                     """)
     @GetMapping(value = "/{orderId}")
-    public RsData<OrderInfoWithoutItemDto> getOrderInfo(@PathVariable String orderId,
-                                                        @RequestParam(name = "email") String email) {
+    public RsData<OrderInfoWithoutItemDto> getOrderInfo(@NotEmpty @PathVariable String orderId,
+                                                        @Valid @NotNull @Email @RequestParam(name = "email") String email) {
         OrderInfoWithoutItemDto order = orderService.findOrder(orderId, email);
 
         return RsData.success("주문 상세 조회 성공", order);
@@ -91,7 +89,7 @@ public class OrderController {
 
     @Operation(summary = "주문 생성 ", description = "사용자가 주문을 생성한다.")
     @PostMapping
-    public RsData<OrderInfoDto> payment(@RequestBody OrderRequestDto body) {
+    public RsData<OrderInfoDto> payment(@Valid @RequestBody OrderRequestDto body) {
 
         System.out.println("이메일조회"+body.getBuyer().getEmail());
 

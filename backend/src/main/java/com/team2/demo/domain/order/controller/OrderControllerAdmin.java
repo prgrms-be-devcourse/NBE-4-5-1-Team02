@@ -1,5 +1,6 @@
 package com.team2.demo.domain.order.controller;
 
+import com.team2.demo.domain.order.dto.AdminOrderRequestDto;
 import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.dto.OrderInfoWithoutItemDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
@@ -9,6 +10,7 @@ import com.team2.demo.global.response.OrderListResponse;
 import com.team2.demo.global.response.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -52,7 +54,7 @@ public class OrderControllerAdmin {
     @PutMapping("/{orderUuid}")
     public RsData<OrderDto> updateOrder(
             @PathVariable String orderUuid,
-            @RequestBody OrderRequestDto order) {
+            @Valid @RequestBody AdminOrderRequestDto order) {
         OrderDto updateOrder = adminOrderService.updateOrder(orderUuid, order);
         return RsData.success("success.", updateOrder);
     }

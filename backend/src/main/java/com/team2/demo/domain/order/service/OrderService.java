@@ -15,10 +15,9 @@ import com.team2.demo.global.exception.order.NoSuchOrderException;
 import com.team2.demo.global.exception.product.NoSuchProductException;
 import com.team2.demo.global.exception.user.AccessDeniedException;
 import com.team2.demo.global.response.RsData;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +51,7 @@ public class OrderService {
 
     // 사용자: 주문 수정
     @Transactional
-    public OrderDto updateOrder(String orderId, String email, OrderRequestDto request) {
+    public OrderDto updateOrder(String orderId, String email, @Valid OrderRequestDto request) {
         Order order = orderRepository.findByOrderUuid(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문을 찾을 수 없습니다."));
 
@@ -127,7 +126,7 @@ public class OrderService {
         List<Pair<Product, Integer>> productsInOrder = new ArrayList<>();
         for (ProductListDto item: items){
             Product product = productRepository.findByProductUuid(item.getProductId())
-                    .orElseThrow(() -> new NoSuchProductException("id가 %s인 product는 없습니다."));
+                    .orElseThrow(() -> new NoSuchProductException("id가 %s인 product는 없습니다.".formatted(item.getProductId())));
 
             // 주문에 아이템 추가하는 로직. 머지할때 조심할것
             productsInOrder.add(Pair.of(product, item.getQuantity()));
@@ -152,7 +151,7 @@ public class OrderService {
 
     public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+                .orElseThrow(() -> new NoSuchOrderException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
     }
 
@@ -189,12 +188,15 @@ public class OrderService {
 
     public OrderInfoWithoutItemDto findOrder(String orderId, String email) {
         Order order =  orderRepository.findByOrderUuid(orderId).
-                orElseThrow(() -> new EntityNotFoundException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
+                orElseThrow(() -> new NoSuchOrderException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
 
         User loggedInUser = userService.findByEmail(email);
 
+        if(loggedInUser == null)
+            throw new AccessDeniedException("email이 %s인 유저는 없습니다.".formatted(email));
+
         if(!loggedInUser.isMine(order))
-            throw new ServiceException("다른 사람의 주문을 조회할 수 없습니다.");
+            throw new AccessDeniedException("다른 사람의 주문을 조회할 수 없습니다.");
 
         return new OrderInfoWithoutItemDto(order);
     }

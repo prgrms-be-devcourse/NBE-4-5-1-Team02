@@ -5,78 +5,110 @@
 - **URL:** `/products`
 - **Method:** `POST`
 - **Parameters**
-  - **Query string**
-    - `keyword-type` : string, default=`"title"`, not null
-    - `keyword` : string, nullable <br/>
+    - **Query string**
+    - | 키              | 예시 값      | 필수 여부   | 기본값       | 
+      |----------------|-----------|---------|-----------|
+      | `keyword-type` | `"title"` | `false` | `"title"` |
+      | `keyword`      | `coffee1` | `false` | `""`      |
 
   <details>
   <summary>success</summary> 
-  
+
+  `GET /products`
     ```json
-    {
+      {
         "message": "Success.",
         "data": {
             "data": [
                 {
-                    "productUuid": "product-11111-22222-33331",
-                    "productName": "product1",
+                    "productUuid": "p1",
+                    "productName": "Coffee 1",
                     "category": "coffeeBean",
-                    "productPrice": 1000,
-                    "productDescription": "커피콩1",
-                    "imageUrl": "image_url1"
+                    "productPrice": 1200,
+                    "productDescription": "싱글 오리진 커피 원두",
+                    "imageUrl": "/img/coffee1.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33332",
-                    "productName": "product2",
+                    "productUuid": "p2",
+                    "productName": "Coffee 2",
                     "category": "coffeeBean",
-                    "productPrice": 5000,
-                    "productDescription": "커피콩2",
-                    "imageUrl": "image_url2"
+                    "productPrice": 1300,
+                    "productDescription": "에스프레소용 커피 원두",
+                    "imageUrl": "/img/coffee2.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33333",
-                    "productName": "product3",
+                    "productUuid": "p3",
+                    "productName": "Coffee 3",
                     "category": "coffeeBean",
-                    "productPrice": 1000,
-                    "productDescription": "커피콩3",
-                    "imageUrl": "image_url3"
+                    "productPrice": 1250,
+                    "productDescription": "다크 로스트 커피 원두",
+                    "imageUrl": "/img/coffee3.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33334",
-                    "productName": "product4",
+                    "productUuid": "p4",
+                    "productName": "Coffee 4",
                     "category": "coffeeBean",
-                    "productPrice": 5000,
-                    "productDescription": "커피콩4",
-                    "imageUrl": "image_url4"
+                    "productPrice": 1400,
+                    "productDescription": "라이트 로스트 커피 원두",
+                    "imageUrl": "/img/coffee4.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33335",
-                    "productName": "product5",
+                    "productUuid": "p5",
+                    "productName": "Coffee 5",
                     "category": "coffeeBean",
-                    "productPrice": 1000,
-                    "productDescription": "커피콩5",
-                    "imageUrl": "image_url5"
+                    "productPrice": 1350,
+                    "productDescription": "블렌드 커피 원두",
+                    "imageUrl": "/img/coffee5.png"
+                },
+                {
+                    "productUuid": "p6",
+                    "productName": "Tea 1",
+                    "category": "tea",
+                    "productPrice": 800,
+                    "productDescription": "녹차 티백",
+                    "imageUrl": "/img/tea1.png"
+                },
+                {
+                    "productUuid": "p7",
+                    "productName": "Tea 2",
+                    "category": "tea",
+                    "productPrice": 900,
+                    "productDescription": "홍차 티백",
+                    "imageUrl": "/img/tea2.png"
+                },
+                {
+                    "productUuid": "p8",
+                    "productName": "Tea 3",
+                    "category": "tea",
+                    "productPrice": 850,
+                    "productDescription": "우롱차 티백",
+                    "imageUrl": "/img/tea3.png"
+                },
+                {
+                    "productUuid": "p9",
+                    "productName": "Tea 4",
+                    "category": "tea",
+                    "productPrice": 950,
+                    "productDescription": "허브차 티백",
+                    "imageUrl": "/img/tea4.png"
+                },
+                {
+                    "productUuid": "p10",
+                    "productName": "Tea 5",
+                    "category": "tea",
+                    "productPrice": 800,
+                    "productDescription": "과일차 티백",
+                    "imageUrl": "/img/tea5.png"
                 }
             ],
             "page": 0,
             "size": 10,
-            "totalPages": 1
+            "totalPages": 3
         },
         "code": 200
     }
     ```  
   </details>
-  <details>
-  <summary>fail</summary>
-
-    ```json
-    {
-      "errcode": "PRODUCT001",
-      "errmsg": "상품 목록 조회를 불러오지 못했습니다."
-    }
-    ```
-  </details>
-
 
 ## 1. 사용자 API
 
@@ -84,89 +116,144 @@
 
 - **URL:** `/orders`
 - **Method:** `POST`
-- **설명:** 사용자가 주문 요청을 생성합니다.
+- **설명:** 사용자가 주문을 생성합니다.
+- **Body Parameter**
 
-- 파라미터
-
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.email | user@example.com | true |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |
-| buyer.zipcode | 12345 | true |
-| items[].productId | p123 | true |
-| items[].quantity | 2 | true |
-- **Request Body 예시:**
-    
+    | 키                   | 타입        | 값 예시                 | 필수 여부  | 기본값 |
+    |---------------------|-----------|----------------------|--------|-----|
+    | `buyer.email`       | `string`  | `"user@example.com"` | `true` |     |
+    | `address`           | `string`  | `"서울시 강남구 테헤란로 123"` | `true` |     |
+    | `zipcode`           | `integer` | `12345`              | `true` |
+    | `items[].productId` | `string`  | `p123`               | `true` |
+    | `items[].quantity`  | `number`  | `2`                  | `true` |
+    - `items`: 하나 이상의 상품이 포함되어야 하며, 각 `quantity`는 0보다 커야 함
+- **Request Body**
+    <details>
+    <summary>Request Body</summary>
+  
     ```json
     {
       "buyer": {
-        "email": "user@example.com"
+        "email": "email1@email.com"
       },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
+      "address": "addr1",
+      "zipcode": 1073,
       "items": [
         {
-          "productId": "p123",
-          "quantity": 2
-        },
-        {
-          "productId": "p456",
-          "quantity": 1
+          "productId": "p1",
+          "quantity": 3
         }
       ]
     }
-    
     ```
-    
-    - **유효성 검사:**
-        - `buyer.email`: 이메일 형식, 비어있지 않음
-        - `buyer.address`: 문자열, 비어있지 않음
-        - `buyer.zipcode`: 숫자 혹은 숫자형 문자열, 비어있지 않음
-        - `items`: 하나 이상의 상품이 포함되어야 하며, 각 `quantity`는 0보다 커야 함
-- **Response 예시:**
-    
-    ```json
-    {
-      "orderId": "order-111111-222222-333333",
-      "createdAt": "2025-02-18T14:00:00Z",
-      "updatedAt": "2025-02-18T14:00:00Z",
-      "buyer": {
-        "email": "user@example.com"
-      },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
-      "items": [
-        {
-          "productId": "p123",
-          "quantity": 2,
-          "name": "상품명1",
-          "price": 10000,
-          "image_url": "url/"
-        },
-        {
-          "productId": "p456",
-          "quantity": 1,
-          "name": "상품명2",
-          "price": 20000,
-          "image_url": "url/"
-        }
-      ],
-      "totalPrice": 40000,
-      "deliveryStatus": "대기중"
-    }
-    
-    ```
-    
-    fail
-    
-    ```json
-    {
-    	"errcode": "ORDER-1",
-    	"errmsg": "주문 생성에 실패했습니다. 필수 값을 체크해주세요."
-    }
-    ```
-    
+  </details>    
+        
+  - **Response Body**
+ 
+      <details>
+      <summary>success</summary>
 
+    `POST /orders`
+
+      ```json
+    {
+        "message": "ok",
+        "data": {
+        "orderId": "order-f03a8a4d-b875-42ad-8e22-2770e84f4893",
+        "buyer": {
+            "email": "email1@email.com"
+        },
+        "products": [
+            {
+            "productUuid": "p1",
+            "productName": "Coffee 1",
+            "category": "coffeeBean",
+            "productPrice": 1200,
+            "productDescription": "싱글 오리진 커피 원두",
+            "imageUrl": "/img/coffee1.png"
+            },
+            {
+            "productUuid": "p1",
+            "productName": "Coffee 1",
+            "category": "coffeeBean",
+            "productPrice": 1200,
+            "productDescription": "싱글 오리진 커피 원두",
+            "imageUrl": "/img/coffee1.png"
+            },
+            {
+            "productUuid": "p1",
+            "productName": "Coffee 1",
+            "category": "coffeeBean",
+            "productPrice": 1200,
+            "productDescription": "싱글 오리진 커피 원두",
+            "imageUrl": "/img/coffee1.png"
+            }
+        ],
+        "createAt": "2025-02-25T10:06:04.3688085",
+        "modifiedAt": "2025-02-25T10:06:04.3688085",
+        "totalAmount": 3600,
+        "address": "addr1",
+        "zipcode": 1073,
+        "deliveryStatus": "PENDING"
+        },
+        "code": 200
+    }
+      ```
+      </details>
+    
+      <details>
+      <summary>fail</summary>
+    
+      - 우편번호가 빠진 입력
+          ```json
+          {
+              "message": "우편번호를 입력해야 합니다.",
+              "data": null,
+              "code": 400
+          }
+          ```
+      - 배송지가 빠진 입력
+        ```json
+        {
+            "message": "배송 주소를 입력해야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+      - 이메일이 빠진 입력
+        ```json
+        {
+          "message": "이메일 입력은 필수입니다.",
+          "data": null,
+          "code": 400
+        }
+        ```
+      - 상품 id 리스트가 빠진 입력
+        ```json
+        {
+            "message": "상품 ID 리스트는 필수입니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+      - 상품 ID가 빠진 입력
+        ```json
+        {
+            "message": "product Id는 필수입니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+      - 상품 수량이 빠진 입력
+        ```json
+        {
+            "message": "수량은 최소 1개 이상이어야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+      </details>
+    
 ---
 
 ### 1.2. 주문 리스트 조회 (사용자)
@@ -174,38 +261,59 @@
 - **URL:** `/orders`
 - **Method:** `GET`
 - **설명:** 사용자가 본인의 주문 내역을 조회합니다.
-- **Query Parameter (옵션):**
-    - `email` (혹은 인증 정보를 통해 결정)
-- **Response 예시:**
+- **Query Parameter (옵션)**
 
+  | 키       | 타입       | 값 예시                  | 필수 여부  | 기본값 |
+  |---------|----------|-----------------------|--------|-----|
+  | `email` | `string` | `"email@example.com"` | `true` |     |
+
+- **Response**
+    <details>
+    <summary>success</summary>
 
     ```json
     {
-      "content": [
-        {
-          "orderId": "order789",
-          "orderDate": "2025-02-18T14:00:00Z",
-          "totalPrice": 40000,
-          "deliveryStatus":"배송 전",
-          "buyerEmail": "user@example.com",
-          "address": "add1",
-        },
-        {
-          "orderId": "order790",
-          "orderDate": "2025-02-17T14:00:00Z",
-          "totalPrice": 15000,
-          "deliveryStatus":"배송 ",
-          "buyerEmail": "user@example.com",
-          "address": "add2",
-        }
-      ],
-      "page": 1,
-      "size": 10,
-      "totalPages": 1
+      "message": "ok",
+      "data": {
+        "content": [
+          {
+            "orderId": "o9",
+            "orderDate": "2025-02-25T09:18:48.052555",
+            "totalPrice": 4300,
+            "deliveryStatus": "DELIVERED",
+            "buyerEmail": "bob@example.com",
+            "address": "Busan, Nam-gu"
+          },
+          {
+            "orderId": "o7",
+            "orderDate": "2025-02-25T09:18:48.052555",
+            "totalPrice": 3250,
+            "deliveryStatus": "PENDING",
+            "buyerEmail": "bob@example.com",
+            "address": "Busan, Suyeong-gu"
+          }
+        ],
+        "page": 0,
+        "size": 2,
+        "totalPages": 2
+      },
+      "code": 200
     }
     ```
+    </details>
 
-
+    <details>
+    <summary>fail</summary>
+    
+    - 이메일 형식이 올바르지 않을 경우
+    ```json
+    {
+        "message": "getOrders.email: 올바른 이메일 형식이어야 합니다.",
+        "data": null,
+        "code": 400
+    } 
+    ```
+    </details>
 ---
 
 ### 1.3. 주문 상세 조회 (사용자)
@@ -213,8 +321,16 @@
 - **URL:** `/orders/{orderId}`
 - **Method:** `GET`
 - **설명:** 사용자가 특정 주문의 상세 내역을 조회합니다.
-- **Response 예시:**
-
+- **Parameter**
+  - **Path variable**
+    
+    | 키         | 타입       | 값 예시                        | 필수 여부  | 기본값 |
+    |-----------|----------|-----------------------------|--------|-----|
+    | `orderId` | `string` | `"order-11111-22222-33333"` | `true` |     |
+- **Response**
+    <details>
+    <summary>success</summary>
+    
     ```json
     {
       "orderId": "order789",
@@ -249,214 +365,251 @@
       }
     }
     ```
+    </details>
+    
 
 ### 1.3.1 주문 내 상품 페이지네이션 조회 (사용자)
+
 - **URL:** `/orders/{orderId}/products`
 - **Method:** `GET`
 - **설명:** 사용자가 주문 내 상품을 페이지네이션 해서 조회합니다.
-- **Query Parameter**:
-  - `email`: 필수
-  - `page` : 기본값=0, 필수 아님
-  - `size` : 기본값=10, 필수 아님
+  - **Query Parameter**
+  
+    | 키       | 타입        | 값 예시                    | 필수 여부   | 기본값  |
+    |---------|-----------|-------------------------|---------|------|
+    | `email` | `string`  | `"example@example.com"` | `true`  |      |
+    | `page`  | `integer` | `0`                     | `false` | `0`  |
+    | `size`  | `integer` | `10`                    | `false` | `10` | 
+  - **Path Parameter**
 
-- **Response예시**
+    | 키         | 타입       | 값 예시                        | 필수 여부  | 기본값 |
+    |-----------|----------|-----------------------------|--------|-----|
+    | `orderId` | `string` | `"order-11111-22222-33333"` | `true` |     |
 
-  ```json
-  {
-    "message": "Success.",
-    "data": {
+- **Response**
+    <details>
+    <summary>success</summary>
+  
+    ```json
+    {
+        "message": "Success.",
+        "data": {
+            "data": [
+                {
+                    "productUuid": "p11",
+                    "productName": "Snack 1",
+                    "category": "snack",
+                    "productPrice": 1500,
+                    "productDescription": "바삭한 감자칩",
+                    "imageUrl": "/img/snack1.png"
+                },
+                {
+                    "productUuid": "p12",
+                    "productName": "Snack 2",
+                    "category": "snack",
+                    "productPrice": 1600,
+                    "productDescription": "고소한 견과류 믹스",
+                    "imageUrl": "/img/snack2.png"
+                }
+            ],
+            "page": 0,
+            "size": 10,
+            "totalPages": 1
+        },
+        "code": 200
+    }
+    ```
+    </details>
+    
+
+### 1.3.2 주문 내 모든 상품 조회 (사용자)
+
+- **URL:** `/orders/{orderId}/products/all`
+- **Method:** `GET`
+- **설명:** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **Parameters**
+    - **Query Parameters**
+
+        | 키       | 타입       | 값 예시                    | 필수 여부  | 기본값 |
+        |---------|----------|-------------------------|--------|-----|
+        | `email` | `string` | `"example@example.com"` | `true` |     |
+    - **Path Parameters**
+  
+        | 키         | 타입       | 값 예시                        | 필수 여부  | 기본값 |
+        |-----------|----------|-----------------------------|--------|-----|
+        | `orderId` | `string` | `"order-11111-22222-33333"` | `true` |     |
+    
+- **Response 예시**
+    <details>
+    <summary>success</summary>
+    
+    ```json
+    {
+      "message": "Success.",
       "data": [
         {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
+          "product": {
+            "productUuid": "p12",
+            "productName": "Snack 2",
+            "category": "snack",
+            "productPrice": 1600,
+            "productDescription": "고소한 견과류 믹스",
+            "imageUrl": "/img/snack2.png"
+          },
+          "amount": 1
         },
         {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33332",
-          "productName": "product2",
-          "category": "coffeeBean",
-          "productPrice": 5000,
-          "productDescription": "커피콩2",
-          "imageUrl": "image_url2"
+          "product": {
+            "productUuid": "p11",
+            "productName": "Snack 1",
+            "category": "snack",
+            "productPrice": 1500,
+            "productDescription": "바삭한 감자칩",
+            "imageUrl": "/img/snack1.png"
+          },
+          "amount": 1
         }
       ],
-      "page": 0,
-      "size": 10,
-      "totalPages": 1
-    },
-    "code": 200
-  }
-  ```
-  
-### 1.3.2 주문 내 모든 상품 조회 (사용자)
-- **URL:** `//orders/{orderId}/products/all`
-- **Method:** `GET`
-- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
-- **Parameters**
-  - **QueryParameter**
-    - `email`: 이메일 형식, 필수
-  - **PathParameter**
-    - `orderId` : 주문번호
-- **Response 예시**
-<details>
-<summary>success</summary>
-
-```json
-{
-  "message": "Success.",
-  "data": [
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "/image.png"
-      },
-      "amount": 5
-    },
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "/image.png"
-      },
-      "amount": 1
+      "code": 200
     }
-  ],
-  "code": 200
-}
-```
-</details>
+    ```
+    </details>
 
 ---
 
 ### 1.4. 주문 수정 (사용자)
 
-- **URL:** `/odrers/{orderId}?email=email@email.com`
+- **URL:** `/orders/{orderId}?email=email@email.com`
 - **Method:** `PUT`
 - **설명:** 사용자가 주문 상세 페이지에서 주문을 수정합니다. 배송 상태가 **배송 중/배송 완료** 일 때 수정이 불가능합니다.
-- **Query Parameter (옵션):**
-    - `email` (혹은 인증 정보를 통해 결정)
-    - ex) `/odrers/{orderId}?email=email@email.com`
+  - **Query Parameter:**
+      - ex) `/orders/{orderId}?email=email@email.com`
+  
+      | 키       | 타입       | 값 예시                 | 필수 여부  | 기본값 |
+      |---------|----------|----------------------|--------|-----|
+      | `email` | `string` | `"user@example.com"` | `true` |     | |
 
-- 바디 파라미터
+  - **Body Parameter**
 
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.address | user@example.com | true |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |
-| buyer.zipcode | 12345 | true |
-| items[].productId | p123 | true |
-| items[].quantity | 2 | true |
-- **Request Body 예시:**
-    - success
+    | 키                   | 타입                           | 값 예시                                         | 필수 여부  | 기본값 |
+    |---------------------|------------------------------|----------------------------------------------|--------|-----|
+    | `buyer.email`       | `string`                     | `user@example.com`                           | `true` |     |     |
+    | `deliveryStatus`    | `string`                     | `PENDING, SHIPPED, DELIVERED, CANCELLED 중 1` | `true` |     |     |
+    | `address`           | `string`                     | `서울시 강남구 새로운주소 456`                          | `true` |     |     |
+    | `zipcode`           | `string`                     | `12345`                                      | `true` |     |     |
+    | `items[]`           | `List[{productId,quantity}]` | `true`                                       |        |     |     |
+    | `items[].productId` | `string`                     | `p123`                                       | `true` |     |     |
+    | `items[].quantity`  | `integer`, 0보다 큼             | `2`                                          | `true` |     |     |
 
+- **Request Body**
+    <details>
+    <summary>request body</summary>
+    
     ```json
     {
-      "address": "서울시 강남구 새로운주소 456",
-      "zipcode": "67890",
-      "items": [
-        {
-          "productId": "p123",
-          "quantity": 3
+        "address": "changeaddr1",
+        "zipcode": "1112222",
+        "items":[
+            {
+                "productId": "p5",
+                "quantity": 2
+            },
+            {
+                "productId": "p8",
+                "quantity": 3
+            }
+        ],
+        "buyer":{
+            "email": "bob@example.com"
         },
-        {
-          "productId": "p789",
-          "quantity": 2
-        }
-      ]
+        "deliveryStatus": "PENDING"
     }
     ```
+    </details>
 
-    - fail
+  - **주의사항:**
+      - 수정 시 주문의 `updatedAt` 타임스탬프를 갱신합니다.
+      - 주문 상품이 모두 삭제되면 주문이 취소(삭제)됩니다.
 
-    ```json
-    {
-      "error": "NotFoundException",
-      "orderId": "order789",
-      "message": "해당하는 주문을 찾을 수 없어 삭제에 실패했습니다."
-    }
-    ```
 
-    - **주의사항:**
-        - 수정 시 주문의 `updatedAt` 타임스탬프를 갱신합니다.
-        - 주문 상품이 모두 삭제되면 주문이 취소(삭제)됩니다.
+
 - **Response 예시:** (성공 시 갱신된 주문 데이터 반환)
+    <details>
+    <summary>success</summary>
+    
+    ```json
+    {
+      "message": "ok",
+      "data": {
+         "orderId": "o1",
+         "orderDate": "2025-02-25T10:30:12.667673",
+         "totalPrice": 9950,
+         "deliveryStatus": "CANCELLED",
+         "buyerEmail": "alice@example.com",
+         "address": "a1"
+      },
+       "code": 200
+    }
+    ```
+    </details>
+
+    <details>
+    <summary>fail</summary>
 
     ```json
     {
-      "orderId": "order789",
-      "createdAt": "2025-02-18T14:00:00Z",
-      "updatedAt": "2025-02-18T16:00:00Z",
-      "image_url": "url/",
-      "buyer": {
-        "email": "user@example.com"
-      },
-      "address": "서울시 강남구 새로운주소 456",
-      "zipcode": "67890",
-      "items": [
-        {
-          "productId": "p123",
-          "name": "상품명1",
-          "quantity": 3,
-          "price": 10000
-        },
-        {
-          "productId": "p789",
-          "name": "상품명3",
-          "quantity": 2,
-          "price": 15000
-        }
-      ],
-      "totalPrice": 60000,
-      "deliveryStatus": "배송전"
+    "message": "해당 주문을 찾을 수 없습니다.",
+    "data": null,
+    "code": 400
     }
     ```
+
+    </details>
 
 
 ---
 
 ### 1.5. 주문 취소 (사용자)
 
-- **URL:** `/odrers/{orderId}?email=email@email.com`
+- **URL:** `/orders/{orderId}?email=email@email.com`
 - **Method:** `DELETE`
 - **설명:** 사용자가 상세보기 페이지나 리스트에서 주문을 취소합니다.
-- **Response 예시:**
-    - success
+- **Query Parameter:**
+  - `email`
+  - ex) `/orders/{orderId}?email=email@email.com`
 
+    | 키       | 타입       | 값 예시                 | 필수 여부  | 기본값 |
+    |---------|----------|----------------------|--------|-----|
+    | `email` | `string` | `"user@example.com"` | `true` |     | 
+
+- **Response**
+    <details>
+    <summary>success</summary>
+  
     ```json
     {
       "message": "주문이 성공적으로 취소되었습니다.",
-      "orderId": "order789"
+      "data": {
+           "orderId": "o1",
+           "message": "주문이 성공적으로 취소되었습니다."
+    },
+    "code": 200
     }
     ```
-
-    - fail
-
+    </details>
+    <details>
+    <summary>fail</summary>
+    
     ```json
     {
-      "error": "NotFoundException",
-      "orderId": "order789",
-      "message": "해당하는 주문을 찾을 수 없어 삭제에 실패했습니다."
+      "message": "해당하는 주문을 찾을 수 없어 삭제에 실패했습니다.",
+      "data": null,
+      "code": 400
     }
     ```
+    </details>
 
+    
 
 ---
 
@@ -466,6 +619,7 @@
 
 > 주의: 관리자 API 엔드포인트는 별도의 인증 및 권한 검증 로직이 적용되어야 합니다.
 >
+
 - **URL:** `/admin/orders`
 
 ### 2.1. 주문 리스트 조회 (관리자)
@@ -473,124 +627,232 @@
 - **URL:** `/admin/orders`
 - **Method:** `GET`
 - **설명:** 관리자가 모든 사용자의 주문 리스트를 조회합니다.
-- **Response 예시:**
-    - success
+- **Response**
+
+    <details>
+    <summary>success</summary>
 
     ```json
     {
-      "message": "Success.",
-      "data": {
-        "data": [
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
+        "message": "ok",
+        "data": {
+            "content": [
+                {
+                    "orderId": "o9",
+                    "orderDate": "2025-02-25T09:18:48.052555",
+                    "totalPrice": 4300,
+                    "deliveryStatus": "DELIVERED",
+                    "buyerEmail": "bob@example.com",
+                    "address": "Busan, Nam-gu",
+                    "items": [
+                        {
+                            "name": "Beverage 3",
+                            "quantity": 1
+                        },
+                        {
+                            "name": "Beverage 2",
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "orderId": "o8",
+                    "orderDate": "2025-02-25T09:18:48.052555",
+                    "totalPrice": 3650,
+                    "deliveryStatus": "SHIPPED",
+                    "buyerEmail": "bob@example.com",
+                    "address": "Busan, Dongnae-gu",
+                    "items": [
+                        {
+                            "name": "Snack 5",
+                            "quantity": 1
+                        },
+                        {
+                            "name": "Beverage 1",
+                            "quantity": 1
+                        }
+                    ]
+                },
+                {
+                    "orderId": "o7",
+                    "orderDate": "2025-02-25T09:18:48.052555",
+                    "totalPrice": 3250,
+                    "deliveryStatus": "PENDING",
+                    "buyerEmail": "bob@example.com",
+                    "address": "Busan, Suyeong-gu",
+                    "items": [
+                        {
+                            "name": "Snack 4",
+                            "quantity": 1
+                        },
+                        {
+                            "name": "Snack 3",
+                            "quantity": 1
+                        }
+                    ]
+                },
+              /*추가 조회 목록 생략*/
+            ],
+            "page": 1,
+            "size": 10,
+            "totalPages": 4
         },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "image_url2"
-        }
-        ],
-        "page": 0,
-        "size": 10,
-        "totalPages": 1
-        },
-      "code": 200
+        "code": 200
     }
     ```
 
-    - fail
-
-    ```json
-    {
-      "error": "NotFoundException",
-      "orderId": "order789",
-      "message": "주문 정보들을 찾을 수 없습니다."
-    }
-    ```
-
+    </details>
 
 ---
 
-### 2.2. 주문 상세 조회 (관리자)
+### 2.2.1 주문 상세 조회 (관리자)
 
 - **URL:** `/admin/orders/{orderId}`
 - **Method:** `GET`
-- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다.
+- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다. <br/> 이때 주문 내의 물품은 포함하지 않습니다
+
 - **Response 예시:**
-    - success
+    <details>
+    <summary>success</summary>
 
-```json
-{
-  "message": "Success.",
-  "data": {
-    "orderUuid": "order-11111-22222-33331",
-    "user": {
-      "id": "user-11111-22222-33331",
-      "email": "email1@email.com",
-      "createdDate": "2025-02-21T10:14:11.083775",
-      "modifiedDate": "2025-02-21T10:14:11.083775",
-      "orders": null
-    },
-    "createDate": "2025-02-21T10:14:11.084784",
-    "modifiedDate": "2025-02-21T10:14:11.084784",
-    "totalAmount": 10000,
-    "deliveryAddress": "addr1",
-    "zipCode": 123123,
-    "deliveryStatus": "PENDING"
-  },
-  "code": 200
-}
-```
+    `GET /admin/orders/o6`
+    ```json
+    {
+        "message": "Success.",
+        "data": {
+            "orderUuid": "o6",
+            "user": {
+                "id": "u2",
+                "email": "bob@example.com",
+                "createdDate": "2025-02-25T12:03:02.803832",
+                "modifiedDate": "2025-02-25T12:03:02.803832"
+            },
+            "createDate": "2025-02-25T12:03:02.803832",
+            "modifiedDate": "2025-02-25T12:03:02.803832",
+            "totalAmount": 3100,
+            "deliveryAddress": "Busan, Haeundae",
+            "zipCode": 202010,
+            "deliveryStatus": "PENDING"
+        },
+        "code": 200
+    }
+    ```
+    </details>
+  
 
-- fail
+- **Parameters**
+    - **PathParameter**
 
-```json
-{
-  "error": "NotFoundException",
-  "orderId": "order789",
-  "message": "해당하는 주문 정보를 가져올 수 없습니다."
-}
-```
+      | 키         | 타입       | 값 예시                      | 필수 여부  | 기본값 |
+      |-----------|----------|---------------------------|--------|-----|
+      | `orderId` | `string` | `order-11111-22222-33333` | `true` |     | 
+
+
+- **Response 예시**
+  <details>
+  <summary>success</summary>
+
+  `GET /admin/orders/o1`
+  ```json
+    {
+      "message": "Success.",
+      "data": {
+          "orderUuid": "o1",
+          "user": {
+              "id": "u1",
+              "email": "alice@example.com",
+              "createdDate": "2025-02-25T09:41:22.407886",
+              "modifiedDate": "2025-02-25T09:41:22.407886"
+          },
+          "createDate": "2025-02-25T09:41:22.407886",
+          "modifiedDate": "2025-02-25T09:41:22.407886",
+          "totalAmount": 15000,
+          "deliveryAddress": "Seoul, Gangnam-gu",
+          "zipCode": 101010,
+          "deliveryStatus": "PENDING"
+      },
+      "code": 200
+    }
+  ```
+  </details>
+  <details>
+  <summary>fail</summary>
+
+  `GET /admin/orders/asdfasdf`
+  ```json
+  {
+    "message": "orderId가 asdfasdf인 order를 찾을 수 없습니다.",
+    "data": null,
+    "code": 400
+  }
+  ```
+  </details>
+
+ --- 
+
+### 2.2.2 주문에 포함된 모든 상품과 수량 조회 (관리자)
+
+- **URL:** `/admin/orders/{orderId}/products/all`
+- **Method:** `GET`
+- **설명:** `{orderId}`주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **Parameters**
+  - **PathParameter**
+
+    | 키         | 타입       | 값 예시                      | 필수 여부  | 기본값 |
+    |-----------|----------|---------------------------|--------|-----| 
+    | `orderId` | `string` | `order-11111-22222-33333` | `true` |     |
+
+- **Response 예시**
+
+    <details>
+    <summary>success</summary>
+    
+    ```json
+    {
+        "message": "Success.",
+        "data": [
+            {
+                "product": {
+                    "productUuid": "p1",
+                    "productName": "Coffee 1",
+                    "category": "coffeeBean",
+                    "productPrice": 1200,
+                    "productDescription": "싱글 오리진 커피 원두",
+                    "imageUrl": "/img/coffee1.png"
+                },
+                "amount": 1
+            },
+            {
+                "product": {
+                   "productUuid": "p2",
+                   "productName": "Coffee 2",
+                   "category": "coffeeBean",
+                   "productPrice": 1300,
+                   "productDescription": "에스프레소용 커피 원두",
+                   "imageUrl": "/img/coffee2.png"
+                },
+                "amount": 1
+           }
+        ],
+    "code": 200
+    }
+    ```
+    
+  </details>
+
+  <details>
+  <summary>fail</summary>
+    
+    `GET /admin/orders/asdfasdf/all`
+    ```json
+    {
+      "message": "id가 asdfasdf인 order는 없습니다.",
+      "data": null,
+      "code": 400
+    }
+    ```
+
+  </details>
 
 ---
 
@@ -599,53 +861,105 @@
 - **URL:** `/admin/orders/{orderId}`
 - **Method:** `PUT`
 - **설명:** 관리자가 주문 상세 페이지에서 주문 정보를 수정할 수 있습니다.
-- 파라미터
+- **Parameter**
+  - **Body Parameter**
 
-| 키 | 값 예시 | 필수 여부 |  |
-| --- | --- | --- | --- |
-| buyer.email | user@example.com | true |  |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |  |
-| buyer.zipcode | 12345 | true |  |
-- **Request Body 예시:**
+    | 키             | 타입        | 값 예시                 | 필수 여부  | 기본값 |
+    |---------------|-----------|----------------------|--------|-----|
+    | buyer.email   | `string`  | `"user@example.com"` | `true` |     |
+    | buyer.address | `string`  | `"서울시 강남구 테헤란로 123"` | `true` |     |
+    | buyer.zipcode | `integer` | `12345`              | `true` |     |
 
-  (사용자와 유사하며, 관리자는 주문 상태(배송 상태) 등 추가 필드를 수정할 수 있습니다.)
+- **Request Body**
 
-- **Response 예시:** (수정된 주문 데이터 반환)
-
+    <details>
+    <summary>Request Body</summary>
+  
     ```json
     {
-      "buyer": {
-    	  "email": "user@example.com"
-      }
+        "address": "changeaddr1",
+        "zipcode": 123123,
+        "items":[
+            {
+                "productId": "p3",
+                "quantity": 2
+            },
+            {
+                "productId": "p12",
+                "quantity": 3
+            }
+            ]
     }
+    ```
+    </details>
+  
+
+- **Response Body**
+    <details>
+    <summary>success</summary>
+  
+    ```json
+    {
+        "message": "success.",
+        "data": {
+            "orderId": "o6",
+            "orderDate": "2025-02-25T11:49:46.271223",
+            "totalPrice": 7300,
+            "deliveryStatus": "PENDING",
+            "buyerEmail": "bob@example.com",
+            "address": "changeaddr1"
+        },
+        "code": 200
+    }
+    ```
+    </details>
+    <details>
+    <summary>fail</summary>
     
-    ```
-
-    - success
-
-    ```json
-    {
-      "orderId": "order789",
-      "createdAt": "2025-02-18T14:00:00Z",
-      "updatedAt": "2025-02-18T14:00:00Z",
-      "buyer": {
-        "email": "user@example.com"
-      },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
-      "deliveryStatus": "대기중"
-    }
-    ```
-
-    - fail
-
-    ```json
-    {
-      "error": "ModificationNotAllowed",
-      "message": "주문 일자로부터 오후 2시가 지난 주문은 수정할 수 없습니다."
-    }
-    ```
-
+    - `zipcode`가 빠진 입력
+    
+        ```json
+        {
+            "message": "우편번호를 입력해야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    
+    - address가 빠진 입력
+    
+        ```json
+        {
+            "message": "배송 주소를 입력해야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    - item list가 빠진 입력
+        ```json
+        {
+            "message": "상품 ID 리스트는 필수입니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    - item에 수량이 빠진 입력
+        ```json
+        {
+            "message": "수량은 최소 1개 이상이어야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    - item에 productId가 빠진 입력
+        ```json
+        {
+            "message": "product Id는 필수입니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    </details>
 
 ---
 
@@ -654,27 +968,40 @@
 - **URL:** `/admin/orders/{orderId}`
 - **Method:** `DELETE`
 - **설명:** 관리자가 주문 리스트 혹은 상세 페이지에서 주문을 삭제합니다.
-- **Response 예시:**
-    - success
+- **Parameter**
+  - **Path parameter**
 
+    | 키         | 타입       | 값 예시                      | 필수 여부  | 기본값 |
+    |-----------|----------|---------------------------|--------|-----|
+    | `orderId` | `string` | `order-11111-22222-33333` | `true` |     |
+- **Response**
+    
+    <details>
+    <summary>success</summary>
+  
     ```json
     {
-      "message": "주문이 성공적으로 삭제되었습니다.",
-      "orderId": "order789"
+        "message": "주문이 성공적으로 삭제되었습니다.",
+        "data": null,
+        "code": 200
     }
     ```
+    </details>
 
-    - fail
+    <details>
+    <summary>fail</summary>
 
-    ```json
-    {
-      "message": "주문 삭제에 실패했습니다..",
-      "orderId": "order789",
-      "error": "NotFoundError"
-    }
-    ```
-
-
+    - 존재하지 않는 주문 삭제
+        ```json
+        {
+            "message": "주문을 찾을 수 없습니다: o123123123",
+            "data": null,
+            "code": 400
+        }
+         ```
+    
+    </details>
+    
 ---
 
 ### 2.5 주문에 포함된 상품 리스트 조회 (관리자)
@@ -682,134 +1009,70 @@
 - **URL:** `/admin/orders/{orderId}/products`
 - **Method:** `GET`
 - **설명:** 주문에 포함된 모든 상품 리스트를 페이지네이션 해서 조회합니다.
-- **Parameters** 
-  - **QueryParameter**
-    - `size` : 한 페이지에 출력할 item 개수
-    - `page` : 페이지 번호
-  - **PathParameter** 
-    - `orderId` : 주문 번호
-- **Response 예시:**
-  <details>
-  <summary>success</summary>
-  
-  ```json
-  {
-    "message": "Success.",
-    "data": {
-      "data": [
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33332",
-          "productName": "product2",
-          "category": "coffeeBean",
-          "productPrice": 5000,
-          "productDescription": "커피콩2",
-          "imageUrl": "image_url2"
-        }
-      ],
-      "page": 0,
-      "size": 10,
-      "totalPages": 1
-    },
-    "code": 200
-  }
-  ```
-  </details>
-  <details>
-  <summary>fail</summary> 
+- **Parameters**
+    - **QueryParameter**
 
-  ```json
-  {
-    "error": "NotFoundException",
-    "orderId": "order789",
-    "message": "해당 주문에 포함된 상품을 가져올 수 없습니다."
-  }
-  ```
-  </details> 
+      | 키      | 타입        | 값 예시 | 필수 여부   | 기본값  |
+      |--------|-----------|------|---------|------|
+      | `size` | `integer` | `10` | `false` | `10` |
+      | `page` | `integer` | `0`  | `false` | `0`  |
+    - **PathParameter**
+
+      | 키         | 타입       | 값 예시                      | 필수 여부  | 기본값 |
+      |-----------|----------|---------------------------|--------|-----|
+      | `orderId` | `string` | `order-11111-22222-33333` | `true` |     |
+
+
+
+- **Response 예시:**
+    <details>
+    <summary>success</summary>
+  
+    ```json
+    {
+       "message": "Success.",
+       "data": {
+           "data": [
+               {
+                   "productUuid": "p1",
+                   "productName": "Coffee 1",
+                   "category": "coffeeBean",
+                   "productPrice": 1200,
+                   "productDescription": "싱글 오리진 커피 원두",
+                   "imageUrl": "/img/coffee1.png"
+               },
+               {
+                   "productUuid": "p2",
+                   "productName": "Coffee 2",
+                   "category": "coffeeBean",
+                   "productPrice": 1300,
+                   "productDescription": "에스프레소용 커피 원두",
+                   "imageUrl": "/img/coffee2.png"
+               }
+           ],
+           "page": 0,
+           "size": 10,
+           "totalPages": 1
+       },
+       "code": 200
+    }
+    ```
+    </details>
+    <details>
+    <summary>fail</summary> 
+    
+    - 존재하지 않는 주문 조회
+    ```json
+    {
+        "message": "id가 asdf인 Order는 없습니다.",
+        "data": null,
+        "code": 400
+    }
+    ```
+    
+    </details> 
 
 ---
-
-### 2.6 주문에 포함된 모든 상품과 수량 조회 (관리자)
-- **URL:** `/admin/orders/{orderId}/products/all`
-- **Method:** `GET`
-- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
-- **Parameters**
-  - **PathParameter**
-    - `orderId` : 주문번호
-- **Response 예시**
-<details>
-<summary>success</summary>
-
-```json
-{
-  "message": "Success.",
-  "data": [
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "/image.png"
-      },
-      "amount": 5
-    },
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "/image.png"
-      },
-      "amount": 1
-    }
-  ],
-  "code": 200
-}
-```
-</details>
 
 ### 1. 유저 API
 
@@ -819,13 +1082,16 @@
 - **Method:** `POST`
 - **설명:** 사용자가 주문 요청을 생성합니다. 생성하면서 유저의 정보를 저장
 
-- 파라미터
+- **Parameter**
+  - **Query Parameter**
 
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.email | user@example.com | true |
-- **Request Body 예시:**
-
+      | 키             | 타입       | 값 예시               | 필수 여부  |
+      |---------------|----------|--------------------|--------|
+      | `buyer.email` | `string` | `user@example.com` | `true` |
+- **Request Body**
+    <details>
+    <summary>body</summary>
+    
     ```json
     {
       "buyer":{
@@ -834,11 +1100,15 @@
     }
     
     ```
+    </details>
+    
 
   - **유효성 검사:**
     - `buyer.email`: 이메일 형식, 비어있지 않음
-- **Response 예시:**
-
+- **Response**
+    <details>
+    <summary>success</summary>
+    
     ```json
     {
         "message": "Success",
@@ -847,15 +1117,22 @@
             "email": "user@example.com",
             "createdDate": "2025-02-20T15:37:21.1689457",
             "modifiedDate": "2025-02-20T15:37:21.1689457"
-        }
+        },
+        "code": 200
     }
-    
     ```
--fail
-```json
-{
+    </details>
+    <details>
+    <summary>fail</summary>
+    
+    ```json
+    {
     "message": "사용자 생성에 실패했습니다.",
     "data": null,
     "code": 400
-}
-```
+    }
+    ```
+    </details>
+
+    
+

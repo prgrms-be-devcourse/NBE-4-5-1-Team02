@@ -37,7 +37,7 @@ out/
 .vscode/
 gradle/wrapper
 db.mv.db
-dt.trace.db
+db.trace.db
 db_dev.mv.db
 db_dev.trace.db
 apiV1.json
