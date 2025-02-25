@@ -8,17 +8,23 @@ import SearchInput from "./home/ProductList/SearchInput";
 import ProductList from "./home/ProductList/ProductList";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Separator } from "@/components/ui/separator"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import OrderConfirmModal from "@/components/OrderConfirmModal";
 
 export type PaginationDataProductDto =
@@ -179,7 +185,11 @@ export default function ClientPage({
       alert("주문이 성공적으로 생성되었습니다.");
       // 주문 성공 후 장바구니 비우기
       setProductsMap(new Map());
-      
+      sessionStorage.setItem("selectedItems", "[]");
+      setAddress("")
+      setAmount(0)
+      setZipcode("")
+      setEmail("")
     } catch (error) {
       console.error("주문 처리 중 오류 발생:", error);
       alert("주문 처리 중 오류가 발생했습니다.");
@@ -216,7 +226,10 @@ export default function ClientPage({
             <h2 className="text-2xl font-bold whitespace-nowrap">상품 목록</h2>
             <div className="flex items-center gap-2 whitespace-nowrap">
               <Label htmlFor="pageSize">페이지당 항목 수</Label>
-              <Select value={pageSize.toString()} onValueChange={(value) => handlePageSizeChange(Number(value))}>
+              <Select
+                value={pageSize.toString()}
+                onValueChange={(value) => handlePageSizeChange(Number(value))}
+              >
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="항목 수 선택" />
                 </SelectTrigger>
