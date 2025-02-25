@@ -32,49 +32,6 @@ export default function ClientPage({
     Map<string, productWithQuantity>
   >(new Map());
 
-  //   const decreaseQuantityCallBack = useCallback(
-  //     (key: string) => {
-  //       const changedProductsMap = new Map<string, productWithQuantity>(
-  //         productsMap
-  //       );
-
-  //       const item = changedProductsMap.get(key);
-
-  //       // 수량이 1개 이상이라면 개수 감소
-  //       if (
-  //         changedProductsMap.has(key) &&
-  //         changedProductsMap.get(key)!.quantity! > 1
-  //       ) {
-  //         changedProductsMap.set(key, {
-  //           product: item!.product,
-  //           quantity: item!.quantity - 1,
-  //         });
-  //       } else {
-  //         // 수량이 1개 미만이라면 삭제
-  //         changedProductsMap.delete(key);
-  //       }
-  //       setProductsMap(changedProductsMap);
-  //     },
-  //     [productsMap]
-  //   );
-
-  //   const increaseQuantityCallBack = useCallback(
-  //     (key: string) => {
-  //       const changedProductsMap = new Map<string, productWithQuantity>(
-  //         productsMap
-  //       );
-
-  //       const item = changedProductsMap.get(key);
-
-  //       changedProductsMap.set(key, {
-  //         product: item!.product,
-  //         quantity: item!.quantity + 1,
-  //       });
-  //       setProductsMap(changedProductsMap);
-  //     },
-  //     [productsMap]
-  //   );
-
   useEffect(() => {
     const a = async () => {
       const { orderId, page, size } = searchParams;
@@ -136,10 +93,10 @@ export default function ClientPage({
       <div className="w-full md:w-3/4 p-6 flex items-center justify-center bg-background">
         <SingleItemCarousel imageList={products!} />
       </div>
-      
+
       <div className="w-full md:w-1/4 min-h-screen bg-muted/10 p-6 flex flex-col space-y-6">
         <UserData order={order} />
-        
+
         <Card>
           <CardContent className="pt-6">
             <ProductSummary
@@ -152,24 +109,24 @@ export default function ClientPage({
         </Card>
 
         <div className="flex flex-col space-y-3">
-          <Button 
+          <Button
             size="lg"
             className="w-full"
             onClick={() => router.push(`/orders/${order?.orderUuid}/update`)}
           >
             주문 수정
           </Button>
-          
+
           <div className="flex space-x-3">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
               className="flex-1"
               onClick={() => router.push("/")}
             >
               메인 화면
             </Button>
-            <Button 
+            <Button
               variant="outline"
               size="lg"
               className="flex-1"
