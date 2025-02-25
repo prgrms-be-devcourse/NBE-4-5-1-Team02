@@ -152,7 +152,7 @@ public class OrderService {
 
     public OrderInfoWithoutItemDto getOrderAdmin(@NotEmpty String orderId) {
         return new OrderInfoWithoutItemDto(orderRepository.findByOrderUuid(orderId)
-                .orElseThrow(() -> new EntityNotFoundException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
+                .orElseThrow(() -> new NoSuchOrderException("orderId가 " + orderId + "인 order를 찾을 수 없습니다."))
         );
     }
 
@@ -189,9 +189,12 @@ public class OrderService {
 
     public OrderInfoWithoutItemDto findOrder(String orderId, String email) {
         Order order =  orderRepository.findByOrderUuid(orderId).
-                orElseThrow(() -> new EntityNotFoundException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
+                orElseThrow(() -> new NoSuchOrderException("id가 %s인 order를 찾을 수 없습니다.".formatted(orderId)));
 
         User loggedInUser = userService.findByEmail(email);
+
+        if(loggedInUser == null)
+            throw new AccessDeniedException("email이 %s인 유저는 없습니다.".formatted(email));
 
         if(!loggedInUser.isMine(order))
             throw new ServiceException("다른 사람의 주문을 조회할 수 없습니다.");
