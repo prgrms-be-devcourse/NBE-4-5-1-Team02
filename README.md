@@ -2,8 +2,8 @@
 ## 팀원
 |김지우|김윤주|박종현|신우석|정회찬|
 |:-:|:-:|:-:|:-:|:-:|
-|<img src="https://github.com/user-attachments/assets/ede38190-2308-44b6-b8e6-b269142226e4" width="150">|[![김윤주]()]()|<img src="https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d" width="200">|[![신우석]()]()|[![정회찬]()]()|
-|FE,BE|FE,BE|FE,BE|FE,BE|FE,BE|
+|<img src="https://github.com/user-attachments/assets/ede38190-2308-44b6-b8e6-b269142226e4" width="150">|<img src="https://github.com/user-attachments/assets/5abd0806-bcd2-4512-b11d-09474e51ee5c" width="150">|<img src="https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d" width="150">|<img src="https://github.com/user-attachments/assets/65fc1b4a-615b-432a-84bf-057f3566a4d4" width="150">|<img src="https://github.com/user-attachments/assets/d3135603-64d6-47c2-8758-6c5b87089584" width="150">|
+|FE,BE|FE,BE|FE,BE|FE,BE|BE|
 |[GitHub](https://github.com/omegafrog)|[GitHub](https://github.com/yunjuKimm)|[GitHub](https://github.com/joungGo)|[GitHub](https://github.com/shinwoos)|[GitHub](https://github.com/hoechanj)|
 <br>
 
