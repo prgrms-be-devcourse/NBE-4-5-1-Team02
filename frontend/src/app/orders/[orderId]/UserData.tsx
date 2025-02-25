@@ -1,17 +1,18 @@
 import { components } from "@/lib/backend/apiV1/schema";
 import { OrderWithoutItemDto } from "./ClientPage";
-import { Separator } from "@/components/ui/separator"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardHeader, CardContent } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 const deliveryStatus = new Map([
   ["PENDING", "배송 전"],
   ["SHIPPED", "배송 중"],
   ["DELIVERED", "배송 됨"],
-  ["CANCELED", "취소됨"],
+  ["CANCELLED", "취소됨"],
 ]);
 
 export default function UserData({ order }: { order?: OrderWithoutItemDto }) {
+  console.log(order);
   return (
     <Card className="w-full">
       <CardHeader>
@@ -37,7 +38,9 @@ export default function UserData({ order }: { order?: OrderWithoutItemDto }) {
           <Separator />
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">총 결제 금액</span>
-            <span className="font-medium">{order?.totalAmount.toLocaleString()}원</span>
+            <span className="font-medium">
+              {order?.totalAmount.toLocaleString()}원
+            </span>
           </div>
           <Separator />
           <div className="flex items-center justify-between">

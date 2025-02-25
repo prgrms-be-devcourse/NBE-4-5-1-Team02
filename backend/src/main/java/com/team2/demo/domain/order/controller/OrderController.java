@@ -109,7 +109,9 @@ public class OrderController {
             @RequestParam String email,
             @Valid @RequestBody OrderRequestDto request) {
         OrderDto response = orderService.updateOrder(orderId, email, request);
-
+        if(response == null){
+            return RsData.success("주문이 취소되었습니다." ,null);
+        }
         return RsData.success("ok", response);
     }
 

@@ -74,8 +74,7 @@ public class OrderService {
                         .collect(Collectors.toList());
 
         if (updatedProducts.isEmpty()) {
-            order.updateDeliveryStatus(Order.DeliveryStatus.CANCELLED);
-            throw new NoProductsInOrderException("주문에 상품이 하나도 없어 주문이 취소되었습니다.");
+            cancelOrder(orderId, email);
         }
 
         order.updateOrder(updatedProducts,  request.getAddress(), request.getZipcode(), order.getDeliveryStatus());
