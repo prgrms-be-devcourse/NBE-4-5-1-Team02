@@ -2,19 +2,18 @@
 ## 팀원
 |김지우|김윤주|박종현|신우석|정회찬|
 |:-:|:-:|:-:|:-:|:-:|
-|[![김지우]()]()|[![김윤주]()]()|![박종현](https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d)|[![신우석]()]()|[![정회찬]()]()|
+|[![김지우]()]()|[![김윤주]()]()|<img src="https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d" width="200">|[![신우석]()]()|[![정회찬]()]()|
 |FE,BE|FE,BE|FE,BE|FE,BE|FE,BE|
 |[GitHub](https://github.com/omegafrog)|[GitHub](https://github.com/yunjuKimm)|[GitHub](https://github.com/joungGo)|[GitHub](https://github.com/shinwoos)|[GitHub](https://github.com/hoechanj)|
-
 <br>
 
 ## 역할
 | 이름   | FE                                    | BE                                   |
 | ------ | ----------------------------------------- | ---------------------------------------- |
 | 김지우 | 상품 조회 화면 개발                         | 관리자 주문 상세 조회 API 구현              |
-| 신우석 | 사용자 주문 생성 화면 개발 및 주문 세부 조회 UI 개발 | 사용자 주문 생성 및 세부 조회 API 구현         |
-| 김윤주 | 사용자 주문 수정/삭제 화면 개발              | 사용자 주문 수정 및 삭제 API 구현            |
-| 정회찬 | 관리자 주문 수정/삭제 화면 개발              | 관리자 주문 수정 및 삭제 API 구현            |
+| 신우석 | 사용자 주문 생성 화면 개발 및 주문 세부 조회 UI 개발 | 사용자 주문 생성 및 세부 조회 API 구현 |
+| 김윤주 | 사용자 주문 수정/삭제 화면 개발              | 사용자 주문 수정 및 삭제 API 구현 |
+| 정회찬 | 관리자 주문 수정/삭제 화면 개발              | 관리자 주문 수정 및 삭제 API 구현  |
 | 박종현 | 리스트 조회 화면 (사용자, 관리자) UI 및 전체 UI 꾸미기         | 리스트 조회 화면 (사용자, 관리자) 개발 |
 
 <br>
