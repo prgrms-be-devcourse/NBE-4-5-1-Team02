@@ -645,35 +645,37 @@
 
 - **URL:** `/admin/orders/{orderId}`
 - **Method:** `GET`
-- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다.
+- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다. <br/> 이때 주문 내의 물품은 포함하지 않습니다
+
 - **Response 예시:**
     <details>
-<summary>success</summary>
-```json
-`GET /admin/ord
-{
-"message": "Success.",
-"data": {
-"orderUuid": "order-11112-22222-33331",
-"user": {
-"id": "user-11112-22222-33331",
-"email": "email0@email.com",
-"createdDate": "2024-02-21T10:14:11.083775",
-"modifiedDate": "2024-02-21T10:14:11.083775",
-"orders": null
-},
-"createDate": "2024-02-21T10:14:11.084784",
-"modifiedDate": "2024-02-21T10:14:11.084784",
-"totalAmount": 9999,
-"deliveryAddress": "addr0",
-"zipCode": 123122,
-"deliveryStatus": "PENDIN asdfasdf:G"
-},
-"code": 200
-    
-    
+    <summary>success</summary>
+
+    `GET /admin/orders/o6`
+    ```json
+    {
+        "message": "Success.",
+        "data": {
+            "orderUuid": "o6",
+            "user": {
+                "id": "u2",
+                "email": "bob@example.com",
+                "createdDate": "2025-02-25T12:03:02.803832",
+                "modifiedDate": "2025-02-25T12:03:02.803832"
+            },
+            "createDate": "2025-02-25T12:03:02.803832",
+            "modifiedDate": "2025-02-25T12:03:02.803832",
+            "totalAmount": 3100,
+            "deliveryAddress": "Busan, Haeundae",
+            "zipCode": 202010,
+            "deliveryStatus": "PENDING"
+        },
+        "code": 200
+    }
+    ```
     </details>
-- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다. <br/> 이때 주문 내의 물품은 포함하지 않습니다
+  
+
 - **Parameters**
     - **PathParameter**
 
@@ -803,45 +805,96 @@
 | buyer.address | 서울시 강남구 테헤란로 123 | true  |  |
 | buyer.zipcode | 12345            | true  |  |
 
-- **Request Body 예시:**
+- **Request Body**
 
-  (사용자와 유사하며, 관리자는 주문 상태(배송 상태) 등 추가 필드를 수정할 수 있습니다.)
-
-- **Response 예시:** (수정된 주문 데이터 반환)
-
+    <details>
+    <summary>Request Body</summary>
+  
     ```json
     {
-      "buyer": {
-    	  "email": "user@example.com"
-      }
+        "address": "changeaddr1",
+        "zipcode": 123123,
+        "items":[
+            {
+                "productId": "p3",
+                "quantity": 2
+            },
+            {
+                "productId": "p12",
+                "quantity": 3
+            }
+            ]
     }
+    ```
+    </details>
+  
+
+- **Response Body**
+    <details>
+    <summary>success</summary>
+  
+    ```json
+    {
+        "message": "success.",
+        "data": {
+            "orderId": "o6",
+            "orderDate": "2025-02-25T11:49:46.271223",
+            "totalPrice": 7300,
+            "deliveryStatus": "PENDING",
+            "buyerEmail": "bob@example.com",
+            "address": "changeaddr1"
+        },
+        "code": 200
+    }
+    ```
+    </details>
+    <details>
+    <summary>fail</summary>
     
-    ```
-
-    - success
-
-    ```json
-    {
-      "orderId": "order789",
-      "createdAt": "2025-02-18T14:00:00Z",
-      "updatedAt": "2025-02-18T14:00:00Z",
-      "buyer": {
-        "email": "user@example.com"
-      },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
-      "deliveryStatus": "대기중"
-    }
-    ```
-
-    - fail
-
-    ```json
-    {
-      "error": "ModificationNotAllowed",
-      "message": "주문 일자로부터 오후 2시가 지난 주문은 수정할 수 없습니다."
-    }
-    ```
+    - `zipcode`가 빠진 입력
+    
+        ```json
+        {
+            "message": "우편번호를 입력해야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    
+    - address가 빠진 입력
+    
+        ```json
+        {
+            "message": "배송 주소를 입력해야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    - item list가 빠진 입력
+        ```json
+        {
+            "message": "상품 ID 리스트는 필수입니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    - item에 수량이 빠진 입력
+        ```json
+        {
+            "message": "수량은 최소 1개 이상이어야 합니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    - item에 productId가 빠진 입력
+        ```json
+        {
+            "message": "product Id는 필수입니다.",
+            "data": null,
+            "code": 400
+        }
+        ```
+    </details>
 
 ---
 
