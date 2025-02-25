@@ -1,13 +1,16 @@
-// /components/OrderUpdate/OrderDetails.tsx
+"use client";
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Order, OrderItem } from "@/services/orderService";
+import { Order } from "@/services/orderService";
 
 interface OrderDetailsProps {
   order: Order;
   setOrder: React.Dispatch<React.SetStateAction<Order>>;
   onRemoveProduct: (productId: string) => void;
+  onIncreaseQuantity: (productId: string) => void;
+  onDecreaseQuantity: (productId: string) => void;
   onSubmit: () => void;
 }
 
@@ -15,78 +18,96 @@ export default function OrderDetails({
   order,
   setOrder,
   onRemoveProduct,
+  onIncreaseQuantity,
+  onDecreaseQuantity,
   onSubmit,
 }: OrderDetailsProps) {
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOrder({ ...order, address: e.target.value });
+  };
+
+  const handleZipcodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOrder({ ...order, zipcode: e.target.value });
+  };
+
+  const totalPrice = order.items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
   return (
     <div className="w-80 border p-4">
       <h2 className="text-lg font-semibold mb-2">주문 내용</h2>
+      {/* 주문 정보 */}
       <p className="mb-2">
         <span className="font-medium">주문번호:</span> {order.orderId}
       </p>
-      <p>
+      <p className="mb-2">
         <span className="font-medium">구매자:</span> {order.buyerEmail}
       </p>
-      <p>
+      <p className="mb-2">
         <span className="font-medium">주문일자:</span> {order.orderDate}
       </p>
-      <p>
-        <span className="font-medium">배송상태:</span> {order.deliveryStatus}
-      </p>
+
+      {/* 주문 상품 */}
       <div className="mt-4">
         <h3 className="font-semibold mb-1">주문 상품</h3>
-        {order.items.length > 0 ? (
-          order.items.map((item, index) => (
+        {order.items && order.items.length > 0 ? (
+          order.items.map((item) => (
             <div
-              key={index}
+              key={item.productId}
               className="flex justify-between items-center mb-2 bg-gray-100 p-2 rounded"
             >
-              <span>
-                {item.name} (수량: {item.quantity})
-              </span>
-              <Button
-                onClick={() => onRemoveProduct(item.productId)}
-                variant="destructive"
-                className="bg-black text-white px-3 py-1 rounded"
-              >
-                제거
-              </Button>
+              <div>
+                <p className="font-medium">{item.name}</p>
+                <p className="text-sm text-gray-600">
+                  {(item.price * item.quantity).toLocaleString()}원
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onIncreaseQuantity(item.productId)}
+                >
+                  +
+                </Button>
+                <span className="w-6 text-center">{item.quantity}</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onDecreaseQuantity(item.productId)}
+                >
+                  -
+                </Button>
+              </div>
             </div>
           ))
         ) : (
           <p>주문 상품이 없습니다.</p>
         )}
       </div>
+
       <div className="mt-4">
         <label className="block font-semibold mb-1">배송 주소</label>
-        <Input
-          value={order.address}
-          onChange={(e) => setOrder({ ...order, address: e.target.value })}
-          placeholder="예) 서울시 어쩌구"
-        />
+        <Input value={order.address} onChange={handleAddressChange} />
       </div>
       <div className="mt-4">
         <label className="block font-semibold mb-1">우편번호</label>
-        <Input
-          value={order.zipcode}
-          onChange={(e) => setOrder({ ...order, zipcode: e.target.value })}
-          placeholder="우편번호 입력"
-        />
+        <Input value={order.zipcode} onChange={handleZipcodeChange} />
       </div>
-      <p className="mt-4 font-semibold">총 금액: {order.totalAmount}원</p>
-      <div className="mt-4 flex gap-4">
-        <Button
-          onClick={onSubmit}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          결제하기
-        </Button>
-        <Button
-          onClick={() => window.history.back()}
-          className="bg-gray-300 text-black px-4 py-2 rounded"
-        >
-          돌아가기
-        </Button>
+
+      <hr className="my-3" />
+      <div className="flex justify-between items-center">
+        <span className="font-semibold">총 가격</span>
+        <span className="text-lg font-bold">
+          {totalPrice.toLocaleString()}원
+        </span>
       </div>
+
+      <Button className="mt-4 w-full" onClick={onSubmit}>
+        수정하기
+      </Button>
     </div>
   );
 }
