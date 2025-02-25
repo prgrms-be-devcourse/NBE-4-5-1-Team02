@@ -3,9 +3,9 @@
 # 팀원
 |김지우|김윤주|박종현|신우석|정회찬|
 |:-:|:-:|:-:|:-:|:-:|
-|[![김지우](https://avatars.githubusercontent.com/u/102517739?v=4)](https://avatars.githubusercontent.com/u/102517739?v=4)|[![김윤주](https://avatars.githubusercontent.com/u/58596222?v=4)](https://avatars.githubusercontent.com/u/58596222?v=4)|![박종현](https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d)|[![신우석](https://avatars.githubusercontent.com/u/55376152?v=4)](https://avatars.githubusercontent.com/u/55376152?v=4)|[![정회찬](https://avatars.githubusercontent.com/u/15260002?v=4)](https://avatars.githubusercontent.com/u/15260002?v=4)|
+|[![김지우]()]()|[![김윤주]()]()|![박종현](https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d)|[![신우석]()]()|[![정회찬]()]()|
 |FE,BE|FE,BE|FE,BE|FE,BE|FE,BE|
-|[GitHub](https://github.com/M00NPANG)|[GitHub](https://github.com/socra167)|[GitHub](https://github.com/joungGo)|[GitHub](https://github.com/sameom1048)|[GitHub](https://github.com/GODAOS)|
+|[GitHub](https://github.com/omegafrog)|[GitHub](https://github.com/yunjuKimm)|[GitHub](https://github.com/joungGo)|[GitHub](https://github.com/shinwoos)|[GitHub](https://github.com/hoechanj)|
 
 # 역할
 | 이름   | FE                                    | BE                                   |
