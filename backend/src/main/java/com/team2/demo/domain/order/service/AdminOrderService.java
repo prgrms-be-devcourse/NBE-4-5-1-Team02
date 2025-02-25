@@ -1,5 +1,6 @@
 package com.team2.demo.domain.order.service;
 
+import com.team2.demo.domain.order.dto.AdminOrderRequestDto;
 import com.team2.demo.domain.order.dto.OrderDto;
 import com.team2.demo.domain.order.dto.OrderRequestDto;
 import com.team2.demo.domain.order.dto.ProductWithAmount;
@@ -8,6 +9,7 @@ import com.team2.demo.domain.order.repository.OrderRepository;
 import com.team2.demo.domain.product.dto.ProductListDto;
 import com.team2.demo.domain.product.repository.ProductRepository;
 import com.team2.demo.domain.product.service.ProductService;
+import com.team2.demo.global.exception.order.NoSuchOrderException;
 import com.team2.demo.global.exception.product.NoSuchProductException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,11 +25,10 @@ import java.util.Map;
 public class AdminOrderService {
 
     private final OrderRepository orderRepository;
-    private final ProductService productService;
     private final ProductRepository productRepository;
 
     @Transactional
-    public OrderDto updateOrder(String orderId, OrderRequestDto request) {
+    public OrderDto updateOrder(String orderId, AdminOrderRequestDto request) {
         Order order = orderRepository.findById(orderId).
                 orElseThrow(() -> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderId));
 
@@ -46,14 +47,17 @@ public class AdminOrderService {
         ).toList();
 
         //주문 정보 업데이트
-        order.updateOrder(productWithAmounts, request.getAddress(), request.getZipcode(), request.getDeliveryStatus() );
+        order.updateOrder(productWithAmounts,
+                request.getAddress(),
+                request.getZipcode(),
+                request.getDeliveryStatus()==null?order.getDeliveryStatus():request.getDeliveryStatus() );
         return new OrderDto(order);
     }
 
     // 주문 삭제 기능
     public void deleteOrder(String orderUuid){
         Order order = orderRepository.findByOrderUuid(orderUuid)
-                .orElseThrow(()-> new EntityNotFoundException("주문을 찾을 수 없습니다: " + orderUuid));
+                .orElseThrow(()-> new NoSuchOrderException("주문을 찾을 수 없습니다: " + orderUuid));
 
         orderRepository.delete(order);
     }
