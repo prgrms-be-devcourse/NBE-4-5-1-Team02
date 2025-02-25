@@ -20,7 +20,7 @@
 
 # 스키마
 ## ERD
-![erd1](https://github.com/user-attachments/assets/31fc20bc-7c3d-43b0-8684-bacd06237038)
+![erd1](https://github.com/user-attachments/assets/7b6870ad-ec39-4440-9a9a-332d3ad7b58e)
 
 ## SQL
 ```sql
