@@ -30,30 +30,62 @@ export default function AdminOrderDetailClientPage({
   orderDetail: OrderDetailResponse;
 }) {
   const { data } = orderDetail;
+  const [items, setItems] = useState([]);
 
   const [formData, setFormData] = useState({
     address: data.deliveryAddress,
     zipCode: data.zipCode.toString(),
     totalAmount: data.totalAmount.toLocaleString(),
     buyer: { email: data.user.email || "" },
+    deliveryStatus: data.deliveryStatus,
   });
 
-  
+  const itemList = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/admin/orders/${data.orderUuid}/products/all`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("주문 정보를 불러오는데 실패했습니다.");
+      }
+
+      const result = await response.json();
+      setItems(result.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    itemList();
+  }, []);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof typeof formData
+    field: keyof typeof formData | "amount",
+    index?: number
   ) => {
     if (field === "totalAmount") {
-      const value = e.target.value.replace(/[^\d]/g, ''); // 숫자만 남기기
+      const value = e.target.value.replace(/[^\d]/g, "");
       setFormData({
         ...formData,
-        totalAmount: value ? Number(value) : 0,
+        totalAmount: value ? Number(value).toLocaleString() : "0",
       });
     } else if (field === "buyer") {
       setFormData({
         ...formData,
         buyer: { ...formData.buyer, email: e.target.value },
       });
+    } else if (field === "amount" && typeof index === "number") {
+      const updatedItems = [...items];
+      updatedItems[index].amount = e.target.value;
+      setItems(updatedItems);
     } else {
       setFormData({
         ...formData,
@@ -63,7 +95,6 @@ export default function AdminOrderDetailClientPage({
   };
 
   const handleBlur = () => {
-    // totalAmount가 숫자이면 포맷 적용
     if (formData.totalAmount) {
       setFormData({
         ...formData,
@@ -73,20 +104,26 @@ export default function AdminOrderDetailClientPage({
   };
 
   const handleSubmit = async () => {
-    if (!confirm("수정하시겠습니까?")) {
+    if (!confirm("수정하시겠습니까?")) return;
+    if (!(data.deliveryStatus === "PENDING")) {
+      alert("배송상태가 PENDING일 경우에만 수정 가능합니다.");
       return;
     }
-    // zipCode를 다시 숫자로 변환
+
     const requestBody = {
-      zipcode: Number(formData.zipCode), // 숫자로 변환
       address: formData.address,
-      totalAmount: Number(formData.totalAmount.replace(/,/g, '')), // 포맷 제거 후 숫자로 변환
+      zipcode: Number(formData.zipCode),
+      items: items.map((item) => ({
+        productId: item.product.productUuid,
+        quantity: Number(item.amount),
+      })),
       buyer: {
         email: formData.buyer.email,
       },
+      deliveryStatus: formData.deliveryStatus,
     };
 
-    console.log(requestBody);
+    console.log("Request Body:", requestBody);
 
     try {
       const response = await fetch(
@@ -101,7 +138,6 @@ export default function AdminOrderDetailClientPage({
       );
 
       if (response.ok) {
-        const result = await response.json();
         alert("주문 정보가 수정되었습니다.");
         window.location.reload();
       } else {
@@ -137,19 +173,11 @@ export default function AdminOrderDetailClientPage({
             </p>
             <p>
               <span className="font-medium">주문 일시:</span>{" "}
-              <input
-                type="text"
-                value={formatDate(data.createDate) || ""}
-                readOnly
-              />
+              <input type="text" value={formatDate(data.createDate) || ""} readOnly />
             </p>
             <p>
               <span className="font-medium">배송 상태:</span>{" "}
-              <input
-                type="text"
-                value={data.deliveryStatus || ""}
-                readOnly
-              />
+              <input type="text" value={data.deliveryStatus || ""} readOnly />
             </p>
             <p>
               <span className="font-medium">총 주문금액:</span>{" "}
@@ -157,7 +185,7 @@ export default function AdminOrderDetailClientPage({
                 type="text"
                 value={formData.totalAmount}
                 onChange={(e) => handleChange(e, "totalAmount")}
-                onBlur={handleBlur} // 포커스를 잃을 때 포맷 적용
+                onBlur={handleBlur}
               />
               원
             </p>
@@ -171,11 +199,7 @@ export default function AdminOrderDetailClientPage({
             </p>
             <p>
               <span className="font-medium">이메일:</span>{" "}
-              <input
-                type="text"
-                value={formData.buyer.email || ""}
-                readOnly
-              />
+              <input type="text" value={formData.buyer.email || ""} readOnly />
             </p>
             <p>
               <span className="font-medium">배송 주소:</span>{" "}
@@ -194,7 +218,36 @@ export default function AdminOrderDetailClientPage({
               />
             </p>
           </div>
+
+          <div>
+            <h2 className="text-xl font-bold mb-4">상품 목록</h2>
+            {items.length === 0 ? (
+              <p>상품이 없습니다.</p>
+            ) : (
+              <ul>
+                {items.map((item, index) => (
+                  <li key={index} className="p-2 border-b">
+                    <p>
+                      <strong>상품명:</strong> {item.product.productDescription}
+                    </p>
+                    <p>
+                      <strong>수량:</strong>{" "}
+                      <input
+                        type="text"
+                        value={item.amount || ""}
+                        onChange={(e) => handleChange(e, "amount", index)}
+                      />
+                    </p>
+                    <p>
+                      <strong>가격:</strong> {item.product.productPrice.toLocaleString()}원
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </form>
+
         <div className="mt-4 flex justify-between">
           <div></div>
           <button
