@@ -85,7 +85,7 @@ export default function AdminOrdersClientPage({
       setIsDeleting(false);
     }
   };
-
+  
   return (
     <div className="container mx-auto p-4">
       <Card>
