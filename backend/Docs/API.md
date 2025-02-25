@@ -6,77 +6,109 @@
 - **Method:** `POST`
 - **Parameters**
   - **Query string**
-    - `keyword-type` : string, default=`"title"`, not null
-    - `keyword` : string, nullable <br/>
+  - | 키              | 예시 값      | 필수 여부   | 기본값     | 
+    |----------------|-----------|---------|---------|
+    | `keyword-type` | `"title"` | `false` | `"title"` |
+    | `keyword`       | `coffee1`  | `false` | `""`        |
 
   <details>
   <summary>success</summary> 
   
+    `GET /products`
     ```json
-    {
+      {
         "message": "Success.",
         "data": {
             "data": [
                 {
-                    "productUuid": "product-11111-22222-33331",
-                    "productName": "product1",
+                    "productUuid": "p1",
+                    "productName": "Coffee 1",
                     "category": "coffeeBean",
-                    "productPrice": 1000,
-                    "productDescription": "커피콩1",
-                    "imageUrl": "image_url1"
+                    "productPrice": 1200,
+                    "productDescription": "싱글 오리진 커피 원두",
+                    "imageUrl": "/img/coffee1.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33332",
-                    "productName": "product2",
+                    "productUuid": "p2",
+                    "productName": "Coffee 2",
                     "category": "coffeeBean",
-                    "productPrice": 5000,
-                    "productDescription": "커피콩2",
-                    "imageUrl": "image_url2"
+                    "productPrice": 1300,
+                    "productDescription": "에스프레소용 커피 원두",
+                    "imageUrl": "/img/coffee2.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33333",
-                    "productName": "product3",
+                    "productUuid": "p3",
+                    "productName": "Coffee 3",
                     "category": "coffeeBean",
-                    "productPrice": 1000,
-                    "productDescription": "커피콩3",
-                    "imageUrl": "image_url3"
+                    "productPrice": 1250,
+                    "productDescription": "다크 로스트 커피 원두",
+                    "imageUrl": "/img/coffee3.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33334",
-                    "productName": "product4",
+                    "productUuid": "p4",
+                    "productName": "Coffee 4",
                     "category": "coffeeBean",
-                    "productPrice": 5000,
-                    "productDescription": "커피콩4",
-                    "imageUrl": "image_url4"
+                    "productPrice": 1400,
+                    "productDescription": "라이트 로스트 커피 원두",
+                    "imageUrl": "/img/coffee4.png"
                 },
                 {
-                    "productUuid": "product-11111-22222-33335",
-                    "productName": "product5",
+                    "productUuid": "p5",
+                    "productName": "Coffee 5",
                     "category": "coffeeBean",
-                    "productPrice": 1000,
-                    "productDescription": "커피콩5",
-                    "imageUrl": "image_url5"
+                    "productPrice": 1350,
+                    "productDescription": "블렌드 커피 원두",
+                    "imageUrl": "/img/coffee5.png"
+                },
+                {
+                    "productUuid": "p6",
+                    "productName": "Tea 1",
+                    "category": "tea",
+                    "productPrice": 800,
+                    "productDescription": "녹차 티백",
+                    "imageUrl": "/img/tea1.png"
+                },
+                {
+                    "productUuid": "p7",
+                    "productName": "Tea 2",
+                    "category": "tea",
+                    "productPrice": 900,
+                    "productDescription": "홍차 티백",
+                    "imageUrl": "/img/tea2.png"
+                },
+                {
+                    "productUuid": "p8",
+                    "productName": "Tea 3",
+                    "category": "tea",
+                    "productPrice": 850,
+                    "productDescription": "우롱차 티백",
+                    "imageUrl": "/img/tea3.png"
+                },
+                {
+                    "productUuid": "p9",
+                    "productName": "Tea 4",
+                    "category": "tea",
+                    "productPrice": 950,
+                    "productDescription": "허브차 티백",
+                    "imageUrl": "/img/tea4.png"
+                },
+                {
+                    "productUuid": "p10",
+                    "productName": "Tea 5",
+                    "category": "tea",
+                    "productPrice": 800,
+                    "productDescription": "과일차 티백",
+                    "imageUrl": "/img/tea5.png"
                 }
             ],
             "page": 0,
             "size": 10,
-            "totalPages": 1
+            "totalPages": 3
         },
         "code": 200
     }
     ```  
   </details>
-  <details>
-  <summary>fail</summary>
-
-    ```json
-    {
-      "errcode": "PRODUCT001",
-      "errmsg": "상품 목록 조회를 불러오지 못했습니다."
-    }
-    ```
-  </details>
-
 
 ## 1. 사용자 API
 
@@ -88,32 +120,31 @@
 
 - 파라미터
 
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.email | user@example.com | true |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |
-| buyer.zipcode | 12345 | true |
-| items[].productId | p123 | true |
-| items[].quantity | 2 | true |
+| 키                 | 타입          | 값 예시                 | 필수 여부 | 기본값 |
+|-------------------|-------------|----------------------| --- | --- |
+| `buyer.email`     | `string`    | `"user@example.com"` | `true`           |  |
+| `address`           | `string`    | `"서울시 강남구 테헤란로 123"` | `true`                | |
+| `zipcode`     | `integer`   | `12345`              | true                  |
+| items[].productId | `string`    | p123                 | true                |
+| items[].quantity  | `number` |  2                   | true                 |
 - **Request Body 예시:**
     
     ```json
     {
-      "buyer": {
-        "email": "user@example.com"
-      },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
-      "items": [
-        {
-          "productId": "p123",
-          "quantity": 2
-        },
-        {
-          "productId": "p456",
-          "quantity": 1
-        }
-      ]
+        "buyer":{
+              "email": "email1@email.com"
+            },
+            "address": "address1",
+            "zipcode": "123123",
+            "items":[{
+              "productId": "p1",
+              "quantity": 3
+            },
+            {
+              "productId": "p2",
+              "quantity": 2
+            }
+        ]
     }
     
     ```
@@ -177,34 +208,44 @@
 - **Query Parameter (옵션):**
     - `email` (혹은 인증 정보를 통해 결정)
 - **Response 예시:**
-
-
-    ```json
-    {
-      "content": [
-        {
-          "orderId": "order789",
-          "orderDate": "2025-02-18T14:00:00Z",
-          "totalPrice": 40000,
-          "deliveryStatus":"배송 전",
-          "buyerEmail": "user@example.com",
-          "address": "add1",
-        },
-        {
-          "orderId": "order790",
-          "orderDate": "2025-02-17T14:00:00Z",
-          "totalPrice": 15000,
-          "deliveryStatus":"배송 ",
-          "buyerEmail": "user@example.com",
-          "address": "add2",
-        }
-      ],
-      "page": 1,
-      "size": 10,
-      "totalPages": 1
-    }
-    ```
-
+- 성공
+```json
+{
+  "message": "ok",
+  "data": {
+    "content": [
+      {
+        "orderId": "o9",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 4300,
+        "deliveryStatus": "DELIVERED",
+        "buyerEmail": "bob@example.com",
+        "address": "Busan, Nam-gu"
+      },
+      {
+        "orderId": "o7",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3250,
+        "deliveryStatus": "PENDING",
+        "buyerEmail": "bob@example.com",
+        "address": "Busan, Suyeong-gu"
+      }
+    ],
+    "page": 0,
+    "size": 2,
+    "totalPages": 2
+  },
+  "code": 200
+}
+```
+- 실패
+```json
+{
+    "message": "getOrders.email: 올바른 이메일 형식이어야 합니다.",
+    "data": null,
+    "code": 400
+}
+```
 
 ---
 
@@ -348,22 +389,26 @@
 
 ### 1.4. 주문 수정 (사용자)
 
-- **URL:** `/odrers/{orderId}?email=email@email.com`
+- **URL:** `/orders/{orderId}?email=email@email.com`
 - **Method:** `PUT`
 - **설명:** 사용자가 주문 상세 페이지에서 주문을 수정합니다. 배송 상태가 **배송 중/배송 완료** 일 때 수정이 불가능합니다.
 - **Query Parameter (옵션):**
     - `email` (혹은 인증 정보를 통해 결정)
     - ex) `/odrers/{orderId}?email=email@email.com`
+  
+      | 키 | 값 예시 | 필수 여부 |
+      | --- | --- | --- |
+      | email | user@example.com | true |
 
 - 바디 파라미터
 
 | 키 | 값 예시 | 필수 여부 |
 | --- | --- | --- |
-| buyer.address | user@example.com | true |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |
-| buyer.zipcode | 12345 | true |
+| address | 서울시 강남구 테헤란로 123 | true |
+| zipcode | 12345 | true |
 | items[].productId | p123 | true |
-| items[].quantity | 2 | true |
+| items[].quantity | 2 | true 
+
 - **Request Body 예시:**
     - success
 
@@ -474,84 +519,213 @@
 - **Method:** `GET`
 - **설명:** 관리자가 모든 사용자의 주문 리스트를 조회합니다.
 - **Response 예시:**
-    - success
-
-    ```json
-    {
-      "message": "Success.",
-      "data": {
-        "data": [
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "image_url1"
-        },
-        {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "image_url2"
-        }
+- success
+```json
+{
+    "message": "ok",
+    "data": {
+        "content": [
+            {
+                "orderId": "o9",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 4300,
+                "deliveryStatus": "DELIVERED",
+                "buyerEmail": "bob@example.com",
+                "address": "Busan, Nam-gu",
+                "items": [
+                    {
+                        "name": "Beverage 3",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Beverage 2",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o8",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 3650,
+                "deliveryStatus": "SHIPPED",
+                "buyerEmail": "bob@example.com",
+                "address": "Busan, Dongnae-gu",
+                "items": [
+                    {
+                        "name": "Snack 5",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Beverage 1",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o7",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 3250,
+                "deliveryStatus": "PENDING",
+                "buyerEmail": "bob@example.com",
+                "address": "Busan, Suyeong-gu",
+                "items": [
+                    {
+                        "name": "Snack 4",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Snack 3",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o6",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 3100,
+                "deliveryStatus": "PENDING",
+                "buyerEmail": "bob@example.com",
+                "address": "Busan, Haeundae",
+                "items": [
+                    {
+                        "name": "Snack 1",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Snack 2",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o5",
+                "orderDate": "2025-02-24T16:00:00",
+                "totalPrice": 1750,
+                "deliveryStatus": "CANCELLED",
+                "buyerEmail": "alice@example.com",
+                "address": "Seoul, Seocho-gu",
+                "items": [
+                    {
+                        "name": "Tea 5",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Tea 4",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o4",
+                "orderDate": "2025-02-24T16:00:00",
+                "totalPrice": 1750,
+                "deliveryStatus": "DELIVERED",
+                "buyerEmail": "alice@example.com",
+                "address": "Seoul, Yongsan-gu",
+                "items": [
+                    {
+                        "name": "Tea 3",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Tea 2",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o34",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 4300,
+                "deliveryStatus": "PENDING",
+                "buyerEmail": "george@example.com",
+                "address": "Ulsan, Dong-gu",
+                "items": [
+                    {
+                        "name": "Beverage 3",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Beverage 2",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o33",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 3650,
+                "deliveryStatus": "PENDING",
+                "buyerEmail": "george@example.com",
+                "address": "Ulsan, Nam-gu",
+                "items": [
+                    {
+                        "name": "Snack 5",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Beverage 1",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o32",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 3250,
+                "deliveryStatus": "DELIVERED",
+                "buyerEmail": "george@example.com",
+                "address": "Ulsan, Buk-gu",
+                "items": [
+                    {
+                        "name": "Snack 4",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Snack 3",
+                        "quantity": 1
+                    }
+                ]
+            },
+            {
+                "orderId": "o31",
+                "orderDate": "2025-02-25T09:18:48.052555",
+                "totalPrice": 3100,
+                "deliveryStatus": "SHIPPED",
+                "buyerEmail": "george@example.com",
+                "address": "Ulsan, Jung-gu",
+                "items": [
+                    {
+                        "name": "Snack 1",
+                        "quantity": 1
+                    },
+                    {
+                        "name": "Snack 2",
+                        "quantity": 1
+                    }
+                ]
+            }
         ],
-        "page": 0,
+        "page": 1,
         "size": 10,
-        "totalPages": 1
-        },
-      "code": 200
-    }
-    ```
-
-    - fail
-
-    ```json
-    {
-      "error": "NotFoundException",
-      "orderId": "order789",
-      "message": "주문 정보들을 찾을 수 없습니다."
-    }
-    ```
+        "totalPages": 4
+    },
+    "code": 200
+}
+```
+- fail
+  ```json
+  {
+    "error": "NotFoundException",
+    "orderId": "order789",
+    "message": "주문 정보들을 찾을 수 없습니다."
+  }
+  ```
 
 
 ---
 
-### 2.2. 주문 상세 조회 (관리자)
+### 2.2.1 주문 상세 조회 (관리자)
 
 - **URL:** `/admin/orders/{orderId}`
 - **Method:** `GET`
@@ -591,6 +765,49 @@
   "message": "해당하는 주문 정보를 가져올 수 없습니다."
 }
 ```
+ --- 
+### 2.2.2 주문에 포함된 모든 상품과 수량 조회 (관리자)
+- **URL:** `/admin/orders/{orderId}/products/all`
+- **Method:** `GET`
+- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **Parameters**
+  - **PathParameter**
+    - `orderId` : 주문번호
+- **Response 예시**
+<details>
+<summary>success</summary>
+
+```json
+{
+  "message": "Success.",
+  "data": [
+    {
+      "product": {
+        "productUuid": "product-11111-22222-33331",
+        "productName": "product1",
+        "category": "coffeeBean",
+        "productPrice": 1000,
+        "productDescription": "커피콩1",
+        "imageUrl": "/image.png"
+      },
+      "amount": 5
+    },
+    {
+      "product": {
+        "productUuid": "product-11111-22222-33332",
+        "productName": "product2",
+        "category": "coffeeBean",
+        "productPrice": 5000,
+        "productDescription": "커피콩2",
+        "imageUrl": "/image.png"
+      },
+      "amount": 1
+    }
+  ],
+  "code": 200
+}
+```
+</details>
 
 ---
 
@@ -768,48 +985,6 @@
 
 ---
 
-### 2.6 주문에 포함된 모든 상품과 수량 조회 (관리자)
-- **URL:** `/admin/orders/{orderId}/products/all`
-- **Method:** `GET`
-- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
-- **Parameters**
-  - **PathParameter**
-    - `orderId` : 주문번호
-- **Response 예시**
-<details>
-<summary>success</summary>
-
-```json
-{
-  "message": "Success.",
-  "data": [
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "/image.png"
-      },
-      "amount": 5
-    },
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "/image.png"
-      },
-      "amount": 1
-    }
-  ],
-  "code": 200
-}
-```
-</details>
 
 ### 1. 유저 API
 
