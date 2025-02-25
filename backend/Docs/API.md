@@ -116,8 +116,7 @@
 
 - **URL:** `/orders`
 - **Method:** `POST`
-- **설명:** 사용자가 주문 요청을 생성합니다.
-
+- **설명:** 사용자가 주문을 생성합니다.
 - **Body Parameter**
 
     | 키                   | 타입        | 값 예시                 | 필수 여부  | 기본값 |
@@ -127,16 +126,18 @@
     | `zipcode`           | `integer` | `12345`              | `true` |
     | `items[].productId` | `string`  | `p123`               | `true` |
     | `items[].quantity`  | `number`  | `2`                  | `true` |
-
-- **Request Body 예시:**
-    
+    - `items`: 하나 이상의 상품이 포함되어야 하며, 각 `quantity`는 0보다 커야 함
+- **Request Body**
+    <details>
+    <summary>Request Body</summary>
+  
     ```json
     {
       "buyer": {
-        "email": "user@example.com"
+        "email": "email1@email.com"
       },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
+      "address": "addr1",
+      "zipcode": 1073,
       "items": [
         {
           "productId": "p1",
@@ -144,16 +145,16 @@
         }
       ]
     }
-    
     ```
-    
-    - **유효성 검사:**
-        - `buyer.email`: 이메일 형식, 비어있지 않음
-        - `buyer.address`: 문자열, 비어있지 않음
-        - `buyer.zipcode`: 숫자 혹은 숫자형 문자열, 비어있지 않음
-        - `items`: 하나 이상의 상품이 포함되어야 하며, 각 `quantity`는 0보다 커야 함
-- **Response 예시:**
-    
+  </details>    
+        
+- **Response Body**
+ 
+    <details>
+    <summary>success</summary>
+
+  `POST /orders`
+
     ```json
     {
     "message": "ok",
@@ -199,6 +200,9 @@
     }
     
     ```
+    </details>
+    
+    
 
   fail
 
@@ -325,43 +329,35 @@
 
 - **Response예시**
 
-  ```json
-  {
-    "message": "Success.",
-    "data": {
-      "data": [
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
+    ```json
+    {
+        "message": "Success.",
+        "data": {
+            "data": [
+                {
+                    "productUuid": "p11",
+                    "productName": "Snack 1",
+                    "category": "snack",
+                    "productPrice": 1500,
+                    "productDescription": "바삭한 감자칩",
+                    "imageUrl": "/img/snack1.png"
+                },
+                {
+                    "productUuid": "p12",
+                    "productName": "Snack 2",
+                    "category": "snack",
+                    "productPrice": 1600,
+                    "productDescription": "고소한 견과류 믹스",
+                    "imageUrl": "/img/snack2.png"
+                }
+            ],
+            "page": 0,
+            "size": 10,
+            "totalPages": 1
         },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33332",
-          "productName": "product2",
-          "category": "coffeeBean",
-          "productPrice": 5000,
-          "productDescription": "커피콩2",
-          "imageUrl": "image_url2"
-        }
-      ],
-      "page": 0,
-      "size": 10,
-      "totalPages": 1
-    },
-    "code": 200
-  }
-  ```
+        "code": 200
+    }
+    ```
 
 ### 1.3.2 주문 내 모든 상품 조회 (사용자)
 
@@ -381,40 +377,40 @@
         | `orderId` | `string` | `"order-11111-22222-33333"` | `true` |     |
     
 - **Response 예시**
-<details>
-<summary>success</summary>
-
-```json
-{
-  "message": "Success.",
-  "data": [
+    <details>
+    <summary>success</summary>
+    
+    ```json
     {
-      "product": {
-        "productUuid": "p12",
-        "productName": "Snack 2",
-        "category": "snack",
-        "productPrice": 1600,
-        "productDescription": "고소한 견과류 믹스",
-        "imageUrl": "/img/snack2.png"
-      },
-      "amount": 1
-    },
-    {
-      "product": {
-        "productUuid": "p11",
-        "productName": "Snack 1",
-        "category": "snack",
-        "productPrice": 1500,
-        "productDescription": "바삭한 감자칩",
-        "imageUrl": "/img/snack1.png"
-      },
-      "amount": 1
+      "message": "Success.",
+      "data": [
+        {
+          "product": {
+            "productUuid": "p12",
+            "productName": "Snack 2",
+            "category": "snack",
+            "productPrice": 1600,
+            "productDescription": "고소한 견과류 믹스",
+            "imageUrl": "/img/snack2.png"
+          },
+          "amount": 1
+        },
+        {
+          "product": {
+            "productUuid": "p11",
+            "productName": "Snack 1",
+            "category": "snack",
+            "productPrice": 1500,
+            "productDescription": "바삭한 감자칩",
+            "imageUrl": "/img/snack1.png"
+          },
+          "amount": 1
+        }
+      ],
+      "code": 200
     }
-  ],
-  "code": 200
-}
-```
-</details>
+    ```
+    </details>
 
 ---
 
