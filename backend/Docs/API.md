@@ -392,9 +392,9 @@
 - **URL:** `/orders/{orderId}?email=email@email.com`
 - **Method:** `PUT`
 - **설명:** 사용자가 주문 상세 페이지에서 주문을 수정합니다. 배송 상태가 **배송 중/배송 완료** 일 때 수정이 불가능합니다.
-- **Query Parameter (옵션):**
-    - `email` (혹은 인증 정보를 통해 결정)
-    - ex) `/odrers/{orderId}?email=email@email.com`
+- **Query Parameter:**
+    - `email`
+    - ex) `/orders/{orderId}?email=email@email.com`
   
       | 키 | 값 예시 | 필수 여부 |
       | --- | --- | --- |
@@ -402,75 +402,73 @@
 
 - 바디 파라미터
 
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| address | 서울시 강남구 테헤란로 123 | true |
-| zipcode | 12345 | true |
-| items[].productId | p123 | true |
-| items[].quantity | 2 | true 
+| 키                 | 값 예시             | 필수 여부 |
+|-------------------|------------------|-------|
+| buyer.email       | user@example.com | true  |
+| deliveryStatus    | PENDING          | true  |
+| address           | 서울시 강남구 새로운주소 456 | true  |
+| zipcode           | 12345            | true  |
+| items[].productId | p123             | true  |
+| items[].quantity  | 2                | true  |
 
 - **Request Body 예시:**
     - success
 
     ```json
     {
+      "buyer": {
+        "email": "alice@example.com"
+      },
+      "deliveryStatus": "PENDING",
       "address": "서울시 강남구 새로운주소 456",
       "zipcode": "67890",
       "items": [
         {
-          "productId": "p123",
+          "productId": "p1",
           "quantity": 3
         },
         {
-          "productId": "p789",
+          "productId": "p2",
           "quantity": 2
         }
       ]
     }
     ```
+    - **유효성 검사:**
+      - `buyer.email`: 이메일 형식, 비어있으면 안됨
+      - `deliveryStatus`: 지정된 enum 값(PENDING, SHIPPED, DELIVERED, CANCELLED), null이 될 수 없음
+      - `address`: 비어있지 않은 String
+      - `zipcode`: 비어있지 않은 Integer
+      - `items`: 하나 이상의 상품이 포함되어야 함, 각 항목의 `quantity`는 0보다 커야함
+    
+  - **주의사항:**
+      - 수정 시 주문의 `updatedAt` 타임스탬프를 갱신합니다.
+      - 주문 상품이 모두 삭제되면 주문이 취소(삭제)됩니다.
 
-    - fail
+  - fail
 
-    ```json
-    {
-      "error": "NotFoundException",
-      "orderId": "order789",
-      "message": "해당하는 주문을 찾을 수 없어 삭제에 실패했습니다."
-    }
-    ```
+  ```json
+  {
+    "message": "해당 주문을 찾을 수 없습니다.",
+    "data": null,
+    "code": 400
+  }
+  ```
 
-    - **주의사항:**
-        - 수정 시 주문의 `updatedAt` 타임스탬프를 갱신합니다.
-        - 주문 상품이 모두 삭제되면 주문이 취소(삭제)됩니다.
 - **Response 예시:** (성공 시 갱신된 주문 데이터 반환)
 
     ```json
     {
-      "orderId": "order789",
-      "createdAt": "2025-02-18T14:00:00Z",
-      "updatedAt": "2025-02-18T16:00:00Z",
-      "image_url": "url/",
-      "buyer": {
-        "email": "user@example.com"
+      "message": "ok",
+      "data": {
+         "orderId": "o1",
+         "orderDate": "2025-02-25T10:30:12.667673",
+         "totalPrice": 9950,
+         "deliveryStatus": "CANCELLED",
+         "buyerEmail": "alice@example.com",
+         "address": "a1"
       },
-      "address": "서울시 강남구 새로운주소 456",
-      "zipcode": "67890",
-      "items": [
-        {
-          "productId": "p123",
-          "name": "상품명1",
-          "quantity": 3,
-          "price": 10000
-        },
-        {
-          "productId": "p789",
-          "name": "상품명3",
-          "quantity": 2,
-          "price": 15000
-        }
-      ],
-      "totalPrice": 60000,
-      "deliveryStatus": "배송전"
+       "code": 200
     }
     ```
 
@@ -479,16 +477,28 @@
 
 ### 1.5. 주문 취소 (사용자)
 
-- **URL:** `/odrers/{orderId}?email=email@email.com`
+- **URL:** `/orders/{orderId}?email=email@email.com`
 - **Method:** `DELETE`
 - **설명:** 사용자가 상세보기 페이지나 리스트에서 주문을 취소합니다.
+- **Query Parameter:**
+  - `email`
+  - ex) `/orders/{orderId}?email=email@email.com`
+
+    | 키 | 값 예시 | 필수 여부 |
+          | --- | --- | --- |
+    | email | user@example.com | true |
+
 - **Response 예시:**
     - success
 
     ```json
     {
       "message": "주문이 성공적으로 취소되었습니다.",
-      "orderId": "order789"
+      "data": {
+           "orderId": "o1",
+           "message": "주문이 성공적으로 취소되었습니다."
+    },
+    "code": 200
     }
     ```
 
@@ -496,9 +506,9 @@
 
     ```json
     {
-      "error": "NotFoundException",
-      "orderId": "order789",
-      "message": "해당하는 주문을 찾을 수 없어 삭제에 실패했습니다."
+      "message": "해당하는 주문을 찾을 수 없어 삭제에 실패했습니다.",
+      "data": null,
+      "code": 400
     }
     ```
 
@@ -579,132 +589,7 @@
                     }
                 ]
             },
-            {
-                "orderId": "o6",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3100,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "bob@example.com",
-                "address": "Busan, Haeundae",
-                "items": [
-                    {
-                        "name": "Snack 1",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o5",
-                "orderDate": "2025-02-24T16:00:00",
-                "totalPrice": 1750,
-                "deliveryStatus": "CANCELLED",
-                "buyerEmail": "alice@example.com",
-                "address": "Seoul, Seocho-gu",
-                "items": [
-                    {
-                        "name": "Tea 5",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Tea 4",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o4",
-                "orderDate": "2025-02-24T16:00:00",
-                "totalPrice": 1750,
-                "deliveryStatus": "DELIVERED",
-                "buyerEmail": "alice@example.com",
-                "address": "Seoul, Yongsan-gu",
-                "items": [
-                    {
-                        "name": "Tea 3",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Tea 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o34",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 4300,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Dong-gu",
-                "items": [
-                    {
-                        "name": "Beverage 3",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Beverage 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o33",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3650,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Nam-gu",
-                "items": [
-                    {
-                        "name": "Snack 5",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Beverage 1",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o32",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3250,
-                "deliveryStatus": "DELIVERED",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Buk-gu",
-                "items": [
-                    {
-                        "name": "Snack 4",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 3",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o31",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3100,
-                "deliveryStatus": "SHIPPED",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Jung-gu",
-                "items": [
-                    {
-                        "name": "Snack 1",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 2",
-                        "quantity": 1
-                    }
-                ]
-            }
+          /*추가 조회 목록 생략*/
         ],
         "page": 1,
         "size": 10,
@@ -731,30 +616,34 @@
 - **Method:** `GET`
 - **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다.
 - **Response 예시:**
-    - success
-
+    <details>
+<summary>success</summary>
 ```json
+`GET /admin/ord
 {
-  "message": "Success.",
-  "data": {
-    "orderUuid": "order-11111-22222-33331",
-    "user": {
-      "id": "user-11111-22222-33331",
-      "email": "email1@email.com",
-      "createdDate": "2025-02-21T10:14:11.083775",
-      "modifiedDate": "2025-02-21T10:14:11.083775",
-      "orders": null
-    },
-    "createDate": "2025-02-21T10:14:11.084784",
-    "modifiedDate": "2025-02-21T10:14:11.084784",
-    "totalAmount": 10000,
-    "deliveryAddress": "addr1",
-    "zipCode": 123123,
-    "deliveryStatus": "PENDING"
-  },
-  "code": 200
-}
-```
+"message": "Success.",
+"data": {
+"orderUuid": "order-11112-22222-33331",
+"user": {
+"id": "user-11112-22222-33331",
+"email": "email0@email.com",
+"createdDate": "2024-02-21T10:14:11.083775",
+"modifiedDate": "2024-02-21T10:14:11.083775",
+"orders": null
+},
+"createDate": "2024-02-21T10:14:11.084784",
+"modifiedDate": "2024-02-21T10:14:11.084784",
+"totalAmount": 9999,
+"deliveryAddress": "addr0",
+"zipCode": 123122,
+"deliveryStatus": "PENDIN asdfasdf:G"
+},
+"code": 200
+
+    
+    
+    
+    </details>
 
 - fail
 
