@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OrderRequestDto {
+public class AdminOrderRequestDto {
 
     @NotBlank(message = "배송 주소를 입력해야 합니다.")
     private String address;
@@ -31,16 +31,13 @@ public class OrderRequestDto {
     @Valid
     private List<ProductListDto> items;
 
-    @NotNull(message = "이메일 입력은 필수입니다.")
-    private Buyer buyer;
-
 //    @NotNull(message = "배송 상태를 입력해야 합니다.")
     private Order.DeliveryStatus deliveryStatus;
 
     // 엔티티 -> DTO 변환
-    public static OrderRequestDto of(Order order) {
+    public static AdminOrderRequestDto of(Order order) {
 
-        return OrderRequestDto.builder()
+        return AdminOrderRequestDto.builder()
                 .zipcode(order.getZipCode())
                 .address(order.getDeliveryAddress())
                 .build();
