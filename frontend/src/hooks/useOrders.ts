@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -8,6 +10,12 @@ import {
   OrderItem,
   Order,
 } from "@/services/orderService";
+
+export interface PaginationDataProductDto {
+  data: any[];
+  page: number;
+  totalPages: number;
+}
 
 export default function useOrder(orderId: string) {
   const [order, setOrder] = useState<Order>({
@@ -20,7 +28,15 @@ export default function useOrder(orderId: string) {
     items: [],
     totalAmount: 0,
   });
-  const [availableProducts, setAvailableProducts] = useState<any[]>([]);
+
+  // availableProducts 배열 -> PaginationDataProductDto로 변경
+  const [availableProducts, setAvailableProducts] =
+    useState<PaginationDataProductDto>({
+      data: [],
+      page: 0,
+      totalPages: 1,
+    });
+
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -41,8 +57,13 @@ export default function useOrder(orderId: string) {
           totalAmount,
         });
 
+        // availableProducts에 저장된 상품 페이지네이션으로
         const products = await fetchAllProducts();
-        setAvailableProducts(products);
+        setAvailableProducts({
+          data: products,
+          page: 0,
+          totalPages: 1,
+        });
       } catch (error: any) {
         console.error(error);
         alert("데이터 로딩에 실패했습니다.");
@@ -104,6 +125,30 @@ export default function useOrder(orderId: string) {
     }
   };
 
+  function increaseQuantity(productId: string) {
+    setOrder((prev) => {
+      const updatedItems = prev.items.map((item) =>
+        item.productId === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      );
+      return { ...prev, items: updatedItems };
+    });
+  }
+
+  function decreaseQuantity(productId: string) {
+    setOrder((prev) => {
+      const updatedItems = prev.items
+        .map((item) =>
+          item.productId === productId && item.quantity > 0
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        )
+        .filter((item) => item.quantity > 0);
+      return { ...prev, items: updatedItems };
+    });
+  }
+
   return {
     order,
     setOrder,
@@ -112,5 +157,7 @@ export default function useOrder(orderId: string) {
     addProduct,
     removeProduct,
     submitOrder,
+    increaseQuantity,
+    decreaseQuantity,
   };
 }
