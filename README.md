@@ -1,8 +1,93 @@
 # 프로젝트 명세서
 
 # 팀원
+|김지우|김윤주|박종현|신우석|정회찬|
+|:-:|:-:|:-:|:-:|:-:|
+|[![김지우]()]()|[![김윤주]()]()|![박종현](https://github.com/user-attachments/assets/8c4160d4-f6a8-40ef-97eb-ccf112b9ad2d)|[![신우석]()]()|[![정회찬]()]()|
+|FE,BE|FE,BE|FE,BE|FE,BE|FE,BE|
+|[GitHub](https://github.com/omegafrog)|[GitHub](https://github.com/yunjuKimm)|[GitHub](https://github.com/joungGo)|[GitHub](https://github.com/shinwoos)|[GitHub](https://github.com/hoechanj)|
+
+# 역할
+| 이름   | FE                                    | BE                                   |
+| ------ | ----------------------------------------- | ---------------------------------------- |
+| 김지우 | 상품 조회 화면 개발                         | 관리자 주문 상세 조회 API 구현              |
+| 신우석 | 사용자 주문 생성 화면 개발 및 주문 세부 조회 UI 개발 | 사용자 주문 생성 및 세부 조회 API 구현         |
+| 김윤주 | 사용자 주문 수정/삭제 화면 개발              | 사용자 주문 수정 및 삭제 API 구현            |
+| 정회찬 | 관리자 주문 수정/삭제 화면 개발              | 관리자 주문 수정 및 삭제 API 구현            |
+| 박종현 | 리스트 조회 화면 (사용자, 관리자) UI 및 전체 UI 꾸미기         | 리스트 조회 화면 (사용자, 관리자) 개발 |
+
+
 
 # 스키마
+## ERD
+![erd1](https://github.com/user-attachments/assets/31fc20bc-7c3d-43b0-8684-bacd06237038)
+
+## SQL
+```sql
+SET REFERENTIAL_INTEGRITY FALSE;
+DROP TABLE if exists `PRODUCT_ORDER_RELATION`;
+DROP TABLE if exists `ORDERS`;
+DROP TABLE if exists `PRODUCT`;
+DROP TABLE if exists `MEMBER`;
+DROP TABLE  BATCH_STEP_EXECUTION_CONTEXT IF EXISTS;
+DROP TABLE  BATCH_JOB_EXECUTION_CONTEXT IF EXISTS;
+DROP TABLE  BATCH_STEP_EXECUTION IF EXISTS;
+DROP TABLE  BATCH_JOB_EXECUTION_PARAMS IF EXISTS;
+DROP TABLE  BATCH_JOB_EXECUTION IF EXISTS;
+DROP TABLE  BATCH_JOB_INSTANCE IF EXISTS;
+
+DROP SEQUENCE  BATCH_STEP_EXECUTION_SEQ IF EXISTS;
+DROP SEQUENCE  BATCH_JOB_EXECUTION_SEQ IF EXISTS;
+DROP SEQUENCE  BATCH_JOB_SEQ IF EXISTS;
+
+DROP SCHEMA CAFFEE IF EXISTS CASCADE;
+SET REFERENTIAL_INTEGRITY TRUE;
+
+CREATE SCHEMA CAFFEE ;
+SET SCHEMA CAFFEE;
+
+
+CREATE TABLE MEMBER (
+	`USER_UUID`	VARCHAR(255)	NOT NULL unique primary key,
+	`EMAIL`	VARCHAR(255) unique	NULL,
+	`CREATE_DATE`	DATETIME	NULL,
+	`MODIFIED_DATE`	DATETIME	NULL
+);
+
+CREATE TABLE ORDERS (
+	`ORDER_UUID`	VARCHAR(255) unique	NOT NULL primary key,
+	`USER_UUID`	VARCHAR(255)	NOT NULL,
+	`CREATE_DATE`	DATETIME	NULL,
+	`MODIFIED_DATE`	DATETIME	NULL,
+	`TOTAL_AMOUNT`	INTEGER	NULL,
+	`DELIVERY_ADDRESS`	VARCHAR(255)	NULL,
+	`ZIP_CODE`	INTEGER	NULL,
+	`DELIVERY_STATUS`	VARCHAR(255)	NULL,
+     foreign key(`USER_UUID`)
+     references MEMBER(`USER_UUID`)
+);
+
+
+CREATE TABLE PRODUCT (
+	`PRODUCT_UUID`	VARCHAR(255) unique	NOT NULL,
+	`PRODUCT_NAME`	VARCHAR(255)	NULL,
+	`CATEGORY`	VARCHAR(255)	NULL,
+	`PRODUCT_PRICE`	INTEGER	NULL,
+	`PRODUCT_DESCRIPTION`	VARCHAR(255)	NULL,
+	`IMAGE_URL`	VARCHAR(255)	NULL
+);
+
+
+CREATE TABLE PRODUCT_ORDER_RELATION (
+	`PRODUCT_UUID`	VARCHAR(255) 	NOT NULL,
+	`ORDER_UUID`	VARCHAR(255) 	NOT NULL,
+    foreign key(PRODUCT_UUID)
+    references PRODUCT(PRODUCT_UUID),
+	foreign key(ORDER_UUID)
+    references `ORDERS`(ORDER_UUID)
+);
+```
+
 
 ---
 
@@ -12,6 +97,7 @@
 ---
 
 # Git-Flow 전략
+main > develop > (local)feat
 
 # 컨벤션
 
