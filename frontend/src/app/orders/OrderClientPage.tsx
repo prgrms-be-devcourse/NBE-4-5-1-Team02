@@ -21,15 +21,21 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 export default function OrdersClientPage({
   rsData,
 }: {
   rsData: components["schemas"]["RsDataOrderListResponse"];
 }) {
+  const router = useRouter();
   const orderListResponse = rsData.data;
   const currentPage = orderListResponse?.page || 0;
   const totalPages = orderListResponse?.totalPages || 0;
+
+  const handleRowClick = (orderId: string) => {
+    router.push(`/orders/${orderId}`);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -57,7 +63,11 @@ export default function OrdersClientPage({
                 <TableBody>
                   {orderListResponse?.content?.length ? (
                     orderListResponse.content.map((order) => (
-                      <TableRow key={order.orderId}>
+                      <TableRow 
+                        key={order.orderId}
+                        className="cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleRowClick(order.orderId)}
+                      >
                         <TableCell>{order.orderId}</TableCell>
                         <TableCell>{order.orderDate}</TableCell>
                         <TableCell>{order.deliveryStatus}</TableCell>

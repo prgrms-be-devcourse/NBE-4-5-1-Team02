@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.util.Pair;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-@Entity
+@Entity(name="ORDERS")
 @Table(name = "ORDERS")
 @Getter
 @Builder
@@ -92,7 +93,12 @@ public class Order {
         this.deliveryStatus = deliveryStatus;
         this.modifiedDate = LocalDateTime.now();
         this.products.clear();
-        this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
+       // this.products.addAll(updatedProducts.stream().map(ProductWithAmount::product).toList());
+        for (ProductWithAmount pwa : updatedProducts) {
+            for (int i = 0; i < pwa.amount(); i++) {
+                this.products.add(pwa.product());
+            }
+        }
     }
 
     private static int calculateTotalPrice(List<ProductWithAmount> updatedProducts) {
@@ -123,6 +129,14 @@ public class Order {
     public void updateProducts(List<Product> newProducts) {
         this.products.clear();
         this.products.addAll(newProducts);
+    }
+
+    public void addItems(List<Pair<Product, Integer>> productsInOrder) {
+        productsInOrder.forEach(pair -> {
+            for (int i = 0; i < pair.getSecond(); i++) {
+                products.add(pair.getFirst());
+            }
+        });
     }
 
 }

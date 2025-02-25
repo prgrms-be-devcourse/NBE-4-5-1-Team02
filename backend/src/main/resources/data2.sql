@@ -1,65 +1,3 @@
-/*INSERT INTO `MEMBER` VALUES('user-11111-22222-33331', 'email1@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33332', 'email2@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33333', 'email3@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-33334', 'email4@email.com', now(), now());
-INSERT INTO `MEMBER` VALUES('user-11111-22222-31235', 'email5@email.com', now(), now());
-
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33331', 'user-11111-22222-33331', now(), now(), 10000, 'addr1', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33332', 'user-11111-22222-33331', now(), now(), 20000, 'addr2', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33333', 'user-11111-22222-33332', now(), now(), 10000, 'addr3', 123123, 'SHIPPED');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33334', 'user-11111-22222-33332', now(), now(), 20000, 'addr4', 123123, 'SHIPPED');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33335', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33336', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'),  30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33337', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33338', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33339', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33310', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33311', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-INSERT INtO `ORDERS` VALUES('order-11111-22222-33312', 'user-11111-22222-33333', CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), CONCAT(DATEADD('DAY', -1, CURDATE()), ' 16:00:00'), 30000, 'addr5', 123123, 'PENDING');
-
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33331', 'product1','coffeeBean',1000, '커피콩1', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33332', 'product2','coffeeBean',5000, '커피콩2', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33333', 'product3','coffeeBean',1000, '커피콩3', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33334', 'product4','coffeeBean',5000, '커피콩4', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33335', 'product5','coffeeBean',1000, '커피콩5', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33336', 'product6','coffeeBean',1000, '커피콩6', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33337', 'product7','coffeeBean',5000, '커피콩7', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33338', 'product8','coffeeBean',1000, '커피콩8', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33339', 'product9','coffeeBean',5000, '커피콩9', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33310', 'product10','coffeeBean',1000, '커피콩10', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33311', 'product11','coffeeBean',1000, '커피콩11', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33312', 'product12','coffeeBean',5000, '커피콩12', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33313', 'product13','coffeeBean',1000, '커피콩13', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33314', 'product14','coffeeBean',5000, '커피콩14', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33315', 'product15','coffeeBean',1000, '커피콩15', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33316', 'product16','coffeeBean',1000, '커피콩16', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33317', 'product17','coffeeBean',5000, '커피콩17', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33318', 'product18','coffeeBean',1000, '커피콩18', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33319', 'product19','coffeeBean',5000, '커피콩19', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33320', 'product20','coffeeBean',1000, '커피콩20', '/image.png');
-
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33321', 'product10','coffeeBean',1000, '커피콩10', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33322', 'product11','coffeeBean',1000, '커피콩11', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33323', 'product12','coffeeBean',5000, '커피콩12', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33324', 'product13','coffeeBean',1000, '커피콩13', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33325', 'product14','coffeeBean',5000, '커피콩14', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33326', 'product15','coffeeBean',1000, '커피콩15', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33327', 'product16','coffeeBean',1000, '커피콩16', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33328', 'product17','coffeeBean',5000, '커피콩17', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33329', 'product18','coffeeBean',1000, '커피콩18', '/image.png');
-INSERT INTO `PRODUCT` VALUES('product-11111-22222-33330', 'product19','coffeeBean',5000, '커피콩19', '/image.png');
--- 1번 상품 5개와 2번 상품 1개로 주문 1 구성.
-
-INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33331', 'order-11111-22222-33331');
-INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33331', 'order-11111-22222-33331');
-INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33331', 'order-11111-22222-33331');
-INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33331', 'order-11111-22222-33331');
-INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33331', 'order-11111-22222-33331');
-INSERT INTO `PRODUCT_ORDER_RELATION` VALUES( 'product-11111-22222-33332', 'order-11111-22222-33331');
-
-*/
-
-
 -- MEMBER 테이블 (7명)
 INSERT INTO `MEMBER` VALUES('u1', 'alice@example.com', now(), now());
 INSERT INTO `MEMBER` VALUES('u2', 'bob@example.com', now(), now());
@@ -71,51 +9,52 @@ INSERT INTO `MEMBER` VALUES('u7', 'george@example.com', now(), now());
 
 -- ORDERS 테이블
 -- u1의 주문 (5건)
-INSERT INTO `ORDERS` VALUES('o1', 'u1', now(), now(), 15000, 'Seoul, Gangnam-gu', 101010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o2', 'u1', now(), now(), 22000, 'Seoul, Jongno-gu', 101011, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o3', 'u1', now(), now(), 18000, 'Seoul, Mapo-gu', 101012, 'SHIPPED');
-INSERT INTO `ORDERS` VALUES('o4', 'u1', now(), now(), 30000, 'Seoul, Yongsan-gu', 101013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o5', 'u1', now(), now(), 25000, 'Seoul, Seocho-gu', 101014, 'CANCELLED');
+-- 오늘 기준 전날 16:00:00에 만들어진 order를 생성
+INSERT INTO `ORDERS` VALUES('o1', 'u1', DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')),  DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')), 15000, 'Seoul, Gangnam-gu', 101010, 'PENDING');
+INSERT INTO `ORDERS` VALUES('o2', 'u1', DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')),  DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')), 22000, 'Seoul, Jongno-gu', 101011, 'PENDING');
+INSERT INTO `ORDERS` VALUES('o3', 'u1', DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')),  DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')), 18000, 'Seoul, Mapo-gu', 101012, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o4', 'u1', DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')),  DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')), 30000, 'Seoul, Yongsan-gu', 101013, 'DELIVERED');
+INSERT INTO `ORDERS` VALUES('o5', 'u1', DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')),  DATE_SUB(CONCAT(CURDATE(), ' 16:00:00')), 25000, 'Seoul, Seocho-gu', 101014, 'CANCELLED');
 
 -- u2의 주문 (4건)
 INSERT INTO `ORDERS` VALUES('o6', 'u2', now(), now(), 17000, 'Busan, Haeundae', 202010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o7', 'u2', now(), now(), 19000, 'Busan, Suyeong-gu', 202011, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o7', 'u2', now(), now(), 19000, 'Busan, Suyeong-gu', 202011, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o8', 'u2', now(), now(), 21000, 'Busan, Dongnae-gu', 202012, 'SHIPPED');
 INSERT INTO `ORDERS` VALUES('o9', 'u2', now(), now(), 16000, 'Busan, Nam-gu', 202013, 'DELIVERED');
 
 -- u3의 주문 (6건)
 INSERT INTO `ORDERS` VALUES('o10', 'u3', now(), now(), 28000, 'Incheon, Bupyeong', 303010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o11', 'u3', now(), now(), 26000, 'Incheon, Namdong', 303011, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o11', 'u3', now(), now(), 26000, 'Incheon, Namdong', 303011, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o12', 'u3', now(), now(), 32000, 'Incheon, Yeonsu', 303012, 'SHIPPED');
 INSERT INTO `ORDERS` VALUES('o13', 'u3', now(), now(), 35000, 'Incheon, Jung', 303013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o14', 'u3', now(), now(), 30000, 'Incheon, Dong', 303014, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o14', 'u3', now(), now(), 30000, 'Incheon, Dong', 303014, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o15', 'u3', now(), now(), 27000, 'Incheon, Bupyeong', 303015, 'PENDING');
 
 -- u4의 주문 (4건)
 INSERT INTO `ORDERS` VALUES('o16', 'u4', now(), now(), 24000, 'Daegu, Suseong-gu', 404010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o17', 'u4', now(), now(), 26000, 'Daegu, Nam-gu', 404011, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o17', 'u4', now(), now(), 26000, 'Daegu, Nam-gu', 404011, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o18', 'u4', now(), now(), 23000, 'Daegu, Dalseo-gu', 404012, 'SHIPPED');
 INSERT INTO `ORDERS` VALUES('o19', 'u4', now(), now(), 25000, 'Daegu, Jung-gu', 404013, 'DELIVERED');
 
 -- u5의 주문 (5건)
 INSERT INTO `ORDERS` VALUES('o20', 'u5', now(), now(), 31000, 'Daejeon, Yuseong-gu', 505010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o21', 'u5', now(), now(), 29000, 'Daejeon, Seo-gu', 505011, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o21', 'u5', now(), now(), 29000, 'Daejeon, Seo-gu', 505011, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o22', 'u5', now(), now(), 33000, 'Daejeon, Jung-gu', 505012, 'SHIPPED');
 INSERT INTO `ORDERS` VALUES('o23', 'u5', now(), now(), 30000, 'Daejeon, Dong-gu', 505013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o24', 'u5', now(), now(), 32000, 'Daejeon, Daedeok-gu', 505014, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o24', 'u5', now(), now(), 32000, 'Daejeon, Daedeok-gu', 505014, 'PENDING');
 
 -- u6의 주문 (4건)
 INSERT INTO `ORDERS` VALUES('o25', 'u6', now(), now(), 20000, 'Gwangju, Buk-gu', 606010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o26', 'u6', now(), now(), 22000, 'Gwangju, Dong-gu', 606011, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o26', 'u6', now(), now(), 22000, 'Gwangju, Dong-gu', 606011, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o27', 'u6', now(), now(), 24000, 'Gwangju, Nam-gu', 606012, 'SHIPPED');
 INSERT INTO `ORDERS` VALUES('o28', 'u6', now(), now(), 21000, 'Gwangju, Seo-gu', 606013, 'DELIVERED');
 
 -- u7의 주문 (6건)
 INSERT INTO `ORDERS` VALUES('o29', 'u7', now(), now(), 35000, 'Ulsan, Nam-gu', 707010, 'PENDING');
-INSERT INTO `ORDERS` VALUES('o30', 'u7', now(), now(), 33000, 'Ulsan, Dong-gu', 707011, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o30', 'u7', now(), now(), 33000, 'Ulsan, Dong-gu', 707011, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o31', 'u7', now(), now(), 36000, 'Ulsan, Jung-gu', 707012, 'SHIPPED');
 INSERT INTO `ORDERS` VALUES('o32', 'u7', now(), now(), 37000, 'Ulsan, Buk-gu', 707013, 'DELIVERED');
-INSERT INTO `ORDERS` VALUES('o33', 'u7', now(), now(), 34000, 'Ulsan, Nam-gu', 707014, 'SHIPPED');
+INSERT INTO `ORDERS` VALUES('o33', 'u7', now(), now(), 34000, 'Ulsan, Nam-gu', 707014, 'PENDING');
 INSERT INTO `ORDERS` VALUES('o34', 'u7', now(), now(), 38000, 'Ulsan, Dong-gu', 707015, 'PENDING');
 
 -- PRODUCT 테이블 (25개 상품)

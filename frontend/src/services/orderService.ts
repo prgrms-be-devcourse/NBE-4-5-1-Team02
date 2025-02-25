@@ -43,15 +43,15 @@ export async function fetchOrderData(orderId: string) {
 export async function fetchOrderProductsData(orderId: string) {
   const email = getUserEmail();
   const res = await fetch(
-    `http://localhost:8080/orders/${orderId}/products?email=${email}`
+    `http://localhost:8080/orders/${orderId}/products/all?email=${email}`
   );
   if (!res.ok) throw new Error("주문 상품 목록을 불러오지 못했습니다.");
   const json = await res.json();
-  const rawItems = json.data.data.map((p: any) => ({
-    productId: p.productUuid,
-    name: p.productName,
-    quantity: p.quantity || 1,
-    price: p.productPrice,
+  const rawItems = json.data.map((p: any) => ({
+    productId: p.product.productUuid,
+    name: p.product.productName,
+    quantity: p.amount,
+    price: p.product.productPrice,
   }));
   return rawItems;
 }
