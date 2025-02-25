@@ -88,13 +88,13 @@
 
 - 파라미터
 
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.email | user@example.com | true |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |
-| buyer.zipcode | 12345 | true |
-| items[].productId | p123 | true |
-| items[].quantity | 2 | true |
+| 키 | 타입        | 값 예시         | 필수 여부 |
+| --- |-----------|------------------| --- |
+| `buyer.email`| `string`  | `user@example.com` | `true` |
+| `buyer.address`| `string`  | `서울시 강남구 테헤란로 123` | `true` |
+| `buyer.zipcode`| `integer` | `12345` | `true` |
+| `items[].productId`| `string`  | `p123` | `true` |
+| `items[].quantity`| `number`  | `2`  | `true` |
 - **Request Body 예시:**
     
     ```json
@@ -106,12 +106,8 @@
       "zipcode": "12345",
       "items": [
         {
-          "productId": "p123",
-          "quantity": 2
-        },
-        {
-          "productId": "p456",
-          "quantity": 1
+          "productId": "p1",
+          "quantity": 3
         }
       ]
     }
@@ -127,32 +123,46 @@
     
     ```json
     {
-      "orderId": "order-111111-222222-333333",
-      "createdAt": "2025-02-18T14:00:00Z",
-      "updatedAt": "2025-02-18T14:00:00Z",
-      "buyer": {
-        "email": "user@example.com"
-      },
-      "address": "서울시 강남구 테헤란로 123",
-      "zipcode": "12345",
-      "items": [
-        {
-          "productId": "p123",
-          "quantity": 2,
-          "name": "상품명1",
-          "price": 10000,
-          "image_url": "url/"
+    "message": "ok",
+    "data": {
+        "orderId": "order-f03a8a4d-b875-42ad-8e22-2770e84f4893",
+        "buyer": {
+            "email": "email1@email.com"
         },
-        {
-          "productId": "p456",
-          "quantity": 1,
-          "name": "상품명2",
-          "price": 20000,
-          "image_url": "url/"
-        }
-      ],
-      "totalPrice": 40000,
-      "deliveryStatus": "대기중"
+        "products": [
+            {
+                "productUuid": "p1",
+                "productName": "Coffee 1",
+                "category": "coffeeBean",
+                "productPrice": 1200,
+                "productDescription": "싱글 오리진 커피 원두",
+                "imageUrl": "/img/coffee1.png"
+            },
+            {
+                "productUuid": "p1",
+                "productName": "Coffee 1",
+                "category": "coffeeBean",
+                "productPrice": 1200,
+                "productDescription": "싱글 오리진 커피 원두",
+                "imageUrl": "/img/coffee1.png"
+            },
+            {
+                "productUuid": "p1",
+                "productName": "Coffee 1",
+                "category": "coffeeBean",
+                "productPrice": 1200,
+                "productDescription": "싱글 오리진 커피 원두",
+                "imageUrl": "/img/coffee1.png"
+            }
+        ],
+        "createAt": "2025-02-25T10:06:04.3688085",
+        "modifiedAt": "2025-02-25T10:06:04.3688085",
+        "totalAmount": 3600,
+        "address": "addr1",
+        "zipcode": 1073,
+        "deliveryStatus": "PENDING"
+    },
+    "code": 200
     }
     
     ```
@@ -821,9 +831,9 @@
 
 - 파라미터
 
-| 키 | 값 예시 | 필수 여부 |
-| --- | --- | --- |
-| buyer.email | user@example.com | true |
+| 키 | 타입       | 값 예시          | 필수 여부 |
+| --- |----------|------------------| --- |
+| `buyer.email` | `string` | `user@example.com` | `true` |
 - **Request Body 예시:**
 
     ```json
@@ -847,7 +857,8 @@
             "email": "user@example.com",
             "createdDate": "2025-02-20T15:37:21.1689457",
             "modifiedDate": "2025-02-20T15:37:21.1689457"
-        }
+        },
+        "code": 200
     }
     
     ```
