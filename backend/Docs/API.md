@@ -5,16 +5,16 @@
 - **URL:** `/products`
 - **Method:** `POST`
 - **Parameters**
-  - **Query string**
-  - | 키              | 예시 값      | 필수 여부   | 기본값     | 
-    |----------------|-----------|---------|---------|
-    | `keyword-type` | `"title"` | `false` | `"title"` |
-    | `keyword`       | `coffee1`  | `false` | `""`        |
+    - **Query string**
+    - | 키              | 예시 값      | 필수 여부   | 기본값       | 
+      |----------------|-----------|---------|-----------|
+      | `keyword-type` | `"title"` | `false` | `"title"` |
+      | `keyword`      | `coffee1` | `false` | `""`      |
 
   <details>
   <summary>success</summary> 
-  
-    `GET /products`
+
+  `GET /products`
     ```json
       {
         "message": "Success.",
@@ -118,15 +118,16 @@
 - **Method:** `POST`
 - **설명:** 사용자가 주문 요청을 생성합니다.
 
-- 파라미터
+- **Body Parameter**
 
-| 키                 | 타입          | 값 예시                 | 필수 여부 | 기본값 |
-|-------------------|-------------|----------------------| --- | --- |
-| `buyer.email`     | `string`    | `"user@example.com"` | `true`           |  |
-| `address`           | `string`    | `"서울시 강남구 테헤란로 123"` | `true`                | |
-| `zipcode`     | `integer`   | `12345`              | true                  |
-| items[].productId | `string`    | p123                 | true                |
-| items[].quantity  | `number` |  2                   | true                 |
+    | 키                   | 타입        | 값 예시                 | 필수 여부  | 기본값 |
+    |---------------------|-----------|----------------------|--------|-----|
+    | `buyer.email`       | `string`  | `"user@example.com"` | `true` |     |
+    | `address`           | `string`  | `"서울시 강남구 테헤란로 123"` | `true` |     |
+    | `zipcode`           | `integer` | `12345`              | `true` |
+    | `items[].productId` | `string`  | `p123`               | `true` |
+    | `items[].quantity`  | `number`  | `2`                  | `true` |
+
 - **Request Body 예시:**
     
     ```json
@@ -198,16 +199,15 @@
     }
     
     ```
-    
-    fail
-    
+
+  fail
+
     ```json
     {
     	"errcode": "ORDER-1",
     	"errmsg": "주문 생성에 실패했습니다. 필수 값을 체크해주세요."
     }
     ```
-    
 
 ---
 
@@ -220,6 +220,7 @@
     - `email` (혹은 인증 정보를 통해 결정)
 - **Response 예시:**
 - 성공
+
 ```json
 {
   "message": "ok",
@@ -249,7 +250,9 @@
   "code": 200
 }
 ```
+
 - 실패
+
 ```json
 {
     "message": "getOrders.email: 올바른 이메일 형식이어야 합니다.",
@@ -303,13 +306,22 @@
     ```
 
 ### 1.3.1 주문 내 상품 페이지네이션 조회 (사용자)
+
 - **URL:** `/orders/{orderId}/products`
 - **Method:** `GET`
 - **설명:** 사용자가 주문 내 상품을 페이지네이션 해서 조회합니다.
-- **Query Parameter**:
-  - `email`: 필수
-  - `page` : 기본값=0, 필수 아님
-  - `size` : 기본값=10, 필수 아님
+  - **Query Parameter**
+  
+    | 키       | 타입        | 값 예시                    | 필수 여부   | 기본값  |
+    |---------|-----------|-------------------------|---------|------|
+    | `email` | `string`  | `"example@example.com"` | `true`  |      |
+    | `page`  | `integer` | `0`                     | `false` | `0`  |
+    | `size`  | `integer` | `10`                    | `false` | `10` | 
+  - **Path Parameter**
+
+    | 키         | 타입       | 값 예시                        | 필수 여부  | 기본값 |
+    |-----------|----------|-----------------------------|--------|-----|
+    | `orderId` | `string` | `"order-11111-22222-33333"` | `true` |     |
 
 - **Response예시**
 
@@ -350,16 +362,24 @@
     "code": 200
   }
   ```
-  
+
 ### 1.3.2 주문 내 모든 상품 조회 (사용자)
-- **URL:** `//orders/{orderId}/products/all`
+
+- **URL:** `/orders/{orderId}/products/all`
 - **Method:** `GET`
-- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **설명:** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
 - **Parameters**
-  - **QueryParameter**
-    - `email`: 이메일 형식, 필수
-  - **PathParameter**
-    - `orderId` : 주문번호
+    - **Query Parameters**
+
+        | 키       | 타입       | 값 예시                    | 필수 여부  | 기본값 |
+        |---------|----------|-------------------------|--------|-----|
+        | `email` | `string` | `"example@example.com"` | `true` |     |
+    - **Path Parameters**
+  
+        | 키         | 타입       | 값 예시                        | 필수 여부  | 기본값 |
+        |-----------|----------|-----------------------------|--------|-----|
+        | `orderId` | `string` | `"order-11111-22222-33333"` | `true` |     |
+    
 - **Response 예시**
 <details>
 <summary>success</summary>
@@ -370,23 +390,23 @@
   "data": [
     {
       "product": {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "/image.png"
+        "productUuid": "p12",
+        "productName": "Snack 2",
+        "category": "snack",
+        "productPrice": 1600,
+        "productDescription": "고소한 견과류 믹스",
+        "imageUrl": "/img/snack2.png"
       },
-      "amount": 5
+      "amount": 1
     },
     {
       "product": {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "/image.png"
+        "productUuid": "p11",
+        "productName": "Snack 1",
+        "category": "snack",
+        "productPrice": 1500,
+        "productDescription": "바삭한 감자칩",
+        "imageUrl": "/img/snack1.png"
       },
       "amount": 1
     }
@@ -406,7 +426,7 @@
 - **Query Parameter (옵션):**
     - `email` (혹은 인증 정보를 통해 결정)
     - ex) `/odrers/{orderId}?email=email@email.com`
-  
+
       | 키 | 값 예시 | 필수 여부 |
       | --- | --- | --- |
       | email | user@example.com | true |
@@ -485,7 +505,6 @@
     }
     ```
 
-
 ---
 
 ### 1.5. 주문 취소 (사용자)
@@ -513,7 +532,6 @@
     }
     ```
 
-
 ---
 
 ## 2. 관리자 API
@@ -522,6 +540,7 @@
 
 > 주의: 관리자 API 엔드포인트는 별도의 인증 및 권한 검증 로직이 적용되어야 합니다.
 >
+
 - **URL:** `/admin/orders`
 
 ### 2.1. 주문 리스트 조회 (관리자)
@@ -531,199 +550,201 @@
 - **설명:** 관리자가 모든 사용자의 주문 리스트를 조회합니다.
 - **Response 예시:**
 - success
+
 ```json
 {
-    "message": "ok",
-    "data": {
-        "content": [
-            {
-                "orderId": "o9",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 4300,
-                "deliveryStatus": "DELIVERED",
-                "buyerEmail": "bob@example.com",
-                "address": "Busan, Nam-gu",
-                "items": [
-                    {
-                        "name": "Beverage 3",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Beverage 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o8",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3650,
-                "deliveryStatus": "SHIPPED",
-                "buyerEmail": "bob@example.com",
-                "address": "Busan, Dongnae-gu",
-                "items": [
-                    {
-                        "name": "Snack 5",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Beverage 1",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o7",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3250,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "bob@example.com",
-                "address": "Busan, Suyeong-gu",
-                "items": [
-                    {
-                        "name": "Snack 4",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 3",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o6",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3100,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "bob@example.com",
-                "address": "Busan, Haeundae",
-                "items": [
-                    {
-                        "name": "Snack 1",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o5",
-                "orderDate": "2025-02-24T16:00:00",
-                "totalPrice": 1750,
-                "deliveryStatus": "CANCELLED",
-                "buyerEmail": "alice@example.com",
-                "address": "Seoul, Seocho-gu",
-                "items": [
-                    {
-                        "name": "Tea 5",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Tea 4",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o4",
-                "orderDate": "2025-02-24T16:00:00",
-                "totalPrice": 1750,
-                "deliveryStatus": "DELIVERED",
-                "buyerEmail": "alice@example.com",
-                "address": "Seoul, Yongsan-gu",
-                "items": [
-                    {
-                        "name": "Tea 3",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Tea 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o34",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 4300,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Dong-gu",
-                "items": [
-                    {
-                        "name": "Beverage 3",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Beverage 2",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o33",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3650,
-                "deliveryStatus": "PENDING",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Nam-gu",
-                "items": [
-                    {
-                        "name": "Snack 5",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Beverage 1",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o32",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3250,
-                "deliveryStatus": "DELIVERED",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Buk-gu",
-                "items": [
-                    {
-                        "name": "Snack 4",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 3",
-                        "quantity": 1
-                    }
-                ]
-            },
-            {
-                "orderId": "o31",
-                "orderDate": "2025-02-25T09:18:48.052555",
-                "totalPrice": 3100,
-                "deliveryStatus": "SHIPPED",
-                "buyerEmail": "george@example.com",
-                "address": "Ulsan, Jung-gu",
-                "items": [
-                    {
-                        "name": "Snack 1",
-                        "quantity": 1
-                    },
-                    {
-                        "name": "Snack 2",
-                        "quantity": 1
-                    }
-                ]
-            }
-        ],
-        "page": 1,
-        "size": 10,
-        "totalPages": 4
-    },
-    "code": 200
+  "message": "ok",
+  "data": {
+    "content": [
+      {
+        "orderId": "o9",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 4300,
+        "deliveryStatus": "DELIVERED",
+        "buyerEmail": "bob@example.com",
+        "address": "Busan, Nam-gu",
+        "items": [
+          {
+            "name": "Beverage 3",
+            "quantity": 1
+          },
+          {
+            "name": "Beverage 2",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o8",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3650,
+        "deliveryStatus": "SHIPPED",
+        "buyerEmail": "bob@example.com",
+        "address": "Busan, Dongnae-gu",
+        "items": [
+          {
+            "name": "Snack 5",
+            "quantity": 1
+          },
+          {
+            "name": "Beverage 1",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o7",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3250,
+        "deliveryStatus": "PENDING",
+        "buyerEmail": "bob@example.com",
+        "address": "Busan, Suyeong-gu",
+        "items": [
+          {
+            "name": "Snack 4",
+            "quantity": 1
+          },
+          {
+            "name": "Snack 3",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o6",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3100,
+        "deliveryStatus": "PENDING",
+        "buyerEmail": "bob@example.com",
+        "address": "Busan, Haeundae",
+        "items": [
+          {
+            "name": "Snack 1",
+            "quantity": 1
+          },
+          {
+            "name": "Snack 2",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o5",
+        "orderDate": "2025-02-24T16:00:00",
+        "totalPrice": 1750,
+        "deliveryStatus": "CANCELLED",
+        "buyerEmail": "alice@example.com",
+        "address": "Seoul, Seocho-gu",
+        "items": [
+          {
+            "name": "Tea 5",
+            "quantity": 1
+          },
+          {
+            "name": "Tea 4",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o4",
+        "orderDate": "2025-02-24T16:00:00",
+        "totalPrice": 1750,
+        "deliveryStatus": "DELIVERED",
+        "buyerEmail": "alice@example.com",
+        "address": "Seoul, Yongsan-gu",
+        "items": [
+          {
+            "name": "Tea 3",
+            "quantity": 1
+          },
+          {
+            "name": "Tea 2",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o34",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 4300,
+        "deliveryStatus": "PENDING",
+        "buyerEmail": "george@example.com",
+        "address": "Ulsan, Dong-gu",
+        "items": [
+          {
+            "name": "Beverage 3",
+            "quantity": 1
+          },
+          {
+            "name": "Beverage 2",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o33",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3650,
+        "deliveryStatus": "PENDING",
+        "buyerEmail": "george@example.com",
+        "address": "Ulsan, Nam-gu",
+        "items": [
+          {
+            "name": "Snack 5",
+            "quantity": 1
+          },
+          {
+            "name": "Beverage 1",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o32",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3250,
+        "deliveryStatus": "DELIVERED",
+        "buyerEmail": "george@example.com",
+        "address": "Ulsan, Buk-gu",
+        "items": [
+          {
+            "name": "Snack 4",
+            "quantity": 1
+          },
+          {
+            "name": "Snack 3",
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "orderId": "o31",
+        "orderDate": "2025-02-25T09:18:48.052555",
+        "totalPrice": 3100,
+        "deliveryStatus": "SHIPPED",
+        "buyerEmail": "george@example.com",
+        "address": "Ulsan, Jung-gu",
+        "items": [
+          {
+            "name": "Snack 1",
+            "quantity": 1
+          },
+          {
+            "name": "Snack 2",
+            "quantity": 1
+          }
+        ]
+      }
+    ],
+    "page": 1,
+    "size": 10,
+    "totalPages": 4
+  },
+  "code": 200
 }
 ```
+
 - fail
   ```json
   {
@@ -733,92 +754,126 @@
   }
   ```
 
-
 ---
 
 ### 2.2.1 주문 상세 조회 (관리자)
 
 - **URL:** `/admin/orders/{orderId}`
 - **Method:** `GET`
-- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다.
-- **Response 예시:**
-    - success
+- **설명:** 관리자가 특정 주문의 모든 상세 정보를 조회합니다. <br/> 이때 주문 내의 물품은 포함하지 않습니다
+- **Parameters**
+    - **PathParameter**
 
-```json
-{
-  "message": "Success.",
-  "data": {
-    "orderUuid": "order-11111-22222-33331",
-    "user": {
-      "id": "user-11111-22222-33331",
-      "email": "email1@email.com",
-      "createdDate": "2025-02-21T10:14:11.083775",
-      "modifiedDate": "2025-02-21T10:14:11.083775",
-      "orders": null
-    },
-    "createDate": "2025-02-21T10:14:11.084784",
-    "modifiedDate": "2025-02-21T10:14:11.084784",
-    "totalAmount": 10000,
-    "deliveryAddress": "addr1",
-    "zipCode": 123123,
-    "deliveryStatus": "PENDING"
-  },
-  "code": 200
-}
-```
+      | 키         | 타입       | 값 예시                      | 필수 여부  | 기본값 |
+      |-----------|----------|---------------------------|--------|-----|
+      | `orderId` | `string` | `order-11111-22222-33333` | `true` |     | 
 
-- fail
 
-```json
-{
-  "error": "NotFoundException",
-  "orderId": "order789",
-  "message": "해당하는 주문 정보를 가져올 수 없습니다."
-}
-```
+- **Response 예시**
+  <details>
+  <summary>success</summary>
+
+  `GET /admin/orders/o1`
+  ```json
+    {
+      "message": "Success.",
+      "data": {
+          "orderUuid": "o1",
+          "user": {
+              "id": "u1",
+              "email": "alice@example.com",
+              "createdDate": "2025-02-25T09:41:22.407886",
+              "modifiedDate": "2025-02-25T09:41:22.407886"
+          },
+          "createDate": "2025-02-25T09:41:22.407886",
+          "modifiedDate": "2025-02-25T09:41:22.407886",
+          "totalAmount": 15000,
+          "deliveryAddress": "Seoul, Gangnam-gu",
+          "zipCode": 101010,
+          "deliveryStatus": "PENDING"
+      },
+      "code": 200
+    }
+  ```
+  </details>
+  <details>
+  <summary>fail</summary>
+
+  `GET /admin/orders/asdfasdf`
+  ```json
+  {
+    "message": "orderId가 asdfasdf인 order를 찾을 수 없습니다.",
+    "data": null,
+    "code": 400
+  }
+  ```
+  </details>
+
  --- 
+
 ### 2.2.2 주문에 포함된 모든 상품과 수량 조회 (관리자)
+
 - **URL:** `/admin/orders/{orderId}/products/all`
 - **Method:** `GET`
-- **설명: ** 주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
+- **설명:** `{orderId}`주문에 포함된 모든 상품의 정보와 수량이 전부 조회횝니다.
 - **Parameters**
   - **PathParameter**
-    - `orderId` : 주문번호
-- **Response 예시**
-<details>
-<summary>success</summary>
 
-```json
-{
-  "message": "Success.",
-  "data": [
+    | 키         | 타입       | 값 예시                      | 필수 여부  | 기본값 |
+    |-----------|----------|---------------------------|--------|-----| 
+    | `orderId` | `string` | `order-11111-22222-33333` | `true` |     |
+
+- **Response 예시**
+
+    <details>
+    <summary>success</summary>
+    
+    ```json
     {
-      "product": {
-        "productUuid": "product-11111-22222-33331",
-        "productName": "product1",
-        "category": "coffeeBean",
-        "productPrice": 1000,
-        "productDescription": "커피콩1",
-        "imageUrl": "/image.png"
-      },
-      "amount": 5
-    },
-    {
-      "product": {
-        "productUuid": "product-11111-22222-33332",
-        "productName": "product2",
-        "category": "coffeeBean",
-        "productPrice": 5000,
-        "productDescription": "커피콩2",
-        "imageUrl": "/image.png"
-      },
-      "amount": 1
+        "message": "Success.",
+        "data": [
+            {
+                "product": {
+                    "productUuid": "p1",
+                    "productName": "Coffee 1",
+                    "category": "coffeeBean",
+                    "productPrice": 1200,
+                    "productDescription": "싱글 오리진 커피 원두",
+                    "imageUrl": "/img/coffee1.png"
+                },
+                "amount": 1
+            },
+            {
+                "product": {
+                   "productUuid": "p2",
+                   "productName": "Coffee 2",
+                   "category": "coffeeBean",
+                   "productPrice": 1300,
+                   "productDescription": "에스프레소용 커피 원두",
+                   "imageUrl": "/img/coffee2.png"
+                },
+                "amount": 1
+           }
+        ],
+    "code": 200
     }
-  ],
-  "code": 200
-}
-```
-</details>
+    ```
+    
+  </details>
+
+  <details>
+  <summary>fail</summary>
+    
+    `GET /admin/orders/asdfasdf/all`
+    ```json
+    {
+      "message": "id가 asdfasdf인 order는 없습니다.",
+      "data": null,
+      "code": 400
+    }
+    ```
+
+  </details>
 
 ---
 
@@ -829,11 +884,12 @@
 - **설명:** 관리자가 주문 상세 페이지에서 주문 정보를 수정할 수 있습니다.
 - 파라미터
 
-| 키 | 값 예시 | 필수 여부 |  |
-| --- | --- | --- | --- |
-| buyer.email | user@example.com | true |  |
-| buyer.address | 서울시 강남구 테헤란로 123 | true |  |
-| buyer.zipcode | 12345 | true |  |
+| 키             | 값 예시             | 필수 여부 |  |
+|---------------|------------------|-------|--|
+| buyer.email   | user@example.com | true  |  |
+| buyer.address | 서울시 강남구 테헤란로 123 | true  |  |
+| buyer.zipcode | 12345            | true  |  |
+
 - **Request Body 예시:**
 
   (사용자와 유사하며, 관리자는 주문 상태(배송 상태) 등 추가 필드를 수정할 수 있습니다.)
@@ -874,7 +930,6 @@
     }
     ```
 
-
 ---
 
 ### 2.4. 주문 삭제 (관리자)
@@ -902,7 +957,6 @@
     }
     ```
 
-
 ---
 
 ### 2.5 주문에 포함된 상품 리스트 조회 (관리자)
@@ -910,92 +964,69 @@
 - **URL:** `/admin/orders/{orderId}/products`
 - **Method:** `GET`
 - **설명:** 주문에 포함된 모든 상품 리스트를 페이지네이션 해서 조회합니다.
-- **Parameters** 
-  - **QueryParameter**
-    - `size` : 한 페이지에 출력할 item 개수
-    - `page` : 페이지 번호
-  - **PathParameter** 
-    - `orderId` : 주문 번호
-- **Response 예시:**
-  <details>
-  <summary>success</summary>
-  
-  ```json
-  {
-    "message": "Success.",
-    "data": {
-      "data": [
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33331",
-          "productName": "product1",
-          "category": "coffeeBean",
-          "productPrice": 1000,
-          "productDescription": "커피콩1",
-          "imageUrl": "image_url1"
-        },
-        {
-          "productUuid": "product-11111-22222-33332",
-          "productName": "product2",
-          "category": "coffeeBean",
-          "productPrice": 5000,
-          "productDescription": "커피콩2",
-          "imageUrl": "image_url2"
-        }
-      ],
-      "page": 0,
-      "size": 10,
-      "totalPages": 1
-    },
-    "code": 200
-  }
-  ```
-  </details>
-  <details>
-  <summary>fail</summary> 
+- **Parameters**
+    - **QueryParameter**
 
-  ```json
-  {
-    "error": "NotFoundException",
-    "orderId": "order789",
-    "message": "해당 주문에 포함된 상품을 가져올 수 없습니다."
-  }
-  ```
-  </details> 
+      | 키      | 타입        | 값 예시 | 필수 여부   | 기본값  |
+      |--------|-----------|------|---------|------|
+      | `size` | `integer` | `10` | `false` | `10` |
+      | `page` | `integer` | `0`  | `false` | `0`  |
+    - **PathParameter**
+
+      | 키      | 타입        | 값 예시 | 필수 여부   | 기본값  |
+      |--------|-----------|------|---------|------|
+      | `size` | `integer` | `10` | `false` | `10` |
+      | `page` | `integer` | `0`  | `false` | `0`  |
+
+
+
+- **Response 예시:**
+    <details>
+    <summary>success</summary>
+  
+    ```json
+    {
+       "message": "Success.",
+       "data": {
+           "data": [
+               {
+                   "productUuid": "p1",
+                   "productName": "Coffee 1",
+                   "category": "coffeeBean",
+                   "productPrice": 1200,
+                   "productDescription": "싱글 오리진 커피 원두",
+                   "imageUrl": "/img/coffee1.png"
+               },
+               {
+                   "productUuid": "p2",
+                   "productName": "Coffee 2",
+                   "category": "coffeeBean",
+                   "productPrice": 1300,
+                   "productDescription": "에스프레소용 커피 원두",
+                   "imageUrl": "/img/coffee2.png"
+               }
+           ],
+           "page": 0,
+           "size": 10,
+           "totalPages": 1
+       },
+       "code": 200
+    }
+    ```
+    </details>
+    <details>
+    <summary>fail</summary> 
+
+    ```json
+    {
+        "message": "id가 asdf인 Order는 없습니다.",
+        "data": null,
+        "code": 400
+    }
+    ```
+    </details> 
 
 ---
-
 
 ### 1. 유저 API
 
@@ -1007,8 +1038,8 @@
 
 - 파라미터
 
-| 키 | 타입       | 값 예시          | 필수 여부 |
-| --- |----------|------------------| --- |
+| 키             | 타입       | 값 예시               | 필수 여부  |
+|---------------|----------|--------------------|--------|
 | `buyer.email` | `string` | `user@example.com` | `true` |
 - **Request Body 예시:**
 
